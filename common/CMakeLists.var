@@ -1,0 +1,48 @@
+set(module_name common)
+
+set(module_type library)
+
+set(library_type)
+
+set(headers
+    include/common/TextConfigurationParser.hpp
+    include/common/CommandStore.hpp
+    )
+
+set(sources
+    src/TextConfigurationParser.cpp
+    src/CommandStore.cpp
+    )
+
+set(tests
+    )
+
+set(definitions
+    )
+
+
+set(libraries
+    runnerd_core
+    )
+
+set(external_libraries
+    )
+
+
+set(libraries_test
+    )
+
+set(libraries_test_WIN32
+    mpr
+    )
+
+set(libraries_test_APPLE
+    iconv
+    dl
+    )
+
+set(libraries_test_UNIX
+    dl
+    rt
+    pthread
+    )

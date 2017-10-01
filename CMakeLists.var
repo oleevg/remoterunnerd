@@ -1,0 +1,19 @@
+set(project_name runnerd)
+
+set(${project_name}_version_major 0)
+set(${project_name}_version_minor 1)
+set(${project_name}_version_patch 0)
+
+set(${project_name}_definitions )
+
+set(modules
+    core
+    common
+    server
+    )
+
+find_package(Boost COMPONENTS system program_options REQUIRED)
+message(STATUS "Found BOOST placement: Boost_INCLUDE_DIR=${Boost_INCLUDE_DIR}")
+
+add_definitions(-DBOOST_TEST_DYN_LINK)
+include_directories(${Boost_INCLUDE_DIR})

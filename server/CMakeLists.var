@@ -1,0 +1,51 @@
+set(module_name server)
+
+set(module_type executable)
+
+set(library_type)
+
+set(headers
+    )
+
+set(sources
+    src/main.cpp
+    src/Application.hpp
+    src/Application.cpp
+    )
+
+set(tests
+    )
+
+set(definitions
+    -DULOG_INFO
+    )
+
+
+set(libraries
+    runnerd_core
+    runnerd_common
+    )
+
+set(external_libraries
+    ${Boost_SYSTEM_LIBRARY}
+    ${Boost_PROGRAM_OPTIONS_LIBRARY}
+    )
+
+
+set(libraries_test
+    )
+
+set(libraries_test_WIN32
+    mpr
+    )
+
+set(libraries_test_APPLE
+    iconv
+    dl
+    )
+
+set(libraries_test_UNIX
+    dl
+    rt
+    pthread
+    )

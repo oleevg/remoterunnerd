@@ -1,0 +1,47 @@
+set(module_name core)
+
+set(module_type library)
+
+set(library_type)
+
+set(headers
+    include/core/BaseException.hpp
+    include/core/ulog.h
+    )
+
+set(sources
+    src/BaseException.cpp
+    src/ulog.c
+    )
+
+set(tests
+    )
+
+set(definitions
+    )
+
+
+set(libraries
+    )
+
+set(external_libraries
+    )
+
+
+set(libraries_test
+    )
+
+set(libraries_test_WIN32
+    mpr
+    )
+
+set(libraries_test_APPLE
+    iconv
+    dl
+    )
+
+set(libraries_test_UNIX
+    dl
+    rt
+    pthread
+    )
