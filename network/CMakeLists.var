@@ -1,19 +1,15 @@
-set(module_name common)
+set(module_name network)
 
 set(module_type library)
 
 set(library_type)
 
 set(headers
-    include/common/TextConfigurationParser.hpp
-    include/common/ProcessRunnerProtocol.hpp
-    include/common/CommandStore.hpp
+    include/network/Listener.hpp
     )
 
 set(sources
-    src/TextConfigurationParser.cpp
-    src/ProcessRunnerProtocol.cpp
-    src/CommandStore.cpp
+    src/Listener.cpp
     )
 
 set(tests
@@ -24,7 +20,6 @@ set(definitions
 
 
 set(libraries
-    runnerd_core
     )
 
 set(external_libraries

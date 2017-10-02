@@ -148,7 +148,6 @@ if (${project_name}_${module_name}_TESTS)
   find_package(Boost COMPONENTS system unit_test_framework program_options REQUIRED)
   message(STATUS "Found BOOST placement: Boost_INCLUDE_DIR=${Boost_INCLUDE_DIR}")
 
-  add_definitions(-DBOOST_TEST_DYN_LINK)
   include_directories(${Boost_INCLUDE_DIR})
 
   # Add test's executable to the project using the specified source files.

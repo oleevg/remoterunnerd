@@ -17,7 +17,6 @@ set(tests
     )
 
 set(definitions
-    -DULOG_INFO
     )
 
 

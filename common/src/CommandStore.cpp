@@ -22,7 +22,7 @@ namespace runnerd {
     {
       auto result = commands_.insert(command);
 
-      mdebug_info("Added command: %s", command.c_str());
+      mdebug_info("Registered command: %s", command.c_str());
 
       return result.second;
     }

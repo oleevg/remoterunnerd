@@ -32,7 +32,7 @@ int main(int argc, const char* argv[])
   const int timeoutDefault = 5;
   const std::string unixSocketDefault = "/tmp/simple-telnetd";
   //const std::string commandsConfigurationFile = "/etc/remote-runnerd.conf";
-  const std::string commandsConfigurationFile = "./remote-runnerd.conf";
+  const std::string commandsConfigurationFile = "/home/lolo/remote-runnerd.conf";
 
   runnerd::ULogWrapper ulog;
 

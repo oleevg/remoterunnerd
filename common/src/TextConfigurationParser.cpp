@@ -8,8 +8,9 @@
 #include <fstream>
 #include <string>
 
-#include <common/TextConfigurationParser.hpp>
 #include <core/BaseException.hpp>
+
+#include <common/TextConfigurationParser.hpp>
 
 namespace runnerd {
 
@@ -26,10 +27,7 @@ namespace runnerd {
     {
       ConfigurationContent result;
 
-      std::ifstream file;
-
-      file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-      file.open(filePath_, std::ios_base::in);
+      std::ifstream file(filePath_, std::ios_base::in);
 
       std::string line;
       while (getline(file, line))
