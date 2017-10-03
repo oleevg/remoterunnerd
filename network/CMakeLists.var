@@ -5,11 +5,13 @@ set(module_type library)
 set(library_type)
 
 set(headers
-    include/network/Listener.hpp
+    include/network/AsyncListener.hpp
+    include/network/AsyncConnection.hpp
     )
 
 set(sources
-    src/Listener.cpp
+    src/AsyncListener.cpp
+    src/AsyncConnection.cpp
     )
 
 set(tests
