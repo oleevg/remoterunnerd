@@ -8,10 +8,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdint.h>
 
 #include <core/ulog.h>
-
-static const int max_input_size=1024;
 
 void ulog_init()
 {
@@ -33,7 +32,7 @@ void ulog_clean()
 
 void ulog_info(const char* category, const char* file_name, const char* func_name, int line, const char* format, ...)
 {
-  char buf[max_input_size];
+  char buf[UINT16_MAX];
 
   BUILD_BUFFER(buf, format);
 
@@ -52,7 +51,7 @@ void ulog_info(const char* category, const char* file_name, const char* func_nam
 
 void ulog_error(const char* category, const char* file_name, const char* func_name, int line, const char* format, ...)
 {
-  char buf[max_input_size];
+  char buf[UINT16_MAX];
 
   BUILD_BUFFER(buf, format);
 
@@ -69,7 +68,7 @@ void ulog_error(const char* category, const char* file_name, const char* func_na
 
 void ulog_common(enum zlog_level level, const char* category, const char* file_name, const char* func_name, int line, const char* format, ...)
 {
-  char buf[max_input_size];
+  char buf[UINT16_MAX];
 
   BUILD_BUFFER(buf, format);
 #ifdef ZLOG

@@ -57,13 +57,13 @@ void ulog_common(enum zlog_level level, const char* category, const char* file_n
 #endif
 
 #define mdebug_error_s(str) ulog_error(ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, str)
-#define mdebug_error(format, args...) ulog_error(ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##args)
+#define mdebug_error(format, ...) ulog_error(ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, __VA_ARGS__)
 
 #define mdebug_notice_s(str) ulog_common(ZLOG_LEVEL_NOTICE, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, str)
-#define mdebug_notice(format, args...) ulog_common(ZLOG_LEVEL_NOTICE, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##args)
+#define mdebug_notice(format, ...) ulog_common(ZLOG_LEVEL_NOTICE, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, __VA_ARGS__)
 
-#define mdebug_info(format, args...) ulog_info(ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##args)
-#define mdebug_warn(format, args...) ulog_common(ZLOG_LEVEL_WARN, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##args)
+#define mdebug_info(format, ...) ulog_info(ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, __VA_ARGS__)
+#define mdebug_warn(format, ...) ulog_common(ZLOG_LEVEL_WARN, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, __VA_ARGS__)
 
 
 #ifdef __cplusplus
