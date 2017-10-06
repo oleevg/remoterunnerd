@@ -9,6 +9,7 @@ set(headers
     include/common/ProcessRunnerProtocol.hpp
     include/common/UnixService.hpp
     include/common/CommandStore.hpp
+    include/common/ProcessExecutor.hpp
     )
 
 set(sources
@@ -16,6 +17,7 @@ set(sources
     src/ProcessRunnerProtocol.cpp
     src/UnixService.cpp
     src/CommandStore.cpp
+    src/ProcessExecutor.cpp
     )
 
 set(tests

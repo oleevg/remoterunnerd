@@ -5,7 +5,13 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
+#include <algorithm>
+
+#include<boost/algorithm/string/split.hpp>                                      
+#include<boost/algorithm/string.hpp>
+
 #include <common/ProcessRunnerProtocol.hpp>
+#include <common/ProcessExecutor.hpp>
 #include <network/AsyncConnection.hpp>
 
 namespace runnerd {
@@ -40,7 +46,28 @@ namespace runnerd {
 
       readHandler_ = [selfCopy](const boost::system::error_code &err, size_t bytes)
       {
-        std::string response(selfCopy->getReadBuffer());
+        std::string request(selfCopy->getReadBuffer());
+        request.erase(std::remove(request.begin(), request.end(), '\n'), request.end());
+
+        std::string response;
+
+        if(!request.empty())
+        {
+          ProcessExecutor::Arguments arguments;
+        
+          boost::algorithm::split(arguments, request, boost::is_any_of("\t "), boost::token_compress_on);
+
+          std::string execName = arguments.front();
+          ProcessExecutor::Arguments argumentsWithoutExec;
+
+          if(arguments.size() > 1)
+          {
+            argumentsWithoutExec.assign(arguments.begin() + 1, arguments.end());
+          }
+
+          response = ProcessExecutor::executeProcess(execName, argumentsWithoutExec, 5);
+        } 
+
         response.append("\nrunnerd# ");
 
         selfCopy->clearReadBuffer();
