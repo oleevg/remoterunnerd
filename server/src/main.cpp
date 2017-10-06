@@ -38,8 +38,6 @@ int main(int argc, const char* argv[])
 
   runnerd::server::Application app(portDefault, timeoutDefault, unixSocketDefault, commandsConfigurationFile);
 
-  app.parseArguments(argc, argv);
-
-  return app.runInteractive();
+  return app.run(argc, argv);
 }
 

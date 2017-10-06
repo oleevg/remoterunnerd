@@ -11,8 +11,8 @@ namespace runnerd {
 
   namespace core {
 
-    BaseException::BaseException(const std::string& errorMessage, int errorCode):
-    errorMessage_("Base error occured: " + errorMessage), errorCode_(errorCode)
+    BaseException::BaseException(const std::string& errorMessage) :
+    errorMessage_("Base error occured: " + errorMessage)
     {
 
     }

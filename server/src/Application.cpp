@@ -11,6 +11,9 @@
 #include <boost/program_options.hpp>
 #include <boost/format.hpp>
 
+#include <core/ulog.h>
+#include <core/ThreadHelper.hpp>
+
 #include "Application.hpp"
 
 namespace runnerd {
@@ -59,30 +62,29 @@ namespace runnerd {
         std::cout << desc << "\n";
       }
 
-      parser = std::make_shared<common::TextConfigurationParser>(configurationFile);
+      common::TextConfigurationParser::Ptr parser = std::make_shared<common::TextConfigurationParser>(configurationFile);
 
       auto content = parser->readByLine();
 
-      commandStore = std::make_shared<common::CommandStore>(content.size());
+      common::CommandStore::Ptr commandStore = std::make_shared<common::CommandStore>(content.size());
       for (const auto& command : content)
       {
         commandStore->registerCommand(command);
       }
-    }
 
-    int Application::runInteractive()
-    {
-      return 0;
-    }
-
-    int Application::runForeground()
-    {
-      return 0;
+      appService = std::make_shared<ApplicationService>(vm["port"].as<int>(), parser, commandStore);
     }
 
     void Application::setArguments()
     {
 
+    }
+
+    int Application::run(int argc, const char** argv)
+    {
+      parseArguments(argc, argv);
+
+      return appService->run();
     }
 
   }

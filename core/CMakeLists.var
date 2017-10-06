@@ -5,12 +5,15 @@ set(module_type library)
 set(library_type)
 
 set(headers
+    include/core/ThreadHelper.hpp
     include/core/BaseException.hpp
+    include/core/SystemException.hpp
     include/core/ulog.h
     )
 
 set(sources
     src/BaseException.cpp
+    src/SystemException.cpp
     src/ulog.c
     )
 
@@ -26,7 +29,6 @@ set(libraries
 
 set(external_libraries
     )
-
 
 set(libraries_test
     )

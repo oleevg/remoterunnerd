@@ -10,6 +10,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <functional>
 
 #include <boost/asio.hpp>
 #include <boost/system/error_code.hpp>
@@ -24,27 +25,22 @@ namespace runnerd {
 
       public:
         typedef std::shared_ptr<AsyncConnection> Ptr;
+        typedef std::function<void(const boost::system::error_code&, size_t)> IOHandler;
+        typedef std::function<size_t(const boost::system::error_code&, size_t)> ReadCompleteHandler;
 
       public:
         AsyncConnection(boost::asio::io_service& service);
 
         boost::asio::ip::tcp::socket& getSocket();
 
-        bool started() const;
+        bool isStarted() const;
 
-        void onRead(const boost::system::error_code &err, size_t bytes);
-        void doRead();
-
-        void onWrite(const boost::system::error_code &err, size_t bytes);
-        void doWrite(const std::string &msg);
-
-        size_t readComplete(char *buf, const boost::system::error_code &err, size_t bytes);
+        void readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler, IOHandler readHandler);
+        void writeAsync(const std::string& msg, IOHandler handler);
 
       private:
         boost::asio::ip::tcp::socket socket_;
 
-        char readBuffer_[UINT16_MAX];
-        char writeBuffer_[UINT16_MAX];
         bool started_;
 
     };

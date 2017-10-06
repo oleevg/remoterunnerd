@@ -9,12 +9,16 @@
 #define REMOTERUNNERD_APPLICATION_H
 
 #include <string>
+#include <memory>
 
 #include <common/TextConfigurationParser.hpp>
 #include <common/CommandStore.hpp>
 
-namespace runnerd
-{
+#include <network/AsyncListener.hpp>
+
+#include "ApplicationService.hpp"
+
+namespace runnerd {
 
   namespace server {
 
@@ -26,9 +30,7 @@ namespace runnerd
 
         void parseArguments(int argc, const char** argv);
 
-        int runInteractive();
-
-        int runForeground();
+        int run(int argc, const char** argv);
 
       private:
         void setArguments();
@@ -39,8 +41,13 @@ namespace runnerd
         const std::string defaultUnixSocket_;
         const std::string defaultConfiguration_;
 
-        common::TextConfigurationParser::Ptr parser;
-        common::CommandStore::Ptr commandStore;
+        common::TextConfigurationParser::Ptr parser_;
+        common::CommandStore::Ptr commandStore_;
+
+        network::AsyncListener::Ptr asyncListener_;
+
+        std::shared_ptr<ApplicationService> appService;
+
     };
 
   }

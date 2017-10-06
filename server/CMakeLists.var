@@ -5,12 +5,14 @@ set(module_type executable)
 set(library_type)
 
 set(headers
+    src/Application.hpp
+    src/ApplicationService.hpp
     )
 
 set(sources
     src/main.cpp
-    src/Application.hpp
     src/Application.cpp
+    src/ApplicationService.cpp
     )
 
 set(tests
@@ -23,6 +25,7 @@ set(definitions
 set(libraries
     runnerd_core
     runnerd_common
+    runnerd_network
     )
 
 set(external_libraries

@@ -22,6 +22,7 @@ set(definitions
 
 
 set(libraries
+    runnerd_core
     )
 
 set(external_libraries

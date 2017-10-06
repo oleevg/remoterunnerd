@@ -18,14 +18,11 @@ namespace runnerd {
     class BaseException : public std::exception {
 
       public:
-        BaseException(const std::string& errorMessage, int errorCode);
-
-        int getErrorCode() const;
+        BaseException(const std::string& errorMessage);
 
         const char* what() const noexcept override;
 
       private:
-        int errorCode_;
         std::string errorMessage_;
     };
 

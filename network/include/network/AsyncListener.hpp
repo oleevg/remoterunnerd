@@ -8,6 +8,9 @@
 #ifndef RUNNERD_LISTENER_HPP
 #define RUNNERD_LISTENER_HPP
 
+#include <memory>
+#include <functional>
+
 #include <boost/asio.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/system/error_code.hpp>
@@ -21,16 +24,17 @@ namespace runnerd {
     class AsyncListener {
 
       public:
+        typedef std::shared_ptr<AsyncListener> Ptr;
+        typedef std::function<void(const AsyncConnection::Ptr&, const boost::system::error_code&)> AcceptHandler;
+
+      public:
         AsyncListener(int port);
 
-        void handleAccept(AsyncConnection::Ptr connection, const boost::system::error_code &err);
-
-        void listenAsync();
+        void listenAsync(AcceptHandler asyncHandler);
 
         void stop();
 
-      private:
-        void acceptAsync();
+        void acceptAsync(AcceptHandler asyncHandler);
 
       private:
         boost::asio::io_service service_;

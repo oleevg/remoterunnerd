@@ -7,52 +7,35 @@
 
 #include <boost/bind.hpp>
 
+#include <core/ulog.h>
+#include <core/ThreadHelper.hpp>
+
 #include <network/AsyncConnection.hpp>
 
-#define MEM_FN(x) boost::bind(&self_type::x, shared_from_this())
-#define MEM_FN2(x, y, z) boost::bind(&self_type::x, shared_from_this(),y,z)
 
 namespace runnerd {
 
   namespace network {
 
-    AsyncConnection::AsyncConnection(boost::asio::io_service& service):
-    socket_(service), started_(false)
+    AsyncConnection::AsyncConnection(boost::asio::io_service& service) :
+            socket_(service), started_(true)
     {
 
     }
 
-    void AsyncConnection::onRead(const boost::system::error_code &err, size_t bytes)
+    void AsyncConnection::readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler,
+                                    IOHandler readHandler)
     {
-      if (!err) {
-        std::string msg(readBuffer_, bytes);
-        doWrite(msg + "\n");
-      }
+      boost::asio::async_read(getSocket(), boost::asio::buffer(buffer, size), readCompleteHandler, readHandler);
     }
 
-    void AsyncConnection::onWrite(const boost::system::error_code &err, size_t bytes)
+    void AsyncConnection::writeAsync(const std::string& msg, IOHandler handler)
     {
-      doRead();
-    }
+      if (!isStarted()) return;
 
-    size_t AsyncConnection::readComplete(char *buf, const boost::system::error_code &err, size_t bytes)
-    {
-      if (err) return 0;
-      bool found = std::find(buf, buf + bytes, '\n') < buf + bytes;
-      // we read one-by-one until we get to enter, no buffering
-      return found ? 0 : 1;
-    }
+      mdebug_info("Going to write %s.", msg.c_str());
 
-    void AsyncConnection::doRead()
-    {
-      boost::asio::async_read(getSocket(), boost::asio::buffer(readBuffer_, sizeof(readBuffer_)), boost::bind(&AsyncConnection::readComplete, shared_from_this(), readBuffer_, _1, _2), MEM_FN2(onRead, _1, _2));
-    }
-
-    void AsyncConnection::doWrite(const std::string &msg)
-    {
-      if (!started()) return;
-      std::copy(msg.begin(), msg.end(), writeBuffer_);
-      getSocket().async_write_some(boost::asio::buffer(writeBuffer_, msg.size()), MEM_FN2(onWrite, _1, _2));
+      getSocket().async_write_some(boost::asio::buffer(msg.c_str(), msg.length()), handler);
     }
 
     boost::asio::ip::tcp::socket& AsyncConnection::getSocket()
@@ -60,7 +43,7 @@ namespace runnerd {
       return socket_;
     }
 
-    bool AsyncConnection::started() const
+    bool AsyncConnection::isStarted() const
     {
       return started_;
     }
