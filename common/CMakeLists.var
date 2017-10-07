@@ -21,6 +21,7 @@ set(sources
     )
 
 set(tests
+    test/CommandStore_test.cpp
     )
 
 set(definitions
@@ -37,6 +38,7 @@ set(external_libraries
 
 
 set(libraries_test
+    runnerd_common
     )
 
 set(libraries_test_WIN32

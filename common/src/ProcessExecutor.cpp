@@ -7,69 +7,92 @@
 
 #include <chrono>
 
-#include <boost/process.hpp>
+#include <boost/process/child.hpp>
+#include <boost/process/io.hpp>
 
 #include <core/ulog.h>
+#include <core/ThreadHelper.hpp>
+#include <core/BaseException.hpp>
 
 #include <common/ProcessExecutor.hpp>
 
-namespace runnerd {
+namespace {
 
-namespace common {
+  const std::string processExecutionCanceled = "Execution canceled due to the timeout expiration.";
 
-	std::string ProcessExecutor::executeProcess(const std::string& execName, const ProcessExecutor::Arguments& arguments, int timeout)
-	{
-		// boost::process::context ctx; 
-		// ctx.stdout_behavior = boost::process::capture_stream(); 
-		// ctx.environment = boost::process::self::get_environment();
-		
-		mdebug_info("Going to execute '%s'", execName.c_str());
+  std::string takeStringFromPipeStream(boost::process::ipstream& stream)
+  {
+    std::string line;
+    std::string output;
 
-		for (auto c: execName)
-		{
-			mdebug_info("%x ", c);	
-		}
+    while (std::getline(stream, line))
+    {
+      mdebug_info(line.c_str());
+      output.append(line);
+      output.push_back('\n');
+    }
 
-		for (const auto& arg : arguments)
-		{
-			mdebug_info("'%s' ", arg.c_str());
-		}
-
-		boost::process::ipstream outputStream;
-		//boost::process::child childProcess = boost::process::launch(execName, arguments, ctx); 
-		boost::process::child childProcess(execName, arguments, boost::process::std_out > outputStream );
-
-		std::error_code errorCode;
-		if(!childProcess.wait_for(std::chrono::seconds(timeout), errorCode))
-		{
-			childProcess.terminate();
-		}
-
-		// if (childProcess.exited()) 
-		// {
-		// 	mdebug_info("Program returned exit code %d.", childProcess.exit_status()); 	
-		// }
-	 //    else if (childProcess.signaled()) 
-	 //    { 
-	 //        mdebug_info("Program received signal %d.", childProcess.term_signal()); 
-	 //    } 
-	 //    else if (childProcess.stopped()) 
-	 //    {
-	 //        mdebug_info("Program stopped by signal %d.", childProcess.stop_signal()); 
-	 //    }
-	 //    else 
-	 //    {
-	 //        mdebug_info("Unknown termination reason"); 
-	 //    }
-
-	    mdebug_info("Child process's output by line:");
-    	std::string line; 
-    	while (std::getline(outputStream, line)) 
-        	mdebug_info(line.c_str());
-
-    	return std::string();
-	}
+    return output;
+  }
 
 }
+
+namespace runnerd {
+
+  namespace common {
+
+    std::string
+    ProcessExecutor::executeProcess(const std::string& execName, const ProcessExecutor::Arguments& arguments,
+                                    int timeout)
+    {
+      mdebug_info("Going to execute '%s'. ThreadId=0x%x", execName.c_str(), core::ThreadHelper::threadIdToInt());
+
+      for (const auto& arg : arguments)
+      {
+        mdebug_info("'%s' ", arg.c_str());
+      }
+
+      std::string execCommand = execName;
+      for (const auto& arg : arguments)
+      {
+        execCommand.append(" ");
+        execCommand.append(arg);
+      }
+
+      boost::process::ipstream outputStream;
+      boost::process::ipstream errorStream;
+
+      try
+      {
+        boost::process::child childProcess(execCommand, boost::process::std_out > outputStream,
+                                           boost::process::std_err > errorStream);
+
+        std::error_code errorCode;
+        if (!childProcess.wait_for(std::chrono::seconds(timeout), errorCode))
+        {
+          mdebug_warn("Process '%s' execution timeout expired. Going to terminate the child process.", execName.c_str());
+          childProcess.terminate();
+
+          return processExecutionCanceled;
+        }
+
+        if(childProcess.exit_code())
+        {
+          return takeStringFromPipeStream(errorStream);
+        }
+
+        mdebug_info("Child process's output by line:");
+
+        return takeStringFromPipeStream(outputStream);
+      }
+      catch(const boost::process::process_error& exc)
+      {
+        throw core::BaseException(exc.what());
+      }
+
+
+    }
+
+  }
 
 }

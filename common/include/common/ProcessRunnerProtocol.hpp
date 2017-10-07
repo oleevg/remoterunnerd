@@ -23,17 +23,19 @@ namespace runnerd {
 
     class ProcessRunnerProtocol : public std::enable_shared_from_this<ProcessRunnerProtocol>, boost::noncopyable {
 
-        typedef std::function<void()> CommandHandler;
+        typedef std::string (ProcessRunnerProtocol::*CommandHandler)(void);
         typedef std::unordered_map<std::string, CommandHandler> CommandHandlers;
 
       public:
         typedef std::shared_ptr<ProcessRunnerProtocol> Ptr;
 
       public:
-        ProcessRunnerProtocol(const network::AsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore);
+        ProcessRunnerProtocol(const network::AsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
+                                      int processExecutionTimeout = -1);
 
         void start();
 
+        int getProcessExecutionTimeout() const;
         const char* getReadBuffer() const;
         void clearReadBuffer();
 
@@ -45,15 +47,26 @@ namespace runnerd {
         void startReadTaskAsync();
         void startWriteTaskAsync(const std::string& message);
 
+        std::string handleRequest();
+        std::string normalizeCommandLine(const std::string& commandLine);
+
+        bool isInternalCommand(const std::string& command) const;
+        std::string executeInternalCommand(const std::string& command);
+
+        std::string exitHandler();
+        std::string listHandler();
+
       private:
+        int processExecutionTimeout_;
+
         CommandHandlers commandHandlers_;
         CommandStore::Ptr commandStore_;
 
         network::AsyncConnection::Ptr connection_;
 
-        network::AsyncConnection::ReadCompleteHandler readCompleteHandler_;
         network::AsyncConnection::IOHandler readHandler_;
         network::AsyncConnection::IOHandler writeHandler_;
+        network::AsyncConnection::ReadCompleteHandler readCompleteHandler_;
 
         char readBuffer_[UINT16_MAX];
 

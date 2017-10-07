@@ -19,18 +19,31 @@ namespace runnerd {
     class UnixService {
 
       public:
-        typedef std::shared_ptr<std::atomic<bool>> SignalHandlerFlag;
-        typedef std::map<int, SignalHandlerFlag> SignalHandlerFlags;
+        struct SignalHandlerFlag {
+          typedef std::shared_ptr<SignalHandlerFlag> Ptr;
+
+          SignalHandlerFlag(bool value) : flag (value)
+          {
+
+          }
+
+          std::atomic<bool> flag;
+        };
+
+        typedef std::map<int, SignalHandlerFlag::Ptr> SignalHandlerFlags;
 
       public:
         void daemonize();
         void setSignalHandler();
 
         bool unregisterSignalHandlerFlag(int signalNumber);
-        void registerSignalHandlerFlag(int signalNumber, SignalHandlerFlag flag);
+        void registerSignalHandlerFlag(int signalNumber, SignalHandlerFlag::Ptr flag);
 
       private:
-        SignalHandlerFlags signalHandlerFlags_;
+        static void signalHandler(int signalNumber);
+
+      private:
+        static SignalHandlerFlags& getSignalHandlerFlags();
 
     };
 

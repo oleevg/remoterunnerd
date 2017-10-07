@@ -16,16 +16,11 @@
 
 #include <boost/format.hpp>
 
+#include <core/ulog.h>
 #include <core/SystemException.hpp>
 
 #include <common/UnixService.hpp>
 
-namespace {
-  void signalHandler(int signalNumber)
-  {
-
-  }
-}
 
 namespace runnerd {
 
@@ -94,6 +89,8 @@ namespace runnerd {
             throw core::BaseException("Cannot attach stderr to /dev/null");
           }
 
+          setSignalHandler();
+
           break;
 
         case -1:
@@ -107,20 +104,20 @@ namespace runnerd {
       }
     }
 
-    void UnixService::registerSignalHandlerFlag(int signalNumber, UnixService::SignalHandlerFlag flag)
+    void UnixService::registerSignalHandlerFlag(int signalNumber, SignalHandlerFlag::Ptr flag)
     {
-      if(signalHandlerFlags_.count(signalNumber))
+      if(getSignalHandlerFlags().count(signalNumber))
       {
         throw core::BaseException(
                 "Flag for signal %d has already been registered. You have to unregister it at first to continue.");
       }
 
-      signalHandlerFlags_[signalNumber] = flag;
+      getSignalHandlerFlags()[signalNumber] = flag;
     }
 
     bool UnixService::unregisterSignalHandlerFlag(int signalNumber)
     {
-      return signalHandlerFlags_.erase(signalNumber);
+      return getSignalHandlerFlags().erase(signalNumber);
     }
 
     void UnixService::setSignalHandler()
@@ -131,10 +128,33 @@ namespace runnerd {
       sa.sa_handler = &signalHandler;
       sa.sa_flags = SA_RESTART;
 
-      for (const auto& sh : signalHandlerFlags_ )
+      for (const auto& sh : getSignalHandlerFlags() )
       {
         sigaction(sh.first, &sa, nullptr);
       }
+    }
+
+    void UnixService::signalHandler(int signalNumber)
+    {
+      mdebug_info("Signal %d received.", signalNumber);
+
+      for (auto item : getSignalHandlerFlags())
+      {
+        if(signalNumber == item.first)
+        {
+          mdebug_info("Signal %d passed.", signalNumber);
+
+          auto& flag = item.second->flag;
+          flag.store(true);
+        }
+      }
+    }
+
+    UnixService::SignalHandlerFlags& UnixService::getSignalHandlerFlags()
+    {
+      static SignalHandlerFlags signalHandlerFlags;
+
+      return signalHandlerFlags;
     }
   }
 

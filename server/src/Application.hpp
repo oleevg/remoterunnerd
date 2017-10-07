@@ -41,11 +41,6 @@ namespace runnerd {
         const std::string defaultUnixSocket_;
         const std::string defaultConfiguration_;
 
-        common::TextConfigurationParser::Ptr parser_;
-        common::CommandStore::Ptr commandStore_;
-
-        network::AsyncListener::Ptr asyncListener_;
-
         std::shared_ptr<ApplicationService> appService;
 
     };

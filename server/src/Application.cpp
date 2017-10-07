@@ -67,10 +67,7 @@ namespace runnerd {
       auto content = parser->readByLine();
 
       common::CommandStore::Ptr commandStore = std::make_shared<common::CommandStore>(content.size());
-      for (const auto& command : content)
-      {
-        commandStore->registerCommand(command);
-      }
+      commandStore->setAllCommands(content);
 
       appService = std::make_shared<ApplicationService>(vm["port"].as<int>(), parser, commandStore);
     }

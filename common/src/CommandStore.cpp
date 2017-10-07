@@ -29,7 +29,36 @@ namespace runnerd {
 
     bool CommandStore::isRegistered(const std::string& command) const
     {
+      std::lock_guard<std::mutex> lock(mtx_);
+
       return (commands_.count(command));
+    }
+
+    CommandStore::CommandCollection CommandStore::getAllCommands() const
+    {
+      std::lock_guard<std::mutex> lock(mtx_);
+
+      CommandCollection output;
+      output.reserve(commands_.size());
+
+      for (const auto& command : commands_)
+      {
+        output.push_back(command);
+      }
+
+      return output;
+    }
+
+    void CommandStore::setAllCommands(const CommandStore::CommandCollection& commands)
+    {
+      std::lock_guard<std::mutex> lock(mtx_);
+
+      commands_.clear();
+
+      for (const auto& command : commands)
+      {
+        commands_.insert(command);
+      }
     }
 
   }

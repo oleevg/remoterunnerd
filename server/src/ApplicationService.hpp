@@ -41,12 +41,19 @@ namespace runnerd {
 
       public:
         ApplicationService(int port, const common::TextConfigurationParser::Ptr& parser,
-                                   const common::CommandStore::Ptr& commandStore);
+                                   const common::CommandStore::Ptr& commandStore, bool daemonize = false);
 
         ApplicationService(const std::string& unixSocketPath, const common::TextConfigurationParser::Ptr& parser,
-                                   const common::CommandStore::Ptr& commandStore);
+                                   const common::CommandStore::Ptr& commandStore, bool daemonize = false);
+
+        bool isDaemonized() const;
 
         int run();
+
+      private:
+        void initialize();
+
+        void signalHandlerTask();
 
       private:
         common::TextConfigurationParser::Ptr parser_;
@@ -54,6 +61,11 @@ namespace runnerd {
 
         network::AsyncListener::Ptr asyncListener_;
         std::unique_ptr<common::UnixService> unixService_;
+
+        common::UnixService::SignalHandlerFlag::Ptr termFlag_;
+        common::UnixService::SignalHandlerFlag::Ptr hupFlag_;
+
+        bool daemonized_;
     };
 
   }

@@ -47,6 +47,11 @@ namespace runnerd {
     {
       return started_;
     }
+
+    void AsyncConnection::close()
+    {
+      socket_.close();
+    }
   }
 
 }

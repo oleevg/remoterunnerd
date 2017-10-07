@@ -35,6 +35,8 @@ namespace runnerd {
 
         bool isStarted() const;
 
+        void close();
+
         void readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler, IOHandler readHandler);
         void writeAsync(const std::string& msg, IOHandler handler);
 

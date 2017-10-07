@@ -9,7 +9,9 @@
 #define C_COMMANDSTORE_HPP
 
 #include <string>
+#include <vector>
 #include <memory>
+#include <mutex>
 #include <unordered_set>
 
 namespace runnerd {
@@ -20,6 +22,7 @@ namespace runnerd {
 
       public:
         typedef std::shared_ptr<CommandStore> Ptr;
+        typedef std::vector<std::string> CommandCollection;
 
       public:
         CommandStore(size_t sizeHint);
@@ -28,8 +31,13 @@ namespace runnerd {
 
         bool isRegistered(const std::string& command) const;
 
+        CommandCollection getAllCommands() const;
+
+        void setAllCommands(const CommandCollection& commands);
+
       private:
         std::unordered_set<std::string> commands_;
+        mutable std::mutex mtx_;
     };
 
   }

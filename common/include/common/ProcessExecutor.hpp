@@ -21,7 +21,7 @@ namespace runnerd {
         typedef std::vector<std::string> Arguments;
 
       public:
-        static std::string executeProcess(const std::string& execName, const Arguments& arguments, int timeout);
+        std::string executeProcess(const std::string& execName, const Arguments& arguments, int timeout);
 
     };
 

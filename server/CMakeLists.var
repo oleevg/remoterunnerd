@@ -28,6 +28,10 @@ set(libraries
     runnerd_network
     )
 
+set(libraries_UNIX
+    pthread
+    )
+
 set(external_libraries
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
