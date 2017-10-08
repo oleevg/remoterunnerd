@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include <network/AsyncConnection.hpp>
+#include <network/IAsyncConnection.hpp>
 
 #include "CommandStore.hpp"
 
@@ -30,7 +30,7 @@ namespace runnerd {
         typedef std::shared_ptr<ProcessRunnerProtocol> Ptr;
 
       public:
-        ProcessRunnerProtocol(const network::AsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
+        ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
                                       int processExecutionTimeout = -1);
 
         void start();
@@ -62,11 +62,11 @@ namespace runnerd {
         CommandHandlers commandHandlers_;
         CommandStore::Ptr commandStore_;
 
-        network::AsyncConnection::Ptr connection_;
+        network::IAsyncConnection::Ptr connection_;
 
-        network::AsyncConnection::IOHandler readHandler_;
-        network::AsyncConnection::IOHandler writeHandler_;
-        network::AsyncConnection::ReadCompleteHandler readCompleteHandler_;
+        network::IOHandler readHandler_;
+        network::IOHandler writeHandler_;
+        network::ReadCompleteHandler readCompleteHandler_;
 
         char readBuffer_[UINT16_MAX];
 

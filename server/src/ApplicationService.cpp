@@ -16,6 +16,8 @@
 #include <core/ThreadHelper.hpp>
 
 #include <common/ProcessRunnerProtocol.hpp>
+#include <network/AsyncListener.hpp>
+#include <network/AsyncLocalListener.hpp>
 
 #include "ApplicationService.hpp"
 
@@ -32,7 +34,7 @@ namespace runnerd {
 
     ApplicationService::ApplicationService(const std::string& unixSocketPath, const common::TextConfigurationParser::Ptr& parser,
                                                const common::CommandStore::Ptr& commandStore, bool daemonize) :
-            parser_(parser), commandStore_(commandStore), daemonized_(daemonize)
+            parser_(parser), commandStore_(commandStore), asyncListener_(std::make_shared<network::AsyncLocalListener>(unixSocketPath)), daemonized_(daemonize)
     {
       initialize();
     }
@@ -53,7 +55,7 @@ namespace runnerd {
 
       auto selfCopy = shared_from_this();
 
-      auto acceptHandler = [selfCopy](const network::AsyncConnection::Ptr& connection, const boost::system::error_code& errorCode){
+      auto acceptHandler = [selfCopy](const network::IAsyncConnection::Ptr& connection, const boost::system::error_code& errorCode){
         mdebug_info("Client connected. ThreadId=0x%x.\n", core::ThreadHelper::threadIdToInt());
         common::ProcessRunnerProtocol::Ptr protocol = std::make_shared<common::ProcessRunnerProtocol>(connection, selfCopy->commandStore_, 15);
         protocol->start();

@@ -9,38 +9,25 @@
 #include <thread>
 
 #include <core/ulog.h>
+#include <core/ThreadHelper.hpp>
 
 #include <network/AsyncListener.hpp>
-#include <core/ThreadHelper.hpp>
+#include <network/AsyncConnection.hpp>
+
 
 namespace runnerd {
 
   namespace network {
 
     AsyncListener::AsyncListener(int port):
-            acceptor_(service_, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
+            acceptor_(getIoService(), boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
     {
 
-    }
-
-    void AsyncListener::listenAsync(AcceptHandler asyncHandler)
-    {
-      acceptAsync(asyncHandler);
-
-      mdebug_info("Listener started.\n");
-      service_.run();
-      mdebug_info("Listener finished.\n");
-    }
-
-
-    void AsyncListener::stop()
-    {
-      service_.stop();
     }
 
     void AsyncListener::acceptAsync(AcceptHandler asyncHandler)
     {
-      auto connection = std::make_shared<AsyncConnection>(service_);
+      auto connection = std::make_shared<AsyncConnection>(getIoService());
 
       auto proxyHandler = [this, connection, asyncHandler](const boost::system::error_code &err) {
         this->acceptAsync(asyncHandler);

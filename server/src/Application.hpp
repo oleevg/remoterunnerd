@@ -25,8 +25,6 @@ namespace runnerd {
     class Application {
 
       public:
-        Application(int defaultPort, int defaultTimeout, const std::string& defaultUnixSocket,
-                    const std::string& commandsConfigurationFile);
 
         void parseArguments(int argc, const char** argv);
 
@@ -36,11 +34,6 @@ namespace runnerd {
         void setArguments();
 
       private:
-        const int defaultPort_;
-        const int defaultTimeout_;
-        const std::string defaultUnixSocket_;
-        const std::string defaultConfiguration_;
-
         std::shared_ptr<ApplicationService> appService;
 
     };

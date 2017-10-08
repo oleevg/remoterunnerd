@@ -20,28 +20,25 @@ namespace runnerd {
 
   namespace server {
 
-    Application::Application(int defaultPort, int defaultTimeout, const std::string& defaultUnixSocket,
-                             const std::string& commandsConfigurationFile) :
-            defaultPort_(defaultPort), defaultTimeout_(defaultTimeout), defaultUnixSocket_(defaultUnixSocket),
-            defaultConfiguration_(commandsConfigurationFile)
-    {
-
-    }
-
-
     void Application::parseArguments(int argc, const char** argv)
     {
       namespace options = boost::program_options;
 
-      int port = defaultPort_;
-      int timeout = defaultTimeout_;
-      std::string configurationFile = defaultConfiguration_;
-      std::string unixSocket = defaultUnixSocket_;
+      const int portDefault = 12345;
+      const int timeoutDefault = 5;
+      const std::string unixSocketDefault = "/tmp/simple-telnetd";
+      //const std::string commandsConfigurationFile = "/etc/remote-runnerd.conf";
+      const std::string commandsConfigurationFile = "/home/lolo/remote-runnerd.conf";
 
       options::options_description desc((boost::format("Usage: %s [options]... \nOptions") % argv[0]).str());
 
+      int port = portDefault;
+      int timeout = timeoutDefault;
+      std::string configurationFile = commandsConfigurationFile;
+      std::string unixSocket = unixSocketDefault;
+
       desc.add_options()
-              ("port,p", options::value<int>(&port)->default_value(defaultPort_), "The port number to listen.")
+              ("port,p", options::value<int>(&port), "The port number to listen.")
               ("config,c", options::value<std::string>(&configurationFile),
                "The configuration file with supported commands list.")
               ("socket,s", options::value<std::string>(&unixSocket), "The UNIX socket path.")
@@ -69,7 +66,8 @@ namespace runnerd {
       common::CommandStore::Ptr commandStore = std::make_shared<common::CommandStore>(content.size());
       commandStore->setAllCommands(content);
 
-      appService = std::make_shared<ApplicationService>(vm["port"].as<int>(), parser, commandStore);
+      //appService = std::make_shared<ApplicationService>(port, parser, commandStore);
+      appService = std::make_shared<ApplicationService>(unixSocket, parser, commandStore);
     }
 
     void Application::setArguments()

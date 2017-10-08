@@ -1,33 +1,31 @@
 /*
- * AsyncConnection.cpp
+ * AsyncLocalConnection.cpp
  *
- *  Created on: 10/3/17
+ *  Created on: 10/7/17
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
 #include <core/ulog.h>
-#include <core/ThreadHelper.hpp>
 
-#include <network/AsyncConnection.hpp>
-
+#include <network/AsyncLocalConnection.hpp>
 
 namespace runnerd {
 
   namespace network {
 
-    AsyncConnection::AsyncConnection(boost::asio::io_service& service) :
+    AsyncLocalConnection::AsyncLocalConnection(boost::asio::io_service& service) :
             socket_(service), started_(true)
     {
 
     }
 
-    void AsyncConnection::readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler,
+    void AsyncLocalConnection::readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler,
                                     IOHandler readHandler)
     {
       boost::asio::async_read(getSocket(), boost::asio::buffer(buffer, size), readCompleteHandler, readHandler);
     }
 
-    void AsyncConnection::writeAsync(const std::string& msg, IOHandler handler)
+    void AsyncLocalConnection::writeAsync(const std::string& msg, IOHandler handler)
     {
       if (!isStarted()) return;
 
@@ -36,20 +34,22 @@ namespace runnerd {
       getSocket().async_write_some(boost::asio::buffer(msg.c_str(), msg.length()), handler);
     }
 
-    boost::asio::ip::tcp::socket& AsyncConnection::getSocket()
+    boost::asio::local::stream_protocol::socket& AsyncLocalConnection::getSocket()
     {
       return socket_;
     }
 
-    bool AsyncConnection::isStarted() const
+    bool AsyncLocalConnection::isStarted() const
     {
       return started_;
     }
 
-    void AsyncConnection::close()
+    void AsyncLocalConnection::close()
     {
       socket_.close();
     }
+
   }
+
 
 }

@@ -28,15 +28,9 @@ namespace runnerd {
 
 int main(int argc, const char* argv[])
 {
-  const int portDefault = 12345;
-  const int timeoutDefault = 5;
-  const std::string unixSocketDefault = "/tmp/simple-telnetd";
-  //const std::string commandsConfigurationFile = "/etc/remote-runnerd.conf";
-  const std::string commandsConfigurationFile = "/home/lolo/remote-runnerd.conf";
-
   runnerd::ULogWrapper ulog;
 
-  runnerd::server::Application app(portDefault, timeoutDefault, unixSocketDefault, commandsConfigurationFile);
+  runnerd::server::Application app;
 
   return app.run(argc, argv);
 }

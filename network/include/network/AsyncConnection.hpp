@@ -13,20 +13,21 @@
 #include <functional>
 
 #include <boost/asio.hpp>
+#include <boost/core/noncopyable.hpp>
 #include <boost/system/error_code.hpp>
+
+#include "IAsyncConnection.hpp"
 
 namespace runnerd {
 
   namespace network {
 
-    class AsyncConnection : public std::enable_shared_from_this<AsyncConnection>, boost::noncopyable {
+    class AsyncConnection : public IAsyncConnection, public std::enable_shared_from_this<AsyncConnection>, boost::noncopyable {
 
         typedef AsyncConnection self_type;
 
       public:
         typedef std::shared_ptr<AsyncConnection> Ptr;
-        typedef std::function<void(const boost::system::error_code&, size_t)> IOHandler;
-        typedef std::function<size_t(const boost::system::error_code&, size_t)> ReadCompleteHandler;
 
       public:
         AsyncConnection(boost::asio::io_service& service);
@@ -35,10 +36,10 @@ namespace runnerd {
 
         bool isStarted() const;
 
-        void close();
+        void close() override ;
 
-        void readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler, IOHandler readHandler);
-        void writeAsync(const std::string& msg, IOHandler handler);
+        void readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler, IOHandler readHandler) override ;
+        void writeAsync(const std::string& msg, IOHandler handler) override ;
 
       private:
         boost::asio::ip::tcp::socket socket_;

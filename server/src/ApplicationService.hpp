@@ -15,17 +15,17 @@
 
 #include <common/TextConfigurationParser.hpp>
 #include <common/CommandStore.hpp>
-
 #include <common/UnixService.hpp>
 
-#include <network/AsyncListener.hpp>
+#include <network/IAsyncListener.hpp>
 
-
-// TODO: try to use forward declaration
+//
 //namespace runnerd {
 //  namespace common {
 //
 //    class UnixService;
+//    struct UnixService::SignalHandlerFlag;
+//    class UnixService::SignalHandlerFlag::Ptr;
 //
 //  }
 //}
@@ -59,7 +59,7 @@ namespace runnerd {
         common::TextConfigurationParser::Ptr parser_;
         common::CommandStore::Ptr commandStore_;
 
-        network::AsyncListener::Ptr asyncListener_;
+        network::IAsyncListener::Ptr asyncListener_;
         std::unique_ptr<common::UnixService> unixService_;
 
         common::UnixService::SignalHandlerFlag::Ptr termFlag_;

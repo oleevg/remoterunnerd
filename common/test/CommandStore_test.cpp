@@ -12,7 +12,7 @@
 #include <common/CommandStore.hpp>
 
 BOOST_AUTO_TEST_SUITE (CommandStore)
-  
+
   BOOST_AUTO_TEST_CASE(setAllCommands_isRegistered_true)
   {
     runnerd::common::CommandStore commandStore(10);
