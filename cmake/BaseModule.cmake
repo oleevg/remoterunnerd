@@ -148,6 +148,15 @@ set(${project_name}_${module_name}_TESTS ${tests}
 # Add test module if tests sources are specified and skip this step overwise.
 #
 if (${project_name}_${module_name}_TESTS)
+  set(Boost_USE_STATIC_LIBS ON)
+  set(Boost_MULTITHREADED ON)
+  if(WIN32)
+    if (MSVC)
+      set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
+    endif ()
+    set(Boost_DETAILED_FAILURE_MSG ON)
+    set(Boost_USE_STATIC_RUNTIME ON)
+  endif()
   find_package(Boost COMPONENTS system unit_test_framework program_options REQUIRED)
   message(STATUS "Found BOOST placement: Boost_INCLUDE_DIR=${Boost_INCLUDE_DIR}")
 

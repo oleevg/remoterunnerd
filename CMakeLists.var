@@ -13,18 +13,20 @@ set(modules
     server
     )
 
+set(CMAKE_BUILD_TYPE Debug)
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_MULTITHREADED ON)
 
 if(WIN32)
-  set(Boost_USE_STATIC_RUNTIME OFF)
+  if (MSVC)
+    set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
+  endif ()
+  set(Boost_DETAILED_FAILURE_MSG ON)
+  set(Boost_USE_STATIC_RUNTIME ON)
 endif()
 
 find_package(Boost 1.64.0 COMPONENTS system program_options REQUIRED)
-message(STATUS "Found BOOST placement: Boost_INCLUDE_DIR=${Boost_INCLUDE_DIR}")
-
 include_directories(${Boost_INCLUDE_DIR})
 
-set(CMAKE_BUILD_TYPE Debug)
-
+# Logger specific settings
 add_definitions(-DULOG_INFO)

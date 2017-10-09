@@ -15,6 +15,9 @@ namespace runnerd {
 
   namespace core {
 
+    /**
+     * @brief Applications's base exception class.
+     */
     class BaseException : public std::exception {
 
       public:

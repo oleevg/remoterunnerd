@@ -41,4 +41,17 @@ BOOST_AUTO_TEST_SUITE (CommandStore)
     }
   }
 
+  BOOST_AUTO_TEST_CASE(registerCommand_isRegistered_true)
+  {
+    runnerd::common::CommandStore commandStore(10);
+
+    runnerd::common::CommandStore::CommandCollection commands = {"date", "pwd"};
+    commandStore.setAllCommands(commands);
+
+    commandStore.registerCommand("ls");
+
+    BOOST_REQUIRE(commandStore.getAllCommands().size() == (commands.size() + 1));
+    BOOST_REQUIRE(commandStore.isRegistered("ls"));
+  }
+
 BOOST_AUTO_TEST_SUITE_END()

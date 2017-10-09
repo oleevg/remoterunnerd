@@ -12,9 +12,20 @@
 #include <boost/format.hpp>
 
 #include <core/ulog.h>
+#include <core/SystemException.hpp>
 #include <core/ThreadHelper.hpp>
 
 #include "Application.hpp"
+
+namespace {
+  void conflicting_options(const boost::program_options::variables_map& vm, const char* rOpt, const char* lOpt)
+  {
+    if (vm.count(lOpt) && !vm[lOpt].defaulted() && vm.count(rOpt) && !vm[rOpt].defaulted())
+    {
+      throw runnerd::core::BaseException((boost::format("You can't set options '%s' and '%s' at the same time. Choose only one of them to continue.") % lOpt % rOpt).str());
+    }
+  }
+}
 
 namespace runnerd {
 
@@ -24,62 +35,95 @@ namespace runnerd {
     {
       namespace options = boost::program_options;
 
+      /* Default parameters definition */
       const int portDefault = 12345;
-      const int timeoutDefault = 5;
+      const int timeoutDefault = 15;
       const std::string unixSocketDefault = "/tmp/simple-telnetd";
-      //const std::string commandsConfigurationFile = "/etc/remote-runnerd.conf";
-      const std::string commandsConfigurationFile = "/home/lolo/remote-runnerd.conf";
+      const std::string commandsConfigurationFileDefault = "/etc/remote-runnerd.conf";
+      const bool useUnixSocketDefault = false;
 
       options::options_description desc((boost::format("Usage: %s [options]... \nOptions") % argv[0]).str());
 
       int port = portDefault;
       int timeout = timeoutDefault;
-      std::string configurationFile = commandsConfigurationFile;
+      std::string configurationFile = commandsConfigurationFileDefault;
       std::string unixSocket = unixSocketDefault;
+      bool useUnixSocket = useUnixSocketDefault;
 
       desc.add_options()
-              ("port,p", options::value<int>(&port), "The port number to listen.")
-              ("config,c", options::value<std::string>(&configurationFile),
+              ("port,p", options::value<int>(&port)->default_value(portDefault), "The port number to listen.")
+              ("config,c", options::value<std::string>(&configurationFile)->default_value(commandsConfigurationFileDefault),
                "The configuration file with supported commands list.")
-              ("socket,s", options::value<std::string>(&unixSocket), "The UNIX socket path.")
-              ("timeout,t", options::value<int>(&timeout), "Process execution wait time in ms.")
+              ("socket,s", options::value<std::string>(&unixSocket)->default_value(unixSocketDefault), "The Unix socket path.")
+              ("timeout,t", options::value<int>(&timeout)->default_value(timeoutDefault), "Process execution wait time in ms.")
+              ("unix,u", options::bool_switch(&useUnixSocket)->default_value(useUnixSocketDefault), "Force to use Unix socket.")
               ("help,h", "As it says.");
 
-      // Variable to store our command line arguments.
-      options::variables_map vm;
+      options::variables_map variableMap;
 
-      // Parsing and storing arguments.
-      options::store(options::parse_command_line(argc, argv, desc), vm);
+      options::store(options::parse_command_line(argc, argv, desc), variableMap);
+      options::notify(variableMap);
 
-      // Must be called after all the parsing and storing.
-      options::notify(vm);
-
-      if(vm.count("help"))
+      if(variableMap.count("help"))
       {
         std::cout << desc << "\n";
+        exit(0);
       }
 
-      common::TextConfigurationParser::Ptr parser = std::make_shared<common::TextConfigurationParser>(configurationFile);
+      conflicting_options(variableMap, "port", "socket");
+      conflicting_options(variableMap, "port", "unix");
+
+      if(timeout <= 0)
+      {
+        throw core::BaseException("Negative or zero timeout values are not supported. Please provide some positive integer value.");
+      }
+
+      common::TextConfigurationParser::Ptr parser = std::make_shared<common::TextConfigurationParser>(
+              configurationFile);
 
       auto content = parser->readByLine();
 
       common::CommandStore::Ptr commandStore = std::make_shared<common::CommandStore>(content.size());
       commandStore->setAllCommands(content);
 
-      //appService = std::make_shared<ApplicationService>(port, parser, commandStore);
-      appService = std::make_shared<ApplicationService>(unixSocket, parser, commandStore);
-    }
-
-    void Application::setArguments()
-    {
+      if(useUnixSocket || !variableMap["socket"].defaulted())
+      {
+        // TODO: Temporary hack. Implement proper exclusive application run.
+        remove(unixSocket.c_str());
+        appService = std::make_shared<ApplicationService>(unixSocket, timeout, parser, commandStore);
+      }
+      else
+      {
+        appService = std::make_shared<ApplicationService>(port, timeout, parser, commandStore);
+      }
 
     }
 
     int Application::run(int argc, const char** argv)
     {
-      parseArguments(argc, argv);
+      int rc = 0;
 
-      return appService->run();
+      try {
+        parseArguments(argc, argv);
+        rc = appService->run();
+      }
+      catch (const core::SystemException& exc)
+      {
+        mdebug_error(exc.what());
+        rc = exc.getErrorCode();
+      }
+      catch (const core::BaseException& exc)
+      {
+        mdebug_error(exc.what());
+        rc = -1;
+      }
+      catch(const std::exception& exc)
+      {
+        mdebug_error("Unknown error occured: %s", exc.what());
+        rc = -1;
+      }
+
+      return rc;
     }
 
   }

@@ -16,6 +16,10 @@ namespace runnerd {
 
   namespace common {
 
+    /**
+     * @brief Unix service class.
+     * @detailed Provides running processes as a daemon. Provides API to register signals to be handled.
+     */
     class UnixService {
 
       public:
@@ -33,10 +37,29 @@ namespace runnerd {
         typedef std::map<int, SignalHandlerFlag::Ptr> SignalHandlerFlags;
 
       public:
+        /**
+         * @brief
+         */
         void daemonize();
+
+        /**
+         * @brief Set signal handler function.
+         * @detailed Must be called after all required signals have been registered.
+         */
         void setSignalHandler();
 
+        /**
+         * @brief Unregisteres previously registered signal.
+         * @param signalNumber Signal number to unregister.
+         * @return Whether the specified signal was successfully unregistered.
+         */
         bool unregisterSignalHandlerFlag(int signalNumber);
+
+        /**
+         * @brief Registeres the specified signal.
+         * @param signalNumber Signal number to register.
+         * @param flag Atomic flag to keep the signal status.
+         */
         void registerSignalHandlerFlag(int signalNumber, SignalHandlerFlag::Ptr flag);
 
       private:

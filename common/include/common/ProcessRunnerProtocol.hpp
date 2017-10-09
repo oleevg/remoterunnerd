@@ -21,6 +21,9 @@ namespace runnerd {
 
   namespace common {
 
+    /**
+     * @brief Represents application's server <-> client interaction protocol.
+     */
     class ProcessRunnerProtocol : public std::enable_shared_from_this<ProcessRunnerProtocol>, boost::noncopyable {
 
         typedef std::string (ProcessRunnerProtocol::*CommandHandler)(void);
@@ -30,9 +33,18 @@ namespace runnerd {
         typedef std::shared_ptr<ProcessRunnerProtocol> Ptr;
 
       public:
+        /**
+         * @brief ctor.
+         * @param connection Connection to communicate with a client.
+         * @param commandStore Registered commands storage.
+         * @param processExecutionTimeout Acceptable timeout to wait for commands execution.
+         */
         ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
                                       int processExecutionTimeout = -1);
 
+        /**
+         * @brief Starts protocol's steps sequence.
+         */
         void start();
 
         int getProcessExecutionTimeout() const;

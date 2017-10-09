@@ -21,12 +21,14 @@ namespace runnerd {
         typedef std::shared_ptr<AsyncLocalListener> Ptr;
 
       public:
-        AsyncLocalListener(const std::string& socketPath);
+        AsyncLocalListener(const std::string& unixSocketPath);
+        ~AsyncLocalListener();
 
         void acceptAsync(AcceptHandler asyncHandler) override;
 
       private:
         boost::asio::local::stream_protocol::acceptor acceptor_;
+        std::string unixSocketPath_;
     };
 
   }

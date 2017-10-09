@@ -1,3 +1,10 @@
+##############################################
+#
+# CMake project build suite.
+# Author: Oleg F., fedorov.ftf@gmail.com
+#
+##############################################
+
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 project(runnerd C CXX)

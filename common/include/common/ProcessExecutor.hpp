@@ -15,12 +15,22 @@ namespace runnerd {
 
   namespace common {
 
+    /**
+     * @brief Executes commands and provides access to its output.
+     */
     class ProcessExecutor {
 
       public:
         typedef std::vector<std::string> Arguments;
 
       public:
+        /**
+         *
+         * @param execName Command name to execute.
+         * @param arguments The collection of command arguments.
+         * @param timeout Acceptable timeout in ms to wait for command execution.
+         * @return Command's output.
+         */
         std::string executeProcess(const std::string& execName, const Arguments& arguments, int timeout);
 
     };

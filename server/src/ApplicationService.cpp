@@ -25,16 +25,24 @@ namespace runnerd {
 
   namespace server {
 
-    ApplicationService::ApplicationService(int port, const common::TextConfigurationParser::Ptr& parser,
-                                               const common::CommandStore::Ptr& commandStore, bool daemonize) :
-            parser_(parser), commandStore_(commandStore), asyncListener_(std::make_shared<network::AsyncListener>(port)), daemonized_(daemonize)
+    ApplicationService::ApplicationService(int port, int processExecutionTimeout,
+                                           const common::TextConfigurationParser::Ptr& parser,
+                                           const common::CommandStore::Ptr& commandStore, bool daemonize) :
+            parser_(parser), commandStore_(commandStore),
+            asyncListener_(std::make_shared<network::AsyncListener>(port)),
+            processExecutionTimeout_(processExecutionTimeout), daemonized_(daemonize)
     {
       initialize();
     }
 
-    ApplicationService::ApplicationService(const std::string& unixSocketPath, const common::TextConfigurationParser::Ptr& parser,
-                                               const common::CommandStore::Ptr& commandStore, bool daemonize) :
-            parser_(parser), commandStore_(commandStore), asyncListener_(std::make_shared<network::AsyncLocalListener>(unixSocketPath)), daemonized_(daemonize)
+    ApplicationService::ApplicationService(const std::string& unixSocketPath, int processExecutionTimeout,
+                                           const common::TextConfigurationParser::Ptr& parser,
+                                           const common::CommandStore::Ptr& commandStore,
+                                           bool daemonize)
+            :
+            parser_(parser), commandStore_(commandStore),
+            asyncListener_(std::make_shared<network::AsyncLocalListener>(unixSocketPath)),
+            processExecutionTimeout_(processExecutionTimeout), daemonized_(daemonize)
     {
       initialize();
     }
@@ -57,7 +65,7 @@ namespace runnerd {
 
       auto acceptHandler = [selfCopy](const network::IAsyncConnection::Ptr& connection, const boost::system::error_code& errorCode){
         mdebug_info("Client connected. ThreadId=0x%x.\n", core::ThreadHelper::threadIdToInt());
-        common::ProcessRunnerProtocol::Ptr protocol = std::make_shared<common::ProcessRunnerProtocol>(connection, selfCopy->commandStore_, 15);
+        common::ProcessRunnerProtocol::Ptr protocol = std::make_shared<common::ProcessRunnerProtocol>(connection, selfCopy->commandStore_, selfCopy->processExecutionTimeout_);
         protocol->start();
       };
 

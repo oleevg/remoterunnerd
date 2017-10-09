@@ -22,16 +22,19 @@ namespace runnerd {
 
   namespace server {
 
+    /**
+     * @brief Application main class.
+     * @detailed Provides application arguments handling.
+     */
     class Application {
-
+      /**
+       * @brief Starts application's main cycle.
+       */
       public:
-
-        void parseArguments(int argc, const char** argv);
-
         int run(int argc, const char** argv);
 
       private:
-        void setArguments();
+        void parseArguments(int argc, const char** argv);
 
       private:
         std::shared_ptr<ApplicationService> appService;

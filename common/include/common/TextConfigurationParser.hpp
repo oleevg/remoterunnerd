@@ -18,13 +18,24 @@ namespace common {
 
   typedef std::vector<std::string> ConfigurationContent;
 
+  /**
+   * @brief Handles simple text files.
+   */
   class TextConfigurationParser {
     public:
       typedef std::shared_ptr<TextConfigurationParser> Ptr;
 
     public:
+      /**
+       * @brief ctor.
+       * @param filePath The file path to work with.
+       */
       TextConfigurationParser(const std::string& filePath);
 
+      /**
+       * @brief Reads the file by lines.
+       * @return Custom collection of strings the file contains.
+       */
       ConfigurationContent readByLine();
 
     private:
