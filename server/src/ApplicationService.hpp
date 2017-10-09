@@ -19,17 +19,6 @@
 
 #include <network/IAsyncListener.hpp>
 
-//
-//namespace runnerd {
-//  namespace common {
-//
-//    class UnixService;
-//    struct UnixService::SignalHandlerFlag;
-//    class UnixService::SignalHandlerFlag::Ptr;
-//
-//  }
-//}
-
 namespace runnerd {
 
   namespace server {
@@ -52,7 +41,7 @@ namespace runnerd {
          * @param daemonize Whether run as a daemon or not.
          */
         ApplicationService(int port, int processExecutionTimeout, const common::TextConfigurationParser::Ptr& parser,
-                                   const common::CommandStore::Ptr& commandStore, bool daemonize = false);
+                                   const common::CommandStore::Ptr& commandStore, bool daemonize = true);
 
         /**
          * @brief ctor.
@@ -64,7 +53,7 @@ namespace runnerd {
          */
         ApplicationService(const std::string& unixSocketPath, int processExecutionTimeout,
                                    const common::TextConfigurationParser::Ptr& parser, const common::CommandStore::Ptr& commandStore,
-                                   bool daemonize = false);
+                                   bool daemonize = true);
         /**
          * @return Flag saying whether application runs as a daemon or not.
          */
@@ -86,9 +75,9 @@ namespace runnerd {
         common::CommandStore::Ptr commandStore_;
 
         network::IAsyncListener::Ptr asyncListener_;
-        std::unique_ptr<common::UnixService> unixService_;
 
         common::UnixService::SignalHandlerFlag::Ptr termFlag_;
+        common::UnixService::SignalHandlerFlag::Ptr intFlag_;
         common::UnixService::SignalHandlerFlag::Ptr hupFlag_;
 
         int processExecutionTimeout_;

@@ -18,6 +18,8 @@ namespace runnerd {
 
     class AsyncBaseListener : public IAsyncListener {
       public:
+        virtual ~AsyncBaseListener() = default;
+
         virtual void stop() override;
 
         virtual void listenAsync(AcceptHandler asyncHandler) override;

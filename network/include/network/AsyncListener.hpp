@@ -1,5 +1,5 @@
 /*
- * Listener.hpp
+ * AsyncListener.hpp
  *
  *  Created on: 10/2/17
  *      Author: Oleg F., fedorov.ftf@gmail.com
@@ -26,6 +26,7 @@ namespace runnerd {
       public:
         AsyncListener(int port);
 
+      private:
         void acceptAsync(AcceptHandler asyncHandler) override ;
 
       private:

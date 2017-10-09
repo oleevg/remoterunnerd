@@ -22,14 +22,14 @@ namespace runnerd {
     void AsyncLocalConnection::readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler,
                                     IOHandler readHandler)
     {
+      if (!isStarted()) return;
+
       boost::asio::async_read(getSocket(), boost::asio::buffer(buffer, size), readCompleteHandler, readHandler);
     }
 
     void AsyncLocalConnection::writeAsync(const std::string& msg, IOHandler handler)
     {
       if (!isStarted()) return;
-
-      mdebug_info("Going to write %s.", msg.c_str());
 
       getSocket().async_write_some(boost::asio::buffer(msg.c_str(), msg.length()), handler);
     }
@@ -46,6 +46,7 @@ namespace runnerd {
 
     void AsyncLocalConnection::close()
     {
+      started_  =false;
       socket_.close();
     }
 

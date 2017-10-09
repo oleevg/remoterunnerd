@@ -27,8 +27,6 @@ namespace runnerd {
 
       public:
         typedef std::shared_ptr<AsyncLocalConnection> Ptr;
-        typedef std::function<void(const boost::system::error_code&, size_t)> IOHandler;
-        typedef std::function<size_t(const boost::system::error_code&, size_t)> ReadCompleteHandler;
 
       public:
         AsyncLocalConnection(boost::asio::io_service& service);

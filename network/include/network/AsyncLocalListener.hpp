@@ -24,6 +24,7 @@ namespace runnerd {
         AsyncLocalListener(const std::string& unixSocketPath);
         ~AsyncLocalListener();
 
+      private:
         void acceptAsync(AcceptHandler asyncHandler) override;
 
       private:

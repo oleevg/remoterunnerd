@@ -1,3 +1,10 @@
+##############################################
+#
+# CMake project build suite v1.0.0
+# Author: Oleg F., fedorov.ftf@gmail.com
+#
+##############################################
+
 set(module_name network)
 
 set(module_type library)
@@ -39,19 +46,4 @@ set(external_libraries
 
 
 set(libraries_test
-    )
-
-set(libraries_test_WIN32
-    mpr
-    )
-
-set(libraries_test_APPLE
-    iconv
-    dl
-    )
-
-set(libraries_test_UNIX
-    dl
-    rt
-    pthread
     )

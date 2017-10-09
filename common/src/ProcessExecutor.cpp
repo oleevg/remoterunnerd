@@ -27,7 +27,6 @@ namespace {
 
     while (std::getline(stream, line))
     {
-      mdebug_info(line.c_str());
       output.append(line);
       output.push_back('\n');
     }
@@ -47,6 +46,7 @@ namespace runnerd {
     {
       mdebug_info("Going to execute '%s'. ThreadId=0x%x", execName.c_str(), core::ThreadHelper::threadIdToInt());
 
+      mdebug_info("Arguments:");
       for (const auto& arg : arguments)
       {
         mdebug_info("'%s' ", arg.c_str());
@@ -76,12 +76,12 @@ namespace runnerd {
           return processExecutionCanceled;
         }
 
-        if(childProcess.exit_code())
+        int childErrorCode = childProcess.exit_code();
+        if(childErrorCode)
         {
+          mdebug_warn("Command '%s' execution failed. Return code: %d.", execName.c_str(), childErrorCode);
           return takeStringFromPipeStream(errorStream);
         }
-
-        mdebug_info("Child process's output by line:");
 
         return takeStringFromPipeStream(outputStream);
       }

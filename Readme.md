@@ -1,88 +1,103 @@
 # Project Title
 
-Simple server providing poss
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Simple network service that provides remote and local execution of registered commands.
 
 ### Prerequisites
+* CMake build system (>= 3.3) is used to compile the project. Compiling tested with gcc4.9.2 on Debian 8 system. 
+* Compiler support for C++11 standard is required.
+* boost (>= 1.64.0) is required to build the project.
+* [zlog library](https://github.com/HardySimpson/zlog) might be used to collect the services' messages and redirect it to ordinary file, syslog etc.
 
-What things you need to install the software and how to install them
+### Getting Started
+
+1. Download or clone the project's repository.
+2. Install all required tools and libraries listed in 'Prerequisites' section.
+3. Inside project folder create build directory and compile the sources. Building in source directory is forbidden.
+```
+$ mkdir .build && cd .build
+$ cmake ..
+$ make
+```
+4. Getting help:
+```
+$ cd .build/server
+$ ./runnerd_server -h
+Usage: ./runnerd_server [options]... 
+Options:
+  -p [ --port ] arg (=12345)            The port number to listen.
+  -c [ --config ] arg (=/etc/remote-runnerd.conf)
+                                        The configuration file with supported 
+                                        commands list.
+  -s [ --socket ] arg (=/tmp/simple-telnetd)
+                                        The Unix socket path.
+  -t [ --timeout ] arg (=15)            Process execution wait time in ms.
+  -u [ --unix ]                         Force to use Unix socket.
+  -d [ --debug ]                        Interactive run without daemonizing.
+  -h [ --help ]                         As it says.
 
 ```
-Give examples
+
+### Usage
+
+1. Prepare application's configuration file. 
+Create the service configuration file that contains the list of allowed commands to execute. You need to provide only command name without any supported arguments. Each new command must be placed on the new line.
+Example of configuration file creation:
+```
+$ touch ~/remote-runnerd.conf
+$ echo "ls" >>  ~/remote-runnerd.conf
+$ echo "pwd" >>  ~/remote-runnerd.conf
+$ ./runnerd_server -c ~/remote-runnerd.conf
+...
+```
+Application's default configuration file is '/etc/remote-runnerd.conf' - see application's help.
+
+2. Listening the specified or default port (12345).
+Default run mode is working with the specified or default numeric port:
+```
+$ ./runnerd_server -t 54321
+``` 
+
+3. Working with local Unix sockets:
+You have to provide '-u, --unix' flag to run the service with local Unix socket usage or explicitly provide local socket path through '-s, --socket' argument:
+```
+$ ./runnerd_server -u
+$ ./runnerd_server -s /tmp/runnerd.sock
 ```
 
-### Installing
-
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
-
+4. Run in interactive (debug) mode.
+To run service for debug purposes without daemonizing use '-d, --debug' flag:
 ```
-Give the example
+./runnerd_server -d
 ```
+5. Supported signals.
+* The service rereads configuration file and updates the list of allowed commands by receiving the SIGHUP signal.
+* Use SIGTERM or SIGINT signals to stop the service.
 
-And repeat
-
+6. Interaction with service through system tools:
 ```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
+$ netcal localhost 12345
+$ telnet localhost 12345
+$ socat - UNIX-CONNECT:/tmp/simple-telnetd
 ```
 
-### And coding style tests
+7. The service internal commands.
+The service accepts several internal commands:
+* list - get the list of registered commands to execute including internal ones.
+* exit - close client's connection (Might not work properly.) 
 
-Explain what these tests test and why
-
+##$ Running the tests
+CMake build framework might be used to run available unit tests. Just run 'ctest' inside build directory after building the sources.
 ```
-Give an example
-```
+$ ctest
+$ ctest --verbose
+``` 
 
-## Deployment
+##$ Authors
+Oleg Fedorov, fedorov.ftf@gmail.com
 
-Add additional notes about how to deploy this on a live system
 
-## Built With
+##$ License
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+To be done...
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
 

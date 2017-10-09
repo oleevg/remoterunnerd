@@ -26,7 +26,7 @@ namespace runnerd {
 
     ProcessRunnerProtocol::ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
                                                      int processExecutionTimeout) :
-            processExecutionTimeout_(processExecutionTimeout), connection_(connection), commandStore_(commandStore)
+            processExecutionTimeout_(processExecutionTimeout), connection_(connection), commandStore_(commandStore), commandPrompt_("runnerd# ")
     {
       registerInternalCommands();
     }
@@ -40,7 +40,6 @@ namespace runnerd {
         if (err) return 0;
 
         bool found = std::find(selfCopy->getReadBuffer(), selfCopy->getReadBuffer() + bytes, '\n') < selfCopy->getReadBuffer() + bytes;
-        // we read one-by-one until we get to enter, no buffering
         return found ? 0 : 1;
       };
 
@@ -53,7 +52,7 @@ namespace runnerd {
         }
         else
         {
-          mdebug_info("Socket might has been closed. Error code: %d", err);
+          mdebug_warn("Socket might has been closed. Error code: %d", err);
         }
       };
 
@@ -67,13 +66,13 @@ namespace runnerd {
         }
         else
         {
-          mdebug_info("Socket might has been closed. Error code: %d", err);
+          mdebug_warn("Socket might has been closed. Error code: %d", err);
         }
       };
 
       // Let's start
       clearReadBuffer();
-      connection_->writeAsync("runnerd# ", writeHandler_);
+      connection_->writeAsync(commandPrompt_, writeHandler_);
     }
 
     void ProcessRunnerProtocol::close()
@@ -97,37 +96,15 @@ namespace runnerd {
       connection_->writeAsync(message, writeHandler_);
     }
 
-    const char* ProcessRunnerProtocol::getReadBuffer() const
-    {
-      return readBuffer_;
-    }
-
-    void ProcessRunnerProtocol::clearReadBuffer()
-    {
-      memset(readBuffer_, 0, sizeof(readBuffer_));
-    }
-
-    int ProcessRunnerProtocol::getProcessExecutionTimeout() const
-    {
-      return processExecutionTimeout_;
-    }
-
     std::string ProcessRunnerProtocol::handleRequest()
     {
       std::string temp(getReadBuffer());
-
-      mdebug_info("Full request: '%s'.", temp.c_str());
-      for (auto c: temp)
-      {
-        mdebug_info("%x ", c);
-      }
 
       std::string request = normalizeCommandLine(getReadBuffer());
 
       clearReadBuffer();
 
       std::string response;
-
       if(!request.empty())
       {
         ProcessExecutor::Arguments arguments;
@@ -160,13 +137,30 @@ namespace runnerd {
         }
         else
         {
+          mdebug_warn("Attempt to execute unregistered command: '%s'", execName.c_str());
           response = (boost::format("Command '%s' is not registered. You can't execute unregistered commands.") % execName.c_str()).str();
         }
       }
 
-      response.append("\nrunnerd# ");
+      response.append("\n");
+      response.append(commandPrompt_);
 
       return response;
+    }
+
+    const char* ProcessRunnerProtocol::getReadBuffer() const
+    {
+      return readBuffer_;
+    }
+
+    void ProcessRunnerProtocol::clearReadBuffer()
+    {
+      memset(readBuffer_, 0, sizeof(readBuffer_));
+    }
+
+    int ProcessRunnerProtocol::getProcessExecutionTimeout() const
+    {
+      return processExecutionTimeout_;
     }
 
     bool ProcessRunnerProtocol::isInternalCommand(const std::string& command) const

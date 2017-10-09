@@ -12,6 +12,8 @@
 #include <memory>
 #include <map>
 
+#include <boost/serialization/singleton.hpp>
+
 namespace runnerd {
 
   namespace common {
@@ -20,7 +22,7 @@ namespace runnerd {
      * @brief Unix service class.
      * @detailed Provides running processes as a daemon. Provides API to register signals to be handled.
      */
-    class UnixService {
+    class UnixService : public boost::serialization::singleton<UnixService> {
 
       public:
         struct SignalHandlerFlag {

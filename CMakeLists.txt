@@ -1,6 +1,6 @@
 ##############################################
 #
-# CMake project build suite.
+# CMake project build suite v1.0.0
 # Author: Oleg F., fedorov.ftf@gmail.com
 #
 ##############################################

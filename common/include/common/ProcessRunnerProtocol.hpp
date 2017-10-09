@@ -22,7 +22,7 @@ namespace runnerd {
   namespace common {
 
     /**
-     * @brief Represents application's server <-> client interaction protocol.
+     * @brief Describes application's server <-> client interaction protocol.
      */
     class ProcessRunnerProtocol : public std::enable_shared_from_this<ProcessRunnerProtocol>, boost::noncopyable {
 
@@ -37,7 +37,7 @@ namespace runnerd {
          * @brief ctor.
          * @param connection Connection to communicate with a client.
          * @param commandStore Registered commands storage.
-         * @param processExecutionTimeout Acceptable timeout to wait for commands execution.
+         * @param processExecutionTimeout Acceptable timeout in seconds to wait for commands execution.
          */
         ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
                                       int processExecutionTimeout = -1);
@@ -48,13 +48,14 @@ namespace runnerd {
         void start();
 
         int getProcessExecutionTimeout() const;
-        const char* getReadBuffer() const;
-        void clearReadBuffer();
 
         void close();
 
       private:
         void registerInternalCommands();
+
+        const char* getReadBuffer() const;
+        void clearReadBuffer();
 
         void startReadTaskAsync();
         void startWriteTaskAsync(const std::string& message);
@@ -79,6 +80,8 @@ namespace runnerd {
         network::IOHandler readHandler_;
         network::IOHandler writeHandler_;
         network::ReadCompleteHandler readCompleteHandler_;
+
+        const std::string commandPrompt_;
 
         char readBuffer_[UINT16_MAX];
 

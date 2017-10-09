@@ -22,8 +22,6 @@ set(${project_name}_${module_name}_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/inclu
     CACHE INTERNAL "${project_name}_${module_name} headers directory."
     )
 
-message(STATUS "${project_name}_${module_name}_INCLUDE_DIR -> ${CMAKE_CURRENT_SOURCE_DIR}/include")
-
 set(_headers
     )
 
@@ -32,14 +30,14 @@ set(_sources
 
 # Put a list of header files into the cache.
 add_prefix(_headers "${CMAKE_CURRENT_SOURCE_DIR}" "${headers}")
-message(STATUS "_headers=${_headers}")
+
 set(${project_name}_${module_name}_HEADERS ${_headers}
     CACHE INTERNAL "${project_name}_${module_name} headers."
     )
 
 # Put a list of sources into the cache.
 add_prefix(_sources "${CMAKE_CURRENT_SOURCE_DIR}" "${sources}")
-message(STATUS "_sources=${_sources}")
+
 set(${project_name}_${module_name}_SOURCES ${_sources}
     CACHE INTERNAL "${project_name}_${module_name} sources"
     )
@@ -61,11 +59,6 @@ if ("${module_type}" STREQUAL "library")
       CACHE INTERNAL "${project_name}_${module_name} linking type."
       )
 elseif ("${module_type}" STREQUAL "executable")
-
-  message(STATUS "${project_name}_${module_name}
-        ${${project_name}_${module_name}_HEADERS}
-        ${${project_name}_${module_name}_SOURCES}")
-
   add_executable(${project_name}_${module_name}
                  ${${project_name}_${module_name}_HEADERS}
                  ${${project_name}_${module_name}_SOURCES}
@@ -97,9 +90,6 @@ if (${BUILD_SHARED_LIBS} OR "${${project_name}_${module_name}_library_type}" STR
   add_definitions(-D${project_name}_${module_name}_SHARED_DEFINE)
 endif ()
 
-message(STATUS "${project_name}_${module_name}
-    ${${project_name}_${module_name}_link_type} ${${project_name}_${module_name}_INCLUDE_DIR}")
-
 target_include_directories(${project_name}_${module_name}
                            ${${project_name}_${module_name}_link_type} ${${project_name}_${module_name}_INCLUDE_DIR})
 
@@ -108,7 +98,6 @@ if (WIN32)
   list(APPEND libraries
        ${libraries_WIN32}
        )
-  message(STATUS "Adding platform specific libraries: ${${project_name}_${module_name}} -> ${libraries}")
 elseif (APPLE)
   list(APPEND libraries
        ${libraries_APPLE}
@@ -121,13 +110,10 @@ endif ()
 
 foreach (dependency ${libraries})
   if (${${project_name}_${module_name}_link_type} STREQUAL "INTERFACE")
-    message(STATUS "Adding link:INTERFACE lib:${dependency} for ${project_name}_${module_name}")
     target_link_libraries(${project_name}_${module_name} INTERFACE ${dependency})
   elseif (DEFINED ${${dependency}_link_type})
-    message(STATUS "Adding link:${${dependency}_link_type} lib:${dependency} for ${project_name}_${module_name}")
     target_link_libraries(${project_name}_${module_name} ${${dependency}_link_type} ${dependency})
   else ()
-    message(STATUS "Adding link:PUBLIC lib:${dependency} for ${project_name}_${module_name}")
     target_link_libraries(${project_name}_${module_name} PUBLIC ${dependency})
   endif ()
 endforeach ()
@@ -157,8 +143,7 @@ if (${project_name}_${module_name}_TESTS)
     set(Boost_DETAILED_FAILURE_MSG ON)
     set(Boost_USE_STATIC_RUNTIME ON)
   endif()
-  find_package(Boost COMPONENTS system unit_test_framework program_options REQUIRED)
-  message(STATUS "Found BOOST placement: Boost_INCLUDE_DIR=${Boost_INCLUDE_DIR}")
+  find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
   include_directories(${Boost_INCLUDE_DIR})
 
@@ -166,14 +151,11 @@ if (${project_name}_${module_name}_TESTS)
   add_executable(${project_name}_${module_name}_test
                  ${${project_name}_${module_name}_TESTS}
                  )
-  # Link a target to the given libraries.
-  #add_dependencies(${project_name}_${module_name}_test ${project_name}_${module_name})
 
   if (WIN32)
     list(APPEND libraries_test
          ${libraries_test_WIN32}
          )
-    message(STATUS "Adding platform specific libraries for tests: ${${project_name}_${module_name}} -> ${libraries_test}")
   elseif (APPLE)
     list(APPEND libraries_test
          ${libraries_test_APPLE}
@@ -186,7 +168,6 @@ if (${project_name}_${module_name}_TESTS)
 
   ## Link a target to the given libraries.
   foreach (dependency ${libraries_test})
-    message(STATUS "Adding link:${${dependency}_link_type} lib:${dependency} for ${project_name}_${module_name}_test")
     if (NOT DEFINED ${${dependency}_link_type})
       target_link_libraries(${project_name}_${module_name}_test ${dependency})
     else ()

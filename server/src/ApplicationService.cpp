@@ -49,15 +49,18 @@ namespace runnerd {
 
     int ApplicationService::run()
     {
+      common::UnixService& unixService = common::UnixService::get_mutable_instance();
+
       if(isDaemonized())
       {
-        unixService_->daemonize();
+        unixService.daemonize();
       }
 
-      unixService_->registerSignalHandlerFlag(SIGTERM, termFlag_);
-      unixService_->registerSignalHandlerFlag(SIGHUP, hupFlag_);
+      unixService.registerSignalHandlerFlag(SIGTERM, termFlag_);
+      unixService.registerSignalHandlerFlag(SIGINT, intFlag_);
+      unixService.registerSignalHandlerFlag(SIGHUP, hupFlag_);
 
-      unixService_->setSignalHandler();
+      unixService.setSignalHandler();
 
       std::future<void> signalHandlerTask = std::async(std::launch::async, &ApplicationService::signalHandlerTask, this);
 
@@ -84,21 +87,28 @@ namespace runnerd {
     void ApplicationService::initialize()
     {
       termFlag_ = std::make_shared<common::UnixService::SignalHandlerFlag>(false);
+      intFlag_ = std::make_shared<common::UnixService::SignalHandlerFlag>(false);
       hupFlag_ = std::make_shared<common::UnixService::SignalHandlerFlag>(false);
-
-      unixService_ = std::unique_ptr<common::UnixService>(new common::UnixService());
     }
 
     void ApplicationService::signalHandlerTask()
     {
-      mdebug_info("%s started", __PRETTY_FUNCTION__);
-
       while (true)
       {
         if (termFlag_->flag.load())
         {
           mdebug_info("SIGTERM received.");
           termFlag_->flag.store(false);
+
+          asyncListener_->stop();
+
+          return;
+        }
+
+        if (intFlag_->flag.load())
+        {
+          mdebug_info("SIGINT received.");
+          intFlag_->flag.store(false);
 
           asyncListener_->stop();
 

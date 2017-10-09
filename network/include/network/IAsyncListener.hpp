@@ -30,9 +30,10 @@ namespace runnerd {
 
         virtual void listenAsync(AcceptHandler asyncHandler) = 0;
 
-        virtual void acceptAsync(AcceptHandler asyncHandler) = 0;
-
         virtual void stop() = 0;
+
+      protected:
+        virtual void acceptAsync(AcceptHandler asyncHandler) = 0;
     };
 
   }

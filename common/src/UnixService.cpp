@@ -30,8 +30,8 @@ namespace runnerd {
     {
       FILE* fStream = nullptr;
 
-      pid_t pid = fork();
       fprintf( stdout, "Daemonizing the process...\n");
+      pid_t pid = fork();
 
       switch(pid)
       {
@@ -44,7 +44,6 @@ namespace runnerd {
           }
 
           /* Catch, ignore and handle signals */
-          //TODO: Implement a working signal handler */
           signal(SIGCHLD, SIG_IGN);
           signal(SIGHUP, SIG_IGN);
 
@@ -88,8 +87,6 @@ namespace runnerd {
           {
             throw core::BaseException("Cannot attach stderr to /dev/null");
           }
-
-          setSignalHandler();
 
           break;
 
@@ -136,14 +133,10 @@ namespace runnerd {
 
     void UnixService::signalHandler(int signalNumber)
     {
-      mdebug_info("Signal %d received.", signalNumber);
-
       for (auto item : getSignalHandlerFlags())
       {
         if(signalNumber == item.first)
         {
-          mdebug_info("Signal %d passed.", signalNumber);
-
           auto& flag = item.second->flag;
           flag.store(true);
         }

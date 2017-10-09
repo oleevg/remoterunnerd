@@ -1,5 +1,5 @@
 /*
- * main.cpp
+ * Application.cpp
  *
  *  Created on: 10/1/17
  *      Author: Oleg F., fedorov.ftf@gmail.com
@@ -42,31 +42,33 @@ namespace runnerd {
       const std::string commandsConfigurationFileDefault = "/etc/remote-runnerd.conf";
       const bool useUnixSocketDefault = false;
 
-      options::options_description desc((boost::format("Usage: %s [options]... \nOptions") % argv[0]).str());
+      options::options_description optionDescription((boost::format("Usage: %s [options]... \nOptions") % argv[0]).str());
 
       int port = portDefault;
       int timeout = timeoutDefault;
       std::string configurationFile = commandsConfigurationFileDefault;
       std::string unixSocket = unixSocketDefault;
       bool useUnixSocket = useUnixSocketDefault;
+      bool debugRun = false;
 
-      desc.add_options()
+      optionDescription.add_options()
               ("port,p", options::value<int>(&port)->default_value(portDefault), "The port number to listen.")
               ("config,c", options::value<std::string>(&configurationFile)->default_value(commandsConfigurationFileDefault),
                "The configuration file with supported commands list.")
               ("socket,s", options::value<std::string>(&unixSocket)->default_value(unixSocketDefault), "The Unix socket path.")
-              ("timeout,t", options::value<int>(&timeout)->default_value(timeoutDefault), "Process execution wait time in ms.")
+              ("timeout,t", options::value<int>(&timeout)->default_value(timeoutDefault), "Process execution wait timeout in seconds.")
               ("unix,u", options::bool_switch(&useUnixSocket)->default_value(useUnixSocketDefault), "Force to use Unix socket.")
+              ("debug,d", options::bool_switch(&debugRun)->default_value(false), "Interactive run without daemonizing.")
               ("help,h", "As it says.");
 
       options::variables_map variableMap;
 
-      options::store(options::parse_command_line(argc, argv, desc), variableMap);
+      options::store(options::parse_command_line(argc, argv, optionDescription), variableMap);
       options::notify(variableMap);
 
       if(variableMap.count("help"))
       {
-        std::cout << desc << "\n";
+        std::cout << optionDescription << "\n";
         exit(0);
       }
 
@@ -88,13 +90,13 @@ namespace runnerd {
 
       if(useUnixSocket || !variableMap["socket"].defaulted())
       {
-        // TODO: Temporary hack. Implement proper exclusive application run.
+        // TODO: Temporary hack. Need to implement proper exclusive application run.
         remove(unixSocket.c_str());
-        appService = std::make_shared<ApplicationService>(unixSocket, timeout, parser, commandStore);
+        appService = std::make_shared<ApplicationService>(unixSocket, timeout, parser, commandStore, !debugRun);
       }
       else
       {
-        appService = std::make_shared<ApplicationService>(port, timeout, parser, commandStore);
+        appService = std::make_shared<ApplicationService>(port, timeout, parser, commandStore, !debugRun);
       }
 
     }
@@ -103,7 +105,8 @@ namespace runnerd {
     {
       int rc = 0;
 
-      try {
+      try
+      {
         parseArguments(argc, argv);
         rc = appService->run();
       }
@@ -119,7 +122,7 @@ namespace runnerd {
       }
       catch(const std::exception& exc)
       {
-        mdebug_error("Unknown error occured: %s", exc.what());
+        mdebug_error("Unknown error occurred. %s", exc.what());
         rc = -1;
       }
 
