@@ -13,12 +13,14 @@ Simple network service that provides remote and local execution of registered co
 1. Download or clone the project's repository.
 2. Install all required tools and libraries listed in 'Prerequisites' section.
 3. Create build directory inside project folder and compile the sources. Building in source tree directory is forbidden.
+    
     ```
     $ mkdir .build && cd .build
     $ cmake ..
     $ make
     ```
 4. Getting help:
+    
     ```
     $ cd .build/server
     $ ./runnerd_server -h
@@ -41,6 +43,7 @@ Simple network service that provides remote and local execution of registered co
 1. Prepare application's configuration file. 
 Create the service configuration file that contains the list of allowed commands to execute. You need to provide only command name without any supported arguments. Each new command must be placed on the new line.
 Example of configuration file creation:
+    
     ```
     $ touch ~/remote-runnerd.conf
     $ echo "ls" >>  ~/remote-runnerd.conf
@@ -52,12 +55,14 @@ Application's default configuration file is '/etc/remote-runnerd.conf' - see app
 
 2. Listening the specified or default port (12345).
 Default run mode is working with the specified or default numeric port:
+    
     ```
     $ ./runnerd_server -t 54321
     ``` 
 
 3. Working with local Unix sockets:
 You have to provide '-u, --unix' flag to run the service with local Unix socket usage or explicitly provide local socket path through '-s, --socket' argument:
+    
     ```
     $ ./runnerd_server -u
     $ ./runnerd_server -s /tmp/runnerd.sock
@@ -65,6 +70,7 @@ You have to provide '-u, --unix' flag to run the service with local Unix socket 
 
 4. Run in interactive (debug) mode.
 To run service for debug purposes without daemonizing use '-d, --debug' flag:
+    
     ```
     $./runnerd_server -d
     ```
@@ -73,6 +79,7 @@ To run service for debug purposes without daemonizing use '-d, --debug' flag:
 * Use SIGTERM or SIGINT signals to stop the service.
 
 6. Interaction with service through system tools:
+    
     ```
     $ netcat localhost 12345
     $ telnet localhost 12345
@@ -86,6 +93,7 @@ The service accepts several internal commands:
 
 ##$ Running the tests
 CMake build framework might be used to run available unit tests. Just run 'ctest' inside build directory after building the sources.
+    
     ```
     $ ctest
     $ ctest --verbose
