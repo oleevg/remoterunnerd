@@ -98,8 +98,6 @@ namespace runnerd {
 
     std::string ProcessRunnerProtocol::handleRequest()
     {
-      std::string temp(getReadBuffer());
-
       std::string request = normalizeCommandLine(getReadBuffer());
 
       clearReadBuffer();

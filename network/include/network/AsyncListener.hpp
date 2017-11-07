@@ -18,6 +18,9 @@ namespace runnerd {
 
   namespace network {
 
+    /**
+     * @brief Asynchronous listener implementation using Boost.Asio IP TCP sockets.
+     */
     class AsyncListener : public AsyncBaseListener {
 
       public:

@@ -16,6 +16,9 @@ namespace runnerd {
 
   namespace network {
 
+    /**
+     * @brief Asynchronous listener implementation using Boost.Asio local sockets.
+     */
     class AsyncLocalListener : public AsyncBaseListener  {
       public:
         typedef std::shared_ptr<AsyncLocalListener> Ptr;

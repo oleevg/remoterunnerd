@@ -16,6 +16,10 @@ namespace runnerd {
 
   namespace network {
 
+    /**
+     * @brief Base asynchronous listener class.
+     * @detailed Provides base asynchronous listener functionality using Boost.Asio.
+     */
     class AsyncBaseListener : public IAsyncListener {
       public:
         virtual ~AsyncBaseListener() = default;

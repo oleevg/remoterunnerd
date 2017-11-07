@@ -1,0 +1,380 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"argu",
+				"argumentsWithoutExec"
+			],
+			[
+				"be",
+				"begin"
+			],
+			[
+				"out",
+				"outputStream"
+			],
+			[
+				"exi",
+				"exit_status"
+			],
+			[
+				"chil",
+				"childProcess"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/home/lolo/Dropbox/Public/Manuals/xfreerdp",
+			"settings":
+			{
+				"buffer_size": 397,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/lolo/Downloads/remoterunnerd",
+			"settings":
+			{
+				"buffer_size": 755,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "rein",
+		"selected_items":
+		[
+			[
+				"rein",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Packa",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 497.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/lolo/ClionProjects/RemoteRunnerd",
+		"/home/lolo/ClionProjects/RemoteRunnerd/common",
+		"/home/lolo/ClionProjects/RemoteRunnerd/common/src"
+	],
+	"file_history":
+	[
+		"/home/lolo/Dropbox/Public/Manuals/sublime",
+		"/home/lolo/ClionProjects/RemoteRunnerd/common/CMakeLists.var",
+		"/home/lolo/ClionProjects/RemoteRunnerd/network/src/AsyncConnection.cpp",
+		"/home/lolo/ClionProjects/RemoteRunnerd/network/include/network/AsyncListener.hpp",
+		"/home/lolo/ClionProjects/RemoteRunnerd/common/include/common/ProcessExecutor.hpp",
+		"/home/lolo/ClionProjects/RemoteRunnerd/common/include/common/ProcessRunnerProtocol.hpp",
+		"/home/lolo/ClionProjects/RemoteRunnerd/common/src/ProcessRunnerProtocol.cpp",
+		"/home/lolo/workspace/simple_telnetd/src/CTltdDaemon.h",
+		"/home/lolo/ClionProjects/RemoteRunnerd/common/src/ProcessExecutor.cpp",
+		"/home/lolo/Work/Paragon/Projects/testappliance/cli/include/cli/Command.h",
+		"/home/lolo/workspace/simple_telnetd/src/CTltdDaemon.cpp",
+		"/home/lolo/ClionProjects/MuStl/containers/test/vector_test.cpp",
+		"/home/lolo/ClionProjects/MuStl/mustl.sublime-project",
+		"/home/lolo/ClionProjects/RemoteRunnerd/remote_runnerd.sublime-project",
+		"/home/lolo/Work/Paragon/Projects/testappliance/console/src/RequestHandler.cpp",
+		"/home/lolo/workspace/poco-1.7.9/Util/src/ServerApplication.cpp",
+		"/home/lolo/workspace/poco-1.7.9/Foundation/src/Process_UNIX.cpp",
+		"/home/lolo/ClionProjects/BoostAsio/include/macros.h",
+		"/home/lolo/ClionProjects/BoostAsio/TcpAsync/server.cpp",
+		"/home/lolo/Work/Paragon/Projects/backupsdk_/tools/src/stringtools.cpp",
+		"/home/lolo/ClionProjects/Boost-Cookbook/Chapter01/01_B_program_options_short/main.cpp",
+		"/home/lolo/ClionProjects/Boost-Cookbook/Chapter01/01_A_program_options_base/main.cpp",
+		"/home/lolo/Work/Paragon/Projects/testappliance/console/src/TestApplianceCliBuilder.cpp",
+		"/home/lolo/ClionProjects/vSphereProxy/libs/souc_c/ulog.h",
+		"/home/lolo/ClionProjects/vSphereProxy/libs/souc_c/ulog.c",
+		"/home/lolo/ClionProjects/MuStl/cmake/CommonFunctions.cmake",
+		"/home/lolo/ClionProjects/MuStl/memory/CMakeLists.var",
+		"/home/lolo/ClionProjects/MuStl/CMakeLists.txt",
+		"/home/lolo/ClionProjects/MuStl/containers/CMakeLists.var",
+		"/home/lolo/ClionProjects/MuStl/cmake/BaseModule.cmake",
+		"/home/lolo/ClionProjects/MuStl/testtools/CMakeLists.var",
+		"/home/lolo/ClionProjects/MuStl/memory/test/smart_ptr_test.cpp",
+		"/home/lolo/ClionProjects/MuStl/utilities/CMakeLists.var",
+		"/home/lolo/ClionProjects/MuStl/testtools/include/testtools/custom.hpp",
+		"/home/lolo/ClionProjects/MuStl/containers/include/containers/vector.hpp",
+		"/home/lolo/ClionProjects/MuStl/cmake/CMakeModuleLists.cmake",
+		"/home/lolo/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+		"/home/lolo/Dropbox/Public/Manuals/cmake",
+		"/home/lolo/ClionProjects/agentd/utils/CMakeLists.txt",
+		"/home/lolo/ClionProjects/agentd/libs/CMakeLists.txt",
+		"/home/lolo/Work/Paragon/Test task/vSphereProxy/CMakeLists.txt",
+		"/home/lolo/PycharmProjects/SdkTest/config.json",
+		"/home/lolo/PycharmProjects/SntlTestSuite/sntlTestSuite.py",
+		"/home/lolo/PycharmProjects/SntlTestSuite/example.json",
+		"/home/lolo/Dropbox/Public/Manuals/Debian",
+		"/home/lolo/briss-0.9/README.txt",
+		"/home/lolo/Work/Paragon/Projects/lp2v/webapi/test/pytest/unit_test.py",
+		"/home/lolo/ClionProjects/MuStl/CMakeLists.var",
+		"/home/lolo/Dropbox/Public/Manuals/monodevelop",
+		"/run/user/1000/gvfs/mtp:host=%5Busb%3A002%2C028%5D/Внутренняя память/Download/accs/accs_main/1/accs_election",
+		"/home/lolo/Dropbox/Public/Paragon/Work estimation.txt",
+		"/home/lolo/Downloads/EOSAGO_AISRSADENY_150353.pdf",
+		"/tmp/mozilla_lolo0/EOSAGO_AISRSADENY_150353.pdf",
+		"/home/lolo/ClionProjects/MuStl/cmake/CMakeModule.txt",
+		"/tmp/mozilla_lolo0/button_led.sb",
+		"/home/lolo/.config/sublime-text-3/Packages/CMakeEditor/README.md",
+		"/home/lolo/untitled",
+		"/home/lolo/Dropbox/Public/Paragon/bugzilla",
+		"/home/lolo/Documents/C#/Rob Miles/Yellow Book Code Samples 6.4/Code Sample 04 Complete GlazerCalc/YellowBookSamples/YellowBookSamples.csproj",
+		"/home/lolo/Downloads/John Sharp - Microsoft Visual C# Step by Step (Developer Reference) - 2015/Sources/Chapter 26/Cortana/Customers/Command.cs",
+		"/tmp/mozilla_lolo0/monodevelop-6.2.0.1483.flatpak",
+		"/home/lolo/Downloads/1347-im-labyrinth-des-schweigens-[TVsubs.org].zip",
+		"/home/lolo/Downloads/Отчет по карте 9287 от 14.08.16.pdf",
+		"/tmp/mozilla_lolo0/Отчет по карте 9287 от 14.08.16.pdf",
+		"/run/user/1000/gvfs/smb-share:server=fs-msk,share=pool/Fedorov/Documents/backupSmokeTest",
+		"/run/user/1000/gvfs/smb-share:server=fs-msk,share=pool/Fedorov/Documents/backupSmokeTest_v1.1",
+		"/home/lolo/Dropbox/Public/Manuals/nuget",
+		"/home/lolo/Work/Paragon/Projects/testappliance/webapi/CMakeLists.var",
+		"/home/lolo/Work/Paragon/Projects/cpprestsdk.2.8.0.3/nuget/cpprestsdk.nuspec.cmake.in",
+		"/home/lolo/Downloads/VMware Workstation Pro 12.1.0 build 3272444 for Linux/serial.txt",
+		"/home/lolo/Work/Paragon/Projects/testappliance/scripts/hardwareInfo.sh",
+		"/home/lolo/workspace/casablanca/Release/samples/BlackJack/BlackJack_Client/BlackJackClient.cpp",
+		"/home/lolo/Work/Paragon/Projects/testappliance/scripts/softwareInfo.sh",
+		"/home/lolo/Work/Paragon/Projects/testappliance/scripts/tasks.sh",
+		"/home/lolo/Work/Paragon/Projects/Appliance/Logs/backup1.log",
+		"/home/lolo/Work/Paragon/Projects/testappliance/scripts/volumeMetaItems.sh",
+		"/tmp/mozilla_lolo0/index.html"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"sighandler",
+			"beDaemon",
+			"__agent_info",
+			"_link_type",
+			"_module_type",
+			"__mprint",
+			"send",
+			"contents"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/lolo/Dropbox/Public/Manuals/xfreerdp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 397,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								262,
+								295
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/home/lolo/Downloads/remoterunnerd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 755,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "remote_runnerd.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"common/include/common/ProcessExecutor.hpp"
+			],
+			[
+				"proce",
+				"common/include/common/ProcessExecutor.hpp"
+			],
+			[
+				"proc",
+				"common/src/ProcessExecutor.cpp"
+			],
+			[
+				"cmakelis",
+				"CMakeLists.txt"
+			],
+			[
+				"cmake",
+				"containers/CMakeLists.var"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 255.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

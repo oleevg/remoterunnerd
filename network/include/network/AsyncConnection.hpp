@@ -22,6 +22,9 @@ namespace runnerd {
 
   namespace network {
 
+    /**
+     * @brief Asynchronous connection implementation using Boost.Asio IP TCP sockets.
+     */
     class AsyncConnection : public IAsyncConnection, public std::enable_shared_from_this<AsyncConnection>, boost::noncopyable {
 
         typedef AsyncConnection self_type;
