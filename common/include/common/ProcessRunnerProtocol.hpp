@@ -54,14 +54,14 @@ namespace runnerd {
       private:
         void registerInternalCommands();
 
-        const char* getReadBuffer() const;
+        const network::IOBuffer& getReadBuffer() const;
         void clearReadBuffer();
 
         void startReadTaskAsync();
         void startWriteTaskAsync(const std::string& message);
 
         std::string handleRequest();
-        std::string normalizeCommandLine(const std::string& commandLine);
+        std::string normalizeCommandLine(const network::IOBuffer& commandLine);
 
         bool isInternalCommand(const std::string& command) const;
         std::string executeInternalCommand(const std::string& command);
@@ -83,7 +83,7 @@ namespace runnerd {
 
         const std::string commandPrompt_;
 
-        char readBuffer_[UINT16_MAX];
+        network::IOBuffer readBuffer_;
 
     };
 

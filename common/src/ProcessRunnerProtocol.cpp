@@ -39,7 +39,8 @@ namespace runnerd {
       {
         if (err) return 0;
 
-        bool found = std::find(selfCopy->getReadBuffer(), selfCopy->getReadBuffer() + bytes, '\n') < selfCopy->getReadBuffer() + bytes;
+
+        bool found = std::find(selfCopy->getReadBuffer().cbegin(), selfCopy->getReadBuffer().cbegin() + bytes, '\n') != selfCopy->getReadBuffer().end();
         return found ? 0 : 1;
       };
 
@@ -72,7 +73,7 @@ namespace runnerd {
 
       // Let's start
       clearReadBuffer();
-      connection_->writeAsync(commandPrompt_, writeHandler_);
+      connection_->writeAsync(network::IOBuffer(commandPrompt_.cbegin(), commandPrompt_.cend()),  writeHandler_);
     }
 
     void ProcessRunnerProtocol::close()
@@ -88,12 +89,13 @@ namespace runnerd {
 
     void ProcessRunnerProtocol::startReadTaskAsync()
     {
-      connection_->readAsync(readBuffer_, sizeof(readBuffer_), readCompleteHandler_, readHandler_);
+      connection_->readAsync(readBuffer_, readCompleteHandler_, readHandler_);
     }
 
     void ProcessRunnerProtocol::startWriteTaskAsync(const std::string& message)
     {
-      connection_->writeAsync(message, writeHandler_);
+      network::IOBuffer buffer(message.begin(), message.end());
+      connection_->writeAsync(buffer, writeHandler_);
     }
 
     std::string ProcessRunnerProtocol::handleRequest()
@@ -146,14 +148,14 @@ namespace runnerd {
       return response;
     }
 
-    const char* ProcessRunnerProtocol::getReadBuffer() const
+    const network::IOBuffer& ProcessRunnerProtocol::getReadBuffer() const
     {
       return readBuffer_;
     }
 
     void ProcessRunnerProtocol::clearReadBuffer()
     {
-      memset(readBuffer_, 0, sizeof(readBuffer_));
+      readBuffer_.clear();
     }
 
     int ProcessRunnerProtocol::getProcessExecutionTimeout() const
@@ -197,23 +199,26 @@ namespace runnerd {
       return response;
     }
 
-    std::string ProcessRunnerProtocol::normalizeCommandLine(const std::string& commandLine)
+    std::string ProcessRunnerProtocol::normalizeCommandLine(const network::IOBuffer& commandLine)
     {
-      std::string result = commandLine;
-
       // Remove initial spaces
-      auto pos = commandLine.find_first_not_of("\t ");
-      if(pos != std::string::npos && pos != 0)
+      auto iteratorBegin = std::find_if_not(commandLine.cbegin(), commandLine.cend(), [](const network::IOBuffer::value_type& value)
       {
-        result.assign(getReadBuffer() + pos);
-      }
+        return (value == '\t' || value == ' ');
+      });
+
 
       // Remove trailing new line symbol
-      pos = result.find_first_of("\n\r");
-      if(pos != std::string::npos)
+      std::string symbolsEnd("\n\r");
+      auto iteratorEnd = std::find_first_of(commandLine.cbegin(), commandLine.cend(), symbolsEnd.cbegin(), symbolsEnd.cend());
+
+      std::string result;
+      result.reserve(std::distance(iteratorEnd, iteratorBegin));
+
+      std::transform(iteratorBegin, iteratorEnd, result.begin(), [](const network::IOBuffer::value_type& value)
       {
-        result.erase(pos);
-      }
+        return static_cast<char>(value);
+      });
 
       // Test for injections
 

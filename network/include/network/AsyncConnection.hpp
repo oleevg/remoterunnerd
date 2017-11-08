@@ -41,8 +41,8 @@ namespace runnerd {
 
         void close() override ;
 
-        void readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler, IOHandler readHandler) override ;
-        void writeAsync(const std::string& msg, IOHandler handler) override ;
+        void readAsync(IOBuffer& buffer, ReadCompleteHandler readCompleteHandler, IOHandler readHandler) override ;
+        void writeAsync(const IOBuffer& buffer, IOHandler handler) override ;
 
       private:
         boost::asio::ip::tcp::socket socket_;

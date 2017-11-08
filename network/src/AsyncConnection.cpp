@@ -21,19 +21,18 @@ namespace runnerd {
 
     }
 
-    void AsyncConnection::readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler,
-                                    IOHandler readHandler)
+    void AsyncConnection::readAsync(IOBuffer& buffer, ReadCompleteHandler readCompleteHandler, IOHandler readHandler)
     {
       if (!isStarted()) return;
 
-      boost::asio::async_read(getSocket(), boost::asio::buffer(buffer, size), readCompleteHandler, readHandler);
+      boost::asio::async_read(getSocket(), boost::asio::buffer(buffer), readCompleteHandler, readHandler);
     }
 
-    void AsyncConnection::writeAsync(const std::string& msg, IOHandler handler)
+    void AsyncConnection::writeAsync(const IOBuffer& buffer, IOHandler handler)
     {
       if (!isStarted()) return;
 
-      getSocket().async_write_some(boost::asio::buffer(msg.c_str(), msg.length()), handler);
+      getSocket().async_write_some(boost::asio::buffer(buffer), handler);
     }
 
     boost::asio::ip::tcp::socket& AsyncConnection::getSocket()

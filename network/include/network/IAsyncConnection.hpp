@@ -9,6 +9,7 @@
 #define RUNNERD_IASYNCCONNECTION_HPP
 
 #include <string>
+#include <vector>
 #include <memory>
 #include <functional>
 
@@ -18,6 +19,9 @@
 namespace runnerd {
 
   namespace network {
+
+    typedef uint8_t Byte;
+    typedef std::vector<Byte> IOBuffer;
 
     typedef std::function<void(const boost::system::error_code&, size_t)> IOHandler;
     typedef std::function<size_t(const boost::system::error_code&, size_t)> ReadCompleteHandler;
@@ -45,14 +49,14 @@ namespace runnerd {
          * @param readCompleteHandler
          * @param readHandler
          */
-        virtual void readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler, IOHandler readHandler) = 0;
+        virtual void readAsync(IOBuffer& buffer, ReadCompleteHandler readCompleteHandler, IOHandler readHandler) = 0;
 
         /**
-         * @brief Asynchronous writting to the client's socket.
-         * @param msg
+         * @brief Asynchronous writing to the client's socket.
+         * @param buffer
          * @param handler
          */
-        virtual void writeAsync(const std::string& msg, IOHandler handler) = 0;
+        virtual void writeAsync(const IOBuffer& buffer, IOHandler handler) = 0;
 
     };
 

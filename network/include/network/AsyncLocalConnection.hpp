@@ -40,8 +40,8 @@ namespace runnerd {
 
         void close();
 
-        void readAsync(char* buffer, size_t size, ReadCompleteHandler readCompleteHandler, IOHandler readHandler);
-        void writeAsync(const std::string& msg, IOHandler handler);
+        void readAsync(IOBuffer& buffer, ReadCompleteHandler readCompleteHandler, IOHandler readHandler);
+        void writeAsync(const IOBuffer& buffer, IOHandler handler);
 
       private:
         boost::asio::local::stream_protocol::socket socket_;
