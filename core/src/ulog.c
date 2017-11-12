@@ -8,10 +8,24 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <time.h>
 
 #include <core/ulog.h>
 
 static const int max_input_size=1024;
+
+static inline char* getCurrentTime(char* buffer, size_t bufferSize)
+{
+  time_t timer;
+  struct tm* tm_info;
+
+  time(&timer);
+  tm_info = localtime(&timer);
+
+  strftime(buffer, bufferSize, "%Y-%m-%d %H:%M:%S", tm_info);
+
+  return buffer;
+}
 
 void ulog_init()
 {
@@ -34,6 +48,7 @@ void ulog_clean()
 void ulog_info(const char* category, const char* file_name, const char* func_name, int line, const char* format, ...)
 {
   char buf[max_input_size];
+  char timeBuffer[26];
 
   BUILD_BUFFER(buf, format);
 
@@ -45,7 +60,7 @@ void ulog_info(const char* category, const char* file_name, const char* func_nam
   #endif
 #else
   #ifdef ULOG_INFO
-    printf("%s%s%s", INFO, buf, ENDLINE);
+    printf("%s %s%s%s", getCurrentTime(timeBuffer, sizeof(timeBuffer)), INFO, buf, ENDLINE);
   #endif
 #endif
 }

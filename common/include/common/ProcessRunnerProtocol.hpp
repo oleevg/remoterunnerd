@@ -53,6 +53,7 @@ namespace runnerd {
 
       private:
         void registerInternalCommands();
+        size_t getReadBufferSize() const;
 
         const network::IOBuffer& getReadBuffer() const;
         void clearReadBuffer();

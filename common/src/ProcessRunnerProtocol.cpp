@@ -29,6 +29,8 @@ namespace runnerd {
             processExecutionTimeout_(processExecutionTimeout), connection_(connection), commandStore_(commandStore), commandPrompt_("runnerd# ")
     {
       registerInternalCommands();
+
+      readBuffer_.resize(getReadBufferSize());
     }
 
     void ProcessRunnerProtocol::start()
@@ -39,8 +41,13 @@ namespace runnerd {
       {
         if (err) return 0;
 
+        auto beginIterator = selfCopy->getReadBuffer().cbegin();
+        auto endIterator = selfCopy->getReadBuffer().cbegin();
+        std::advance(endIterator, bytes);
 
-        bool found = std::find(selfCopy->getReadBuffer().cbegin(), selfCopy->getReadBuffer().cbegin() + bytes, '\n') != selfCopy->getReadBuffer().end();
+        auto iter = std::find(beginIterator, endIterator, '\n');
+        bool found = (iter != endIterator);
+
         return found ? 0 : 1;
       };
 
@@ -72,8 +79,14 @@ namespace runnerd {
       };
 
       // Let's start
-      clearReadBuffer();
       connection_->writeAsync(network::IOBuffer(commandPrompt_.cbegin(), commandPrompt_.cend()),  writeHandler_);
+    }
+
+    size_t ProcessRunnerProtocol::getReadBufferSize() const
+    {
+      static const size_t readBufferSize = 8;
+
+      return readBufferSize;
     }
 
     void ProcessRunnerProtocol::close()
@@ -102,16 +115,15 @@ namespace runnerd {
     {
       std::string request = normalizeCommandLine(getReadBuffer());
 
-      clearReadBuffer();
+      //clearReadBuffer();
 
       std::string response;
       if(!request.empty())
       {
         ProcessExecutor::Arguments arguments;
-
         boost::algorithm::split(arguments, request, boost::is_any_of("\t "), boost::token_compress_on);
 
-        std::string execName = arguments.front();
+        const std::string& execName = arguments.front();
 
         if(isInternalCommand(execName))
         {
@@ -155,7 +167,9 @@ namespace runnerd {
 
     void ProcessRunnerProtocol::clearReadBuffer()
     {
-      readBuffer_.clear();
+      
+      network::IOBuffer temp(24);
+      readBuffer_.swap(temp);
     }
 
     int ProcessRunnerProtocol::getProcessExecutionTimeout() const
@@ -202,7 +216,7 @@ namespace runnerd {
     std::string ProcessRunnerProtocol::normalizeCommandLine(const network::IOBuffer& commandLine)
     {
       // Remove initial spaces
-      auto iteratorBegin = std::find_if_not(commandLine.cbegin(), commandLine.cend(), [](const network::IOBuffer::value_type& value)
+      auto beginIterator = std::find_if_not(commandLine.cbegin(), commandLine.cend(), [](const network::IOBuffer::value_type& value)
       {
         return (value == '\t' || value == ' ');
       });
@@ -210,15 +224,9 @@ namespace runnerd {
 
       // Remove trailing new line symbol
       std::string symbolsEnd("\n\r");
-      auto iteratorEnd = std::find_first_of(commandLine.cbegin(), commandLine.cend(), symbolsEnd.cbegin(), symbolsEnd.cend());
+      auto endIterator = std::find_first_of(commandLine.cbegin(), commandLine.cend(), symbolsEnd.cbegin(), symbolsEnd.cend());
 
-      std::string result;
-      result.reserve(std::distance(iteratorEnd, iteratorBegin));
-
-      std::transform(iteratorBegin, iteratorEnd, result.begin(), [](const network::IOBuffer::value_type& value)
-      {
-        return static_cast<char>(value);
-      });
+      std::string result(beginIterator, endIterator);
 
       // Test for injections
 
