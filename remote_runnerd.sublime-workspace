@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"start",
+				"startIterator"
+			],
+			[
+				"getRe",
+				"getReadBufferSize"
+			],
+			[
+				"read",
+				"readBuffer_"
+			],
+			[
+				"readBu",
+				"readBufferSize"
+			],
+			[
+				"clea",
+				"clearReadBuffer"
+			],
+			[
 				"argu",
 				"argumentsWithoutExec"
 			],
@@ -28,19 +48,78 @@
 	"buffers":
 	[
 		{
-			"file": "/home/lolo/Dropbox/Public/Manuals/xfreerdp",
+			"file": "common/src/ProcessRunnerProtocol.cpp",
 			"settings":
 			{
-				"buffer_size": 397,
+				"buffer_size": 6639,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/home/lolo/Downloads/remoterunnerd",
+			"file": "server/src/ApplicationService.cpp",
 			"settings":
 			{
-				"buffer_size": 755,
-				"line_ending": "Windows"
+				"buffer_size": 3962,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "network/src/AsyncListener.cpp",
+			"settings":
+			{
+				"buffer_size": 899,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "network/src/AsyncBaseListener.cpp",
+			"settings":
+			{
+				"buffer_size": 622,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "network/include/network/AsyncBaseListener.hpp",
+			"settings":
+			{
+				"buffer_size": 843,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "network/include/network/IAsyncListener.hpp",
+			"settings":
+			{
+				"buffer_size": 1303,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "common/include/common/ProcessRunnerProtocol.hpp",
+			"settings":
+			{
+				"buffer_size": 2587,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "network/src/AsyncConnection.cpp",
+			"settings":
+			{
+				"buffer_size": 1128,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Readme.md",
+			"settings":
+			{
+				"buffer_size": 3706,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -68,7 +147,7 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 497.0
+		"width": 461.0
 	},
 	"console":
 	{
@@ -89,11 +168,13 @@
 	"expanded_folders":
 	[
 		"/home/lolo/ClionProjects/RemoteRunnerd",
-		"/home/lolo/ClionProjects/RemoteRunnerd/common",
-		"/home/lolo/ClionProjects/RemoteRunnerd/common/src"
+		"/home/lolo/ClionProjects/RemoteRunnerd/network",
+		"/home/lolo/ClionProjects/RemoteRunnerd/network/src"
 	],
 	"file_history":
 	[
+		"/home/lolo/Dropbox/Public/Manuals/xfreerdp",
+		"/home/lolo/Downloads/remoterunnerd",
 		"/home/lolo/Dropbox/Public/Manuals/sublime",
 		"/home/lolo/ClionProjects/RemoteRunnerd/common/CMakeLists.var",
 		"/home/lolo/ClionProjects/RemoteRunnerd/network/src/AsyncConnection.cpp",
@@ -188,6 +269,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"startIterator",
+			"iteratorEnd",
+			"iteratorBegin",
+			"clear",
 			"sighandler",
 			"beDaemon",
 			"__agent_info",
@@ -203,6 +288,9 @@
 		"regex": false,
 		"replace_history":
 		[
+			"beginIterator",
+			"endIterator",
+			"beginIterator"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -213,44 +301,76 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/home/lolo/Dropbox/Public/Manuals/xfreerdp",
+					"file": "common/src/ProcessRunnerProtocol.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 397,
+						"buffer_size": 6639,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								262,
-								295
+								1459,
+								1459
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 423.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "/home/lolo/Downloads/remoterunnerd",
+					"file": "server/src/ApplicationService.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 755,
+						"buffer_size": 3962,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3217,
+								3217
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1314.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "network/src/AsyncListener.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 899,
 						"regions":
 						{
 						},
@@ -263,13 +383,195 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "network/src/AsyncBaseListener.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 622,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "network/include/network/AsyncBaseListener.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 843,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "network/include/network/IAsyncListener.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1303,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								539,
+								539
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 171.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "common/include/common/ProcessRunnerProtocol.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2587,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1593,
+								1560
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 646.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "network/src/AsyncConnection.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1128,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								605,
+								605
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "Readme.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3706,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3140,
+								3180
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 969.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
 					"type": "text"
 				}
 			]
@@ -324,6 +626,22 @@
 		"selected_items":
 		[
 			[
+				"iasync",
+				"network/include/network/IAsyncListener.hpp"
+			],
+			[
+				"asyncbase",
+				"network/include/network/AsyncBaseListener.hpp"
+			],
+			[
+				"asynclis",
+				"network/src/AsyncListener.cpp"
+			],
+			[
+				"pro",
+				"common/include/common/ProcessRunnerProtocol.hpp"
+			],
+			[
 				"",
 				"common/include/common/ProcessExecutor.hpp"
 			],
@@ -372,7 +690,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 255.0,
+	"side_bar_width": 292.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
