@@ -3,7 +3,7 @@
 Simple network service that provides remote and local execution of registered commands.
 
 ### Prerequisites
-* CMake build system (>= 3.3) is used to compile the project. Compiling tested with gcc4.9.2 on Debian 8 system. 
+* CMake build system (>= 3.3) is used to compile the project. Compiling tested with gcc4.9.2 and gcc6.3.0.
 * Compiler support for C++11 standard is required.
 * boost (>= 1.64.0) is required to build the project.
 * [zlog library](https://github.com/HardySimpson/zlog) might be used to collect the services' messages and redirect it to an ordinary file, syslog service etc.
@@ -32,7 +32,8 @@ Simple network service that provides remote and local execution of registered co
                                         commands list.
     -s [ --socket ] arg (=/tmp/simple-telnetd)
                                         The Unix socket path.
-    -t [ --timeout ] arg (=15)            Process execution wait time in ms.
+    -t [ --timeout ] arg (=15)            Process execution wait time in seconds.
+    --threads arg (=5)                    The service's thread pool size.
     -u [ --unix ]                         Force to use Unix socket.
     -d [ --debug ]                        Interactive run without daemonizing.
     -h [ --help ]                         As it says.

@@ -167,8 +167,7 @@ namespace runnerd {
 
     void ProcessRunnerProtocol::clearReadBuffer()
     {
-      
-      network::IOBuffer temp(24);
+      network::IOBuffer temp(getReadBufferSize());
       readBuffer_.swap(temp);
     }
 

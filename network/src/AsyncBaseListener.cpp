@@ -13,9 +13,20 @@ namespace runnerd {
 
   namespace network {
 
+    AsyncBaseListener::AsyncBaseListener(size_t threadPoolSize):
+    threadPoolSize_(threadPoolSize)
+    {
+
+    }
+
     void AsyncBaseListener::stop()
     {
       service_.stop();
+
+      for (auto& serviceThread : threadPool_)
+      {
+        serviceThread.join();
+      }
     }
 
     void AsyncBaseListener::listenAsync(AcceptHandler asyncHandler)
@@ -23,7 +34,12 @@ namespace runnerd {
       acceptAsync(asyncHandler);
 
       mdebug_info("Listener started.\n");
-      getIoService().run();
+      for(size_t i = 0; i<threadPoolSize_; ++i)
+      {
+        threadPool_.push_back(std::thread([this]() {
+          getIoService().run();
+        }));
+      }
       mdebug_info("Listener finished.\n");
     }
 

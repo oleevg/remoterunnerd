@@ -16,8 +16,8 @@ namespace runnerd {
 
   namespace network {
 
-    AsyncLocalListener::AsyncLocalListener(const std::string& unixSocketPath):
-            acceptor_(getIoService(), boost::asio::local::stream_protocol::endpoint(unixSocketPath))
+    AsyncLocalListener::AsyncLocalListener(const std::string& unixSocketPath, size_t threadPoolSize) :
+            AsyncBaseListener(threadPoolSize), acceptor_(getIoService(), boost::asio::local::stream_protocol::endpoint(unixSocketPath))
     {
 
     }

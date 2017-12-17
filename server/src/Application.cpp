@@ -38,6 +38,7 @@ namespace runnerd {
       /* Default parameters definition */
       const int portDefault = 12345;
       const int timeoutDefault = 15;
+      const size_t threadPoolSizeDefault = 5;
       const std::string unixSocketDefault = "/tmp/simple-telnetd";
       const std::string commandsConfigurationFileDefault = "/etc/remote-runnerd.conf";
       const bool useUnixSocketDefault = false;
@@ -46,6 +47,7 @@ namespace runnerd {
 
       int port = portDefault;
       int timeout = timeoutDefault;
+      size_t threadPoolSize = threadPoolSizeDefault;
       std::string configurationFile = commandsConfigurationFileDefault;
       std::string unixSocket = unixSocketDefault;
       bool useUnixSocket = useUnixSocketDefault;
@@ -57,6 +59,7 @@ namespace runnerd {
                "The configuration file with supported commands list.")
               ("socket,s", options::value<std::string>(&unixSocket)->default_value(unixSocketDefault), "The Unix socket path.")
               ("timeout,t", options::value<int>(&timeout)->default_value(timeoutDefault), "Process execution wait timeout in seconds.")
+              ("threads", options::value<size_t>(&threadPoolSize)->default_value(threadPoolSizeDefault), "The service's thread pool size.")
               ("unix,u", options::bool_switch(&useUnixSocket)->default_value(useUnixSocketDefault), "Force to use Unix socket.")
               ("debug,d", options::bool_switch(&debugRun)->default_value(false), "Interactive run without daemonizing.")
               ("help,h", "As it says.");
@@ -80,6 +83,11 @@ namespace runnerd {
         throw core::BaseException("Negative or zero timeout values are not supported. Please provide some positive integer value.");
       }
 
+      if(threadPoolSize < 1)
+      {
+        throw core::BaseException("The number of service threads can't be less than one. Please provide some positive integer value.");
+      }
+
       common::TextConfigurationParser::Ptr parser = std::make_shared<common::TextConfigurationParser>(
               configurationFile);
 
@@ -92,11 +100,11 @@ namespace runnerd {
       {
         // TODO: Temporary hack. Need to implement proper exclusive application run.
         remove(unixSocket.c_str());
-        appService = std::make_shared<ApplicationService>(unixSocket, timeout, parser, commandStore, !debugRun);
+        appService = std::make_shared<ApplicationService>(unixSocket, timeout, threadPoolSize, parser, commandStore, !debugRun);
       }
       else
       {
-        appService = std::make_shared<ApplicationService>(port, timeout, parser, commandStore, !debugRun);
+        appService = std::make_shared<ApplicationService>(port, timeout, threadPoolSize, parser, commandStore, !debugRun);
       }
 
     }

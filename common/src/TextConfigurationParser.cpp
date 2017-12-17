@@ -6,7 +6,9 @@
  */
 
 #include <fstream>
-#include <string>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
 
 #include <boost/format.hpp>
 
@@ -29,10 +31,15 @@ namespace runnerd {
     {
       ConfigurationContent result;
 
+      if(access(filePath_.c_str(), R_OK))
+      {
+        throw core::BaseException((boost::format("Couldn't open the file '%s' for reading: %s") % filePath_.c_str() % strerror(errno)).str());
+      }
+
       std::ifstream file(filePath_, std::ios_base::in);
       if(!file.is_open())
       {
-        throw core::BaseException((boost::format("Couldn't open the file '%s' for reading. The file might be missing or you don't have enough permissions to read it.") % filePath_.c_str()).str());
+        throw core::BaseException((boost::format("Couldn't open the file '%s': Unknown error occurred.") % filePath_.c_str()).str());
       }
 
       std::string line;

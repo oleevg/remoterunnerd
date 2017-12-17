@@ -8,6 +8,9 @@
 #ifndef RUNNERD_ASYNCBASELISTENER_HPP
 #define RUNNERD_ASYNCBASELISTENER_HPP
 
+#include <thread>
+#include <list>
+
 #include <boost/asio.hpp>
 
 #include "IAsyncListener.hpp"
@@ -22,6 +25,8 @@ namespace runnerd {
      */
     class AsyncBaseListener : public IAsyncListener {
       public:
+        AsyncBaseListener(size_t threadPoolSize);
+
         virtual ~AsyncBaseListener() = default;
 
         virtual void stop() override;
@@ -33,6 +38,9 @@ namespace runnerd {
 
       private:
         boost::asio::io_service service_;
+
+        size_t threadPoolSize_;
+        std::list<std::thread> threadPool_;
     };
   }
 

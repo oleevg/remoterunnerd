@@ -32,7 +32,7 @@ namespace runnerd {
         typedef std::shared_ptr<AsyncLocalConnection> Ptr;
 
       public:
-        AsyncLocalConnection(boost::asio::io_service& service);
+        explicit AsyncLocalConnection(boost::asio::io_service& service);
 
         boost::asio::local::stream_protocol::socket& getSocket();
 

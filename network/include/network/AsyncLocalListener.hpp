@@ -24,7 +24,7 @@ namespace runnerd {
         typedef std::shared_ptr<AsyncLocalListener> Ptr;
 
       public:
-        AsyncLocalListener(const std::string& unixSocketPath);
+        explicit AsyncLocalListener(const std::string& unixSocketPath, size_t threadPoolSize);
         ~AsyncLocalListener();
 
       private:

@@ -19,8 +19,8 @@ namespace runnerd {
 
   namespace network {
 
-    AsyncListener::AsyncListener(int port):
-            acceptor_(getIoService(), boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
+    AsyncListener::AsyncListener(int port, size_t threadPoolSize) :
+            AsyncBaseListener(threadPoolSize), acceptor_(getIoService(), boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
     {
 
     }

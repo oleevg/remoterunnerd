@@ -27,7 +27,6 @@ set(sources
     src/AsyncLocalListener.cpp
     src/AsyncConnection.cpp
     src/AsyncLocalConnection.cpp
-
     )
 
 set(tests

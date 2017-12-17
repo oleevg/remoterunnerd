@@ -25,23 +25,22 @@ namespace runnerd {
 
   namespace server {
 
-    ApplicationService::ApplicationService(int port, int processExecutionTimeout,
-                                           const common::TextConfigurationParser::Ptr& parser,
-                                           const common::CommandStore::Ptr& commandStore, bool daemonize) :
+    ApplicationService::ApplicationService(int port, int processExecutionTimeout, size_t threadPoolSize,
+                                               const common::TextConfigurationParser::Ptr& parser, const common::CommandStore::Ptr& commandStore,
+                                               bool daemonize) :
             parser_(parser), commandStore_(commandStore),
-            asyncListener_(std::make_shared<network::AsyncListener>(port)),
+            asyncListener_(std::make_shared<network::AsyncListener>(port, threadPoolSize)),
             processExecutionTimeout_(processExecutionTimeout), daemonized_(daemonize)
     {
       initialize();
     }
 
-    ApplicationService::ApplicationService(const std::string& unixSocketPath, int processExecutionTimeout,
-                                           const common::TextConfigurationParser::Ptr& parser,
-                                           const common::CommandStore::Ptr& commandStore,
-                                           bool daemonize)
+    ApplicationService::ApplicationService(const std::string& unixSocketPath, int processExecutionTimeout, size_t threadPoolSize,
+                                               const common::TextConfigurationParser::Ptr& parser, const common::CommandStore::Ptr& commandStore,
+                                               bool daemonize)
             :
             parser_(parser), commandStore_(commandStore),
-            asyncListener_(std::make_shared<network::AsyncLocalListener>(unixSocketPath)),
+            asyncListener_(std::make_shared<network::AsyncLocalListener>(unixSocketPath, threadPoolSize)),
             processExecutionTimeout_(processExecutionTimeout), daemonized_(daemonize)
     {
       initialize();
@@ -93,11 +92,15 @@ namespace runnerd {
 
     void ApplicationService::signalHandlerTask()
     {
+      common::UnixService& unixService = common::UnixService::get_mutable_instance();
+
       while (true)
       {
+        unixService.waitForSignalsSync();
+
         if (termFlag_->flag.load())
         {
-          mdebug_info("SIGTERM received.");
+          mdebug_info("Signal SIGTERM received.");
           termFlag_->flag.store(false);
 
           asyncListener_->stop();
@@ -107,7 +110,7 @@ namespace runnerd {
 
         if (intFlag_->flag.load())
         {
-          mdebug_info("SIGINT received.");
+          mdebug_info("Signal SIGINT received.");
           intFlag_->flag.store(false);
 
           asyncListener_->stop();
@@ -119,13 +122,11 @@ namespace runnerd {
         {
           hupFlag_->flag.store(false);
 
-          mdebug_info("SIGHUP received.");
+          mdebug_info("Signal SIGHUP received.");
 
           auto content = parser_->readByLine();
           commandStore_->setAllCommands(content);
         }
-
-        std::this_thread::sleep_for(std::chrono::seconds(1));
       }
     }
 

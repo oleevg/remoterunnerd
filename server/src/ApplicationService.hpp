@@ -40,8 +40,9 @@ namespace runnerd {
          * @param commandStore Registered commands storage.
          * @param daemonize Whether run as a daemon or not.
          */
-        ApplicationService(int port, int processExecutionTimeout, const common::TextConfigurationParser::Ptr& parser,
-                                   const common::CommandStore::Ptr& commandStore, bool daemonize = true);
+        ApplicationService(int port, int processExecutionTimeout, size_t threadPoolSize,
+                           const common::TextConfigurationParser::Ptr& parser, const common::CommandStore::Ptr& commandStore,
+                           bool daemonize);
 
         /**
          * @brief ctor.
@@ -51,9 +52,9 @@ namespace runnerd {
          * @param commandStore Registered commands storage.
          * @param daemonize Whether run as a daemon or not.
          */
-        ApplicationService(const std::string& unixSocketPath, int processExecutionTimeout,
-                                   const common::TextConfigurationParser::Ptr& parser, const common::CommandStore::Ptr& commandStore,
-                                   bool daemonize = true);
+        ApplicationService(const std::string& unixSocketPath, int processExecutionTimeout, size_t threadPoolSize,
+                           const common::TextConfigurationParser::Ptr& parser, const common::CommandStore::Ptr& commandStore,
+                           bool daemonize);
         /**
          * @return Flag saying whether application runs as a daemon or not.
          */

@@ -26,6 +26,9 @@ namespace runnerd {
 
   namespace common {
 
+    std::mutex UnixService::mtx;
+    std::condition_variable UnixService::conditionVariable;
+
     void UnixService::daemonize()
     {
       FILE* fStream = nullptr;
@@ -139,6 +142,9 @@ namespace runnerd {
         {
           auto& flag = item.second->flag;
           flag.store(true);
+
+          std::unique_lock<std::mutex> lck(mtx);
+          conditionVariable.notify_one();
         }
       }
     }
@@ -148,6 +154,12 @@ namespace runnerd {
       static SignalHandlerFlags signalHandlerFlags;
 
       return signalHandlerFlags;
+    }
+
+    void UnixService::waitForSignalsSync()
+    {
+      std::unique_lock<std::mutex> lck(mtx);
+      conditionVariable.wait(lck);
     }
   }
 

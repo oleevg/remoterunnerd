@@ -11,6 +11,8 @@
 #include <atomic>
 #include <memory>
 #include <map>
+#include <mutex>
+#include <condition_variable>
 
 #include <boost/serialization/singleton.hpp>
 
@@ -51,6 +53,11 @@ namespace runnerd {
         void setSignalHandler();
 
         /**
+         * @brief Blocks the calling thread and waits for a signal received.
+         */
+        void waitForSignalsSync();
+
+        /**
          * @brief Unregisteres previously registered signal.
          * @param signalNumber Signal number to unregister.
          * @return Whether the specified signal was successfully unregistered.
@@ -70,6 +77,8 @@ namespace runnerd {
       private:
         static SignalHandlerFlags& getSignalHandlerFlags();
 
+        static std::mutex mtx;
+        static std::condition_variable conditionVariable;
     };
 
   }
