@@ -74,6 +74,7 @@ namespace runnerd {
       asyncListener_->listenAsync(acceptHandler);
 
       signalHandlerTask.wait();
+      asyncListener_->wait();
 
       return 0;
     }

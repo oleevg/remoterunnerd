@@ -38,6 +38,11 @@ namespace runnerd {
         virtual void listenAsync(AcceptHandler asyncHandler) = 0;
 
         /**
+         * @brief Waits for the server to stop listening.
+         */
+        virtual void wait() = 0;
+
+        /**
          * @brief Stops listening on the used socket.
          */
         virtual void stop() = 0;

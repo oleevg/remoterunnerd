@@ -25,9 +25,11 @@ namespace runnerd {
      */
     class AsyncBaseListener : public IAsyncListener {
       public:
-        AsyncBaseListener(size_t threadPoolSize);
+        explicit AsyncBaseListener(size_t threadPoolSize);
 
         virtual ~AsyncBaseListener() = default;
+
+        virtual void wait() override;
 
         virtual void stop() override;
 

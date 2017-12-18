@@ -27,7 +27,7 @@ namespace runnerd {
         typedef std::shared_ptr<AsyncListener> Ptr;
 
       public:
-        explicit AsyncListener(int port, size_t threadPoolSize);
+        AsyncListener(int port, size_t threadPoolSize);
 
       private:
         void acceptAsync(AcceptHandler asyncHandler) override ;

@@ -22,11 +22,6 @@ namespace runnerd {
     void AsyncBaseListener::stop()
     {
       service_.stop();
-
-      for (auto& serviceThread : threadPool_)
-      {
-        serviceThread.join();
-      }
     }
 
     void AsyncBaseListener::listenAsync(AcceptHandler asyncHandler)
@@ -36,16 +31,25 @@ namespace runnerd {
       mdebug_info("Listener started.\n");
       for(size_t i = 0; i<threadPoolSize_; ++i)
       {
-        threadPool_.push_back(std::thread([this]() {
+        threadPool_.emplace_back([this]() {
           getIoService().run();
-        }));
+        });
       }
-      mdebug_info("Listener finished.\n");
     }
 
     boost::asio::io_service& AsyncBaseListener::getIoService()
     {
       return service_;
+    }
+
+    void AsyncBaseListener::wait()
+    {
+      for (auto& serviceThread : threadPool_)
+      {
+        serviceThread.join();
+      }
+
+      mdebug_info("Listener finished.\n");
     }
 
   }
