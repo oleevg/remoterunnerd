@@ -19,19 +19,26 @@ namespace runnerd {
     /**
      * @brief Asynchronous listener implementation using Boost.Asio local sockets.
      */
-    class AsyncLocalListener : public AsyncBaseListener  {
+
+    template<class Acceptor>
+    class AsyncLocalListener : public AsyncBaseListener<Acceptor> {};
+
+    template<>
+    class AsyncLocalListener<boost::asio::local::stream_protocol::acceptor> : public AsyncBaseListener<boost::asio::local::stream_protocol::acceptor>  {
       public:
-        typedef std::shared_ptr<AsyncLocalListener> Ptr;
+        typedef std::shared_ptr<AsyncBaseListener> Ptr;
 
       public:
-        AsyncLocalListener(const std::string& unixSocketPath, size_t threadPoolSize);
-        ~AsyncLocalListener();
+        AsyncLocalListener(size_t threadPoolSize, const std::string& unixSocketPath):
+                AsyncBaseListener(threadPoolSize, boost::asio::local::stream_protocol::endpoint(unixSocketPath)), unixSocketPath_(unixSocketPath)
+        { }
+
+        ~AsyncLocalListener()
+        {
+          remove(unixSocketPath_.c_str());
+        }
 
       private:
-        void acceptAsync(AcceptHandler asyncHandler) override;
-
-      private:
-        boost::asio::local::stream_protocol::acceptor acceptor_;
         std::string unixSocketPath_;
     };
 

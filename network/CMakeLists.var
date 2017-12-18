@@ -19,6 +19,7 @@ set(headers
     include/network/AsyncConnection.hpp
     include/network/AsyncLocalConnection.hpp
     include/network/AsyncLocalListener.hpp
+    include/network/AsyncBaseConnection.hpp
     )
 
 set(sources

@@ -21,20 +21,20 @@ namespace runnerd {
     /**
      * @brief Asynchronous listener implementation using Boost.Asio IP TCP sockets.
      */
-    class AsyncListener : public AsyncBaseListener {
+
+    template<class Acceptor>
+    class AsyncListener : public AsyncBaseListener<Acceptor> {};
+
+    template <>
+    class AsyncListener<boost::asio::ip::tcp::acceptor> : public AsyncBaseListener<boost::asio::ip::tcp::acceptor> {
 
       public:
         typedef std::shared_ptr<AsyncListener> Ptr;
 
       public:
-        AsyncListener(int port, size_t threadPoolSize);
-
-      private:
-        void acceptAsync(AcceptHandler asyncHandler) override ;
-
-      private:
-        boost::asio::ip::tcp::acceptor acceptor_;
-
+        AsyncListener(size_t threadPoolSize, int port):
+                AsyncBaseListener(threadPoolSize, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
+        { }
     };
 
   }
