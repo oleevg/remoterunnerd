@@ -16,6 +16,7 @@
 #include <core/ulog.h>
 
 #include "IAsyncListener.hpp"
+#include "AsyncBaseConnection.hpp"
 
 namespace runnerd {
 
@@ -25,12 +26,12 @@ namespace runnerd {
      * @brief Base asynchronous listener class.
      * @detailed Provides base asynchronous listener functionality using Boost.Asio.
      */
-    template <class Acceptor>
+    template <class Acceptor, class Socket>
     class AsyncBaseListener : public IAsyncListener {
 
       public:
         template <typename... Args>
-        AsyncBaseListener(size_t threadPoolSize = 5, Args &&... args):
+        AsyncBaseListener(size_t threadPoolSize, Args &&... args):
                 threadPoolSize_(threadPoolSize), acceptor_(getIoService(), std::forward<Args>(args)...)
         { }
 
@@ -56,7 +57,7 @@ namespace runnerd {
           acceptAsync(asyncHandler);
 
           mdebug_info("Listener started.\n");
-          for(size_t i = 0; i<threadPoolSize_; ++i)
+          for (size_t i = 0; i < threadPoolSize_; ++i)
           {
             threadPool_.emplace_back([this]() {
               getIoService().run();
@@ -67,7 +68,7 @@ namespace runnerd {
       protected:
         void acceptAsync(AcceptHandler asyncHandler)
         {
-          auto connection = std::make_shared<AsyncLocalConnection>(getIoService());
+          auto connection = std::make_shared<AsyncBaseConnection<Socket>>(getIoService());
 
           auto proxyHandler = [this, connection, asyncHandler](const boost::system::error_code &err) {
             this->acceptAsync(asyncHandler);
@@ -84,8 +85,8 @@ namespace runnerd {
         }
 
       private:
-        Acceptor acceptor_;
         boost::asio::io_service service_;
+        Acceptor acceptor_;
 
         size_t threadPoolSize_;
         std::list<std::thread> threadPool_;

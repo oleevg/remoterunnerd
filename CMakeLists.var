@@ -8,7 +8,7 @@
 set(project_name runnerd)
 
 set(${project_name}_version_major 1)
-set(${project_name}_version_minor 0)
+set(${project_name}_version_minor 1)
 set(${project_name}_version_patch 0)
 
 set(${project_name}_definitions )

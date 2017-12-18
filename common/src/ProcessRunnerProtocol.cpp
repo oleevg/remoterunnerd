@@ -17,7 +17,7 @@
 
 #include <common/ProcessRunnerProtocol.hpp>
 #include <common/ProcessExecutor.hpp>
-#include <network/AsyncConnection.hpp>
+#include <network/IAsyncConnection.hpp>
 
 namespace runnerd {
 
@@ -60,7 +60,7 @@ namespace runnerd {
         }
         else
         {
-          mdebug_warn("Socket might has been closed. Error code: %d", err);
+          mdebug_warn("Socket might has been closed. Error code: %d (%s)", err, err.message().c_str());
         }
       };
 
@@ -74,7 +74,7 @@ namespace runnerd {
         }
         else
         {
-          mdebug_warn("Socket might has been closed. Error code: %d", err);
+          mdebug_warn("Socket might has been closed. Error code: %d (%s)", err, err.message().c_str());
         }
       };
 
@@ -84,7 +84,7 @@ namespace runnerd {
 
     size_t ProcessRunnerProtocol::getReadBufferSize() const
     {
-      static const size_t readBufferSize = 8;
+      static const size_t readBufferSize = 1024;
 
       return readBufferSize;
     }
@@ -114,8 +114,6 @@ namespace runnerd {
     std::string ProcessRunnerProtocol::handleRequest()
     {
       std::string request = normalizeCommandLine(getReadBuffer());
-
-      //clearReadBuffer();
 
       std::string response;
       if(!request.empty())
@@ -163,12 +161,6 @@ namespace runnerd {
     const network::IOBuffer& ProcessRunnerProtocol::getReadBuffer() const
     {
       return readBuffer_;
-    }
-
-    void ProcessRunnerProtocol::clearReadBuffer()
-    {
-      network::IOBuffer temp(getReadBufferSize());
-      readBuffer_.swap(temp);
     }
 
     int ProcessRunnerProtocol::getProcessExecutionTimeout() const

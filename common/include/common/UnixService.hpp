@@ -42,18 +42,18 @@ namespace runnerd {
 
       public:
         /**
-         * @brief
+         * @brief Deamonizes the service.
          */
         void daemonize();
 
         /**
-         * @brief Set signal handler function.
+         * @brief Sets signal handler function.
          * @detailed Must be called after all required signals have been registered.
          */
         void setSignalHandler();
 
         /**
-         * @brief Blocks the calling thread and waits for a signal received.
+         * @brief Blocks the calling thread and waits for a signal.
          */
         void waitForSignalsSync();
 

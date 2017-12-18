@@ -56,7 +56,6 @@ namespace runnerd {
         size_t getReadBufferSize() const;
 
         const network::IOBuffer& getReadBuffer() const;
-        void clearReadBuffer();
 
         void startReadTaskAsync();
         void startWriteTaskAsync(const std::string& message);

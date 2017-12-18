@@ -42,6 +42,7 @@ namespace runnerd {
       const std::string unixSocketDefault = "/tmp/simple-telnetd";
       const std::string commandsConfigurationFileDefault = "/etc/remote-runnerd.conf";
       const bool useUnixSocketDefault = false;
+      const bool debugRunDefault = false;
 
       options::options_description optionDescription((boost::format("Usage: %s [options]... \nOptions") % argv[0]).str());
 
@@ -51,7 +52,7 @@ namespace runnerd {
       std::string configurationFile = commandsConfigurationFileDefault;
       std::string unixSocket = unixSocketDefault;
       bool useUnixSocket = useUnixSocketDefault;
-      bool debugRun = false;
+      bool debugRun = debugRunDefault;
 
       optionDescription.add_options()
               ("port,p", options::value<int>(&port)->default_value(portDefault), "The port number to listen.")
@@ -61,7 +62,7 @@ namespace runnerd {
               ("timeout,t", options::value<int>(&timeout)->default_value(timeoutDefault), "Process execution wait timeout in seconds.")
               ("threads", options::value<size_t>(&threadPoolSize)->default_value(threadPoolSizeDefault), "The service's thread pool size.")
               ("unix,u", options::bool_switch(&useUnixSocket)->default_value(useUnixSocketDefault), "Force to use Unix socket.")
-              ("debug,d", options::bool_switch(&debugRun)->default_value(false), "Interactive run without daemonizing.")
+              ("debug,d", options::bool_switch(&debugRun)->default_value(debugRunDefault), "Interactive run without daemonizing.")
               ("help,h", "As it says.");
 
       options::variables_map variableMap;
@@ -85,7 +86,7 @@ namespace runnerd {
 
       if(threadPoolSize < 1)
       {
-        throw core::BaseException("The number of service threads can't be less than one. Please provide some positive integer value.");
+        throw core::BaseException("The number of service's threads can't be less than one. Please provide some positive integer value.");
       }
 
       common::TextConfigurationParser::Ptr parser = std::make_shared<common::TextConfigurationParser>(

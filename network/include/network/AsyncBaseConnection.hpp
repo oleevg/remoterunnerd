@@ -7,13 +7,7 @@
 #ifndef RUNNERD_ASYNCBASECONNECTION_H
 #define RUNNERD_ASYNCBASECONNECTION_H
 
-#include <cstdint>
-#include <memory>
-#include <functional>
-
 #include <boost/asio.hpp>
-#include <boost/core/noncopyable.hpp>
-#include <boost/system/error_code.hpp>
 
 #include "IAsyncConnection.hpp"
 
@@ -22,16 +16,10 @@ namespace runnerd {
   namespace network {
 
     template <class Socket>
-    class AsyncBaseConnection : public IAsyncConnection, public std::enable_shared_from_this<AsyncBaseConnection>, boost::noncopyable {
-
-        typedef AsyncBaseConnection self_type;
-
-      public:
-        typedef std::shared_ptr<AsyncBaseConnection> Ptr;
-
+    class AsyncBaseConnection : public IAsyncConnection {
       public:
         explicit AsyncBaseConnection(boost::asio::io_service& service):
-        socket_(service), started_(false)
+        socket_(service), started_(true)
         { }
 
         Socket& getSocket()

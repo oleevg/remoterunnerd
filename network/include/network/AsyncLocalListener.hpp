@@ -8,7 +8,8 @@
 #ifndef RUNNERD_ASYNCLOCALLISTENER_HPP
 #define RUNNERD_ASYNCLOCALLISTENER_HPP
 
-#include <boost/system/error_code.hpp>
+#include <string>
+#include <cstdio>
 
 #include "AsyncBaseListener.hpp"
 
@@ -19,19 +20,13 @@ namespace runnerd {
     /**
      * @brief Asynchronous listener implementation using Boost.Asio local sockets.
      */
-
-    template<class Acceptor>
-    class AsyncLocalListener : public AsyncBaseListener<Acceptor> {};
-
-    template<>
-    class AsyncLocalListener<boost::asio::local::stream_protocol::acceptor> : public AsyncBaseListener<boost::asio::local::stream_protocol::acceptor>  {
+    class AsyncLocalListener
+            : public AsyncBaseListener<boost::asio::local::stream_protocol::acceptor, boost::asio::local::stream_protocol::socket> {
       public:
-        typedef std::shared_ptr<AsyncBaseListener> Ptr;
-
-      public:
-        AsyncLocalListener(size_t threadPoolSize, const std::string& unixSocketPath):
-                AsyncBaseListener(threadPoolSize, boost::asio::local::stream_protocol::endpoint(unixSocketPath)), unixSocketPath_(unixSocketPath)
-        { }
+        AsyncLocalListener(size_t threadPoolSize, const std::string& unixSocketPath) :
+                AsyncBaseListener(threadPoolSize, boost::asio::local::stream_protocol::endpoint(unixSocketPath)),
+                unixSocketPath_(unixSocketPath)
+        {}
 
         ~AsyncLocalListener()
         {

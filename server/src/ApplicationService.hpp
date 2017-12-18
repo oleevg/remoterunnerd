@@ -24,7 +24,7 @@ namespace runnerd {
   namespace server {
 
     /**
-     * @brief Service class supporting signals and running as a daemon.
+     * @brief Service class responsible for signals handling and application deamonizing.
      */
     class ApplicationService : public std::enable_shared_from_this<ApplicationService>, boost::noncopyable {
 
@@ -35,7 +35,8 @@ namespace runnerd {
         /**
          * @brief ctor.
          * @param port Port number to listen to.
-         * @param processExecutionTimeout Acceptable timeout to wait for a process execution.
+         * @param processExecutionTimeout Acceptable timeout in seconds to wait for a process execution.
+         * @param threadPoolSize The thread pool size.
          * @param parser Application's configuration file parser.
          * @param commandStore Registered commands storage.
          * @param daemonize Whether run as a daemon or not.
@@ -47,7 +48,8 @@ namespace runnerd {
         /**
          * @brief ctor.
          * @param unixSocketPath Path to the local socket.
-         * @param processExecutionTimeout Acceptable timeout to wait for a process execution.
+         * @param processExecutionTimeout Acceptable timeout in seconds to wait for a process execution.
+         * @param threadPoolSize The thread pool size.
          * @param parser Application's configuration file parser.
          * @param commandStore Registered commands storage.
          * @param daemonize Whether run as a daemon or not.
@@ -67,6 +69,10 @@ namespace runnerd {
         int run();
 
       private:
+        ApplicationService(int processExecutionTimeout, const common::TextConfigurationParser::Ptr& parser,
+                           const common::CommandStore::Ptr& commandStore,
+                           bool daemonize);
+
         void initialize();
 
         void signalHandlerTask();
