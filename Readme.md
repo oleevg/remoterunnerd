@@ -41,7 +41,8 @@ Simple network service that provides remote and local execution of registered co
 
 ### Usage
 
-* Prepare application's configuration file. 
+* Prepare application's configuration file.
+
   Create the service configuration file that contains the list of allowed commands to execute. You need to provide only command name without any supported arguments. Each new command must be placed on the new line.
   Example of configuration file creation:
     
@@ -56,13 +57,15 @@ Simple network service that provides remote and local execution of registered co
   Application's default configuration file is '/etc/remote-runnerd.conf' - see application's help.
 
 * Listening the specified or default port (12345).
-Default run mode is working with the specified or default numeric port:
+
+  Default run mode is working with the specified or default numeric port:
     
 ```
     $ ./runnerd_server -t 54321
 ``` 
 
 * Working with local Unix sockets:
+
   You have to provide '-u, --unix' flag to run the service with local Unix socket usage or explicitly provide local socket path through '-s, --socket' argument:
     
 ```
@@ -71,6 +74,7 @@ Default run mode is working with the specified or default numeric port:
 ```
 
 * Run in interactive (debug) mode.
+
   To run service for debug purposes without daemonizing use '-d, --debug' flag:
     
 ```
@@ -89,17 +93,19 @@ Default run mode is working with the specified or default numeric port:
 ```
 
 * The service internal commands.
-  The service accepts several internal commands:
-    * list - get the list of registered commands to execute including internal ones.
+
+    The service accepts several internal commands:
+    * list - get the list of registered commands and internal ones to execute.
     * exit - close client's connection.
 
 ### Running the tests
   CMake build framework might be used to run available unit tests. Just run 'ctest' inside build directory after building the sources.
-    
+
 ```
     $ ctest
     $ ctest --verbose
-``` 
+```
+  *More tests to be done*
 
 ### Known issues
 Wrong behaviour of the boost::process::child::wait_for() call on some systems (specific gcc and boost versions combination).
