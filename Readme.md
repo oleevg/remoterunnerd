@@ -93,19 +93,19 @@ Default run mode is working with the specified or default numeric port:
     * list - get the list of registered commands to execute including internal ones.
     * exit - close client's connection.
 
-### Known issues
-Wrong behaviour of the boost::process::child::wait_for() call on some systems (specific gcc and boost versions).
-For example: boost 1.65.1 + gcc4.8.5 20150623 (Red Hat 4.8.5-4) on Centos 7.
-
-Additional information: https://github.com/klemens-morgenstern/boost-process/issues/99
-
-##$ Running the tests
+### Running the tests
   CMake build framework might be used to run available unit tests. Just run 'ctest' inside build directory after building the sources.
     
 ```
     $ ctest
     $ ctest --verbose
 ``` 
+
+### Known issues
+Wrong behaviour of the boost::process::child::wait_for() call on some systems (specific gcc and boost versions combination).
+For example: boost 1.65.1 + gcc4.8.5 20150623 (Red Hat 4.8.5-4) on Centos 7.
+
+Additional information: https://github.com/klemens-morgenstern/boost-process/issues/99
 
 ##$ Authors
 Oleg Fedorov, fedorov.ftf@gmail.com
