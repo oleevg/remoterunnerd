@@ -23,7 +23,6 @@ namespace runnerd {
 
   namespace common {
 
-
     ProcessRunnerProtocol::ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
                                                      int processExecutionTimeout) :
             processExecutionTimeout_(processExecutionTimeout), connection_(connection), commandStore_(commandStore), commandPrompt_("runnerd# ")
@@ -91,6 +90,7 @@ namespace runnerd {
 
     void ProcessRunnerProtocol::close()
     {
+      mdebug_info("Client disconnected.");
       connection_->close();
     }
 

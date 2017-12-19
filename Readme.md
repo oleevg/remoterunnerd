@@ -6,13 +6,13 @@ Simple network service that provides remote and local execution of registered co
 * CMake build system (>= 3.3) is used to compile the project. Compiling tested with gcc4.9.2 and gcc6.3.0.
 * Compiler support for C++11 standard is required.
 * boost (>= 1.64.0) is required to build the project.
-* [zlog library](https://github.com/HardySimpson/zlog) might be used to collect the services' messages and redirect it to an ordinary file, syslog service etc.
+* [zlog library](https://github.com/HardySimpson/zlog) might be used to collect the service's messages and redirect it to an ordinary file, syslog service etc.
 
 ### Getting Started
 
 * Download or clone the project's repository.
 * Install all required tools and libraries listed in 'Prerequisites' section.
-* Create build directory inside project folder and compile the sources. Building in source tree directory is forbidden.
+* Create build directory inside project folder and compile the sources. Compiling in source tree directory is forbidden.
     
 ```
     $ mkdir .build && cd .build
@@ -91,7 +91,13 @@ Default run mode is working with the specified or default numeric port:
 * The service internal commands.
   The service accepts several internal commands:
     * list - get the list of registered commands to execute including internal ones.
-    * exit - close client's connection (Might not work properly.) 
+    * exit - close client's connection.
+
+### Known issues
+Wrong behaviour of the boost::process::child::wait_for() call on some systems (specific gcc and boost versions).
+For example: boost 1.65.1 + gcc4.8.5 20150623 (Red Hat 4.8.5-4) on Centos 7.
+
+Additional information: https://github.com/klemens-morgenstern/boost-process/issues/99
 
 ##$ Running the tests
   CMake build framework might be used to run available unit tests. Just run 'ctest' inside build directory after building the sources.

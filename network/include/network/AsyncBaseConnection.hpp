@@ -1,8 +1,8 @@
 /*
- * AsyncBaseConnection.h
+ * AsyncBaseConnection.hpp
  *
  *  Created on: 12/18/2017
- *      Author: fedorov2
+ *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 #ifndef RUNNERD_ASYNCBASECONNECTION_H
 #define RUNNERD_ASYNCBASECONNECTION_H

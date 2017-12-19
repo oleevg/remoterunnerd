@@ -16,6 +16,9 @@ namespace runnerd {
 
   namespace core {
 
+    /**
+     * @brief Helper class to work with std::thread identifier.
+     */
     class ThreadHelper {
       public:
         static std::string threadIdToString()

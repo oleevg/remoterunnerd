@@ -11,6 +11,8 @@
 #include <string>
 #include <cstdio>
 
+#include <core/ulog.h>
+
 #include "AsyncBaseListener.hpp"
 
 namespace runnerd {
@@ -26,7 +28,9 @@ namespace runnerd {
         AsyncLocalListener(size_t threadPoolSize, const std::string& unixSocketPath) :
                 AsyncBaseListener(threadPoolSize, boost::asio::local::stream_protocol::endpoint(unixSocketPath)),
                 unixSocketPath_(unixSocketPath)
-        {}
+        {
+          mdebug_info("Running with the local socket '%s'.", unixSocketPath_.c_str());
+        }
 
         ~AsyncLocalListener()
         {

@@ -25,7 +25,7 @@ namespace runnerd {
 
       public:
         /**
-         *
+         * @brief Executes provided command with the specified arguments.
          * @param execName Command name to execute.
          * @param arguments The collection of command arguments.
          * @param timeout Acceptable timeout in seconds to wait for command execution.

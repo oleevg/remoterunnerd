@@ -6,6 +6,7 @@
  */
 
 #include <chrono>
+#include <iostream>
 
 #include <boost/process/child.hpp>
 #include <boost/process/io.hpp>

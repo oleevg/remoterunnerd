@@ -50,7 +50,7 @@ namespace runnerd {
         CommandCollection getAllCommands() const;
 
         /**
-         * @brief Provides a thread-safe way to update all registered commands;
+         * @brief Provides a thread-safe way to update all registered commands.
          * @param commands Custom collection of commands to register.
          */
         void setAllCommands(const CommandCollection& commands);

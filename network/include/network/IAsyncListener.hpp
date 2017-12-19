@@ -32,7 +32,7 @@ namespace runnerd {
         virtual ~IAsyncListener() = default;
 
         /**
-         * @brief Starts to listen on the used socket.
+         * @brief Starts to listen on the socket.
          * @param asyncHandler Callable object to process client's connections.
          */
         virtual void listenAsync(AcceptHandler asyncHandler) = 0;

@@ -1,5 +1,5 @@
 /*
- * main.cpp
+ * BaseException.cpp
  *
  *  Created on: 10/1/17
  *      Author: Oleg F., fedorov.ftf@gmail.com

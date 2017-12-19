@@ -23,7 +23,7 @@ namespace runnerd {
   namespace network {
 
     /**
-     * @brief Base asynchronous listener class.
+     * @brief Base asynchronous listener class implementation.
      * @detailed Provides base asynchronous listener functionality using Boost.Asio.
      */
     template <class Acceptor, class Socket>
@@ -32,10 +32,8 @@ namespace runnerd {
       public:
         template <typename... Args>
         AsyncBaseListener(size_t threadPoolSize, Args &&... args):
-                threadPoolSize_(threadPoolSize), acceptor_(getIoService(), std::forward<Args>(args)...)
+                service_(), acceptor_(service_, std::forward<Args>(args)...), threadPoolSize_(threadPoolSize)
         { }
-
-        virtual ~AsyncBaseListener() = default;
 
         virtual void wait() override
         {

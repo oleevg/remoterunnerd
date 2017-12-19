@@ -8,9 +8,9 @@
 #ifndef RUNNERD_LISTENER_HPP
 #define RUNNERD_LISTENER_HPP
 
-#include <memory>
-
 #include <boost/asio.hpp>
+
+#include <core/ulog.h>
 
 #include "AsyncBaseListener.hpp"
 
@@ -25,7 +25,9 @@ namespace runnerd {
       public:
         AsyncListener(size_t threadPoolSize, int port):
                 AsyncBaseListener(threadPoolSize, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
-        { }
+        {
+          mdebug_info("Running with the port '%d'.", port);
+        }
     };
 
   }

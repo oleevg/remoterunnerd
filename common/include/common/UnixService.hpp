@@ -22,7 +22,7 @@ namespace runnerd {
 
     /**
      * @brief Unix service class.
-     * @detailed Provides running processes as a daemon. Provides API to register signals to be handled.
+     * @detailed Provides possibility to run processes as a daemon. Provides API to register signals to be handled.
      */
     class UnixService : public boost::serialization::singleton<UnixService> {
 
@@ -58,14 +58,14 @@ namespace runnerd {
         void waitForSignalsSync();
 
         /**
-         * @brief Unregisteres previously registered signal.
+         * @brief Unregisters previously registered signal.
          * @param signalNumber Signal number to unregister.
          * @return Whether the specified signal was successfully unregistered.
          */
         bool unregisterSignalHandlerFlag(int signalNumber);
 
         /**
-         * @brief Registeres the specified signal.
+         * @brief Registers the specified signal.
          * @param signalNumber Signal number to register.
          * @param flag Atomic flag to keep the signal status.
          */

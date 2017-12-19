@@ -44,17 +44,16 @@ namespace runnerd {
 
         /**
          * @brief Asynchronous reading from client's socket.
-         * @param buffer
-         * @param size
-         * @param readCompleteHandler
-         * @param readHandler
+         * @param buffer Buffer to write received data to.
+         * @param readCompleteHandler Read complete functor.
+         * @param readHandler Read data functor.
          */
         virtual void readAsync(IOBuffer& buffer, ReadCompleteHandler readCompleteHandler, IOHandler readHandler) = 0;
 
         /**
          * @brief Asynchronous writing to the client's socket.
-         * @param buffer
-         * @param handler
+         * @param buffer Buffer to read the data for sending from.
+         * @param handler Write data functor.
          */
         virtual void writeAsync(const IOBuffer& buffer, IOHandler handler) = 0;
 

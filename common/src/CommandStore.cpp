@@ -20,6 +20,8 @@ namespace runnerd {
 
     bool CommandStore::registerCommand(const std::string& command)
     {
+      std::lock_guard<std::mutex> lock(mtx_);
+
       auto result = commands_.insert(command);
 
       mdebug_info("Registered command: %s", command.c_str());

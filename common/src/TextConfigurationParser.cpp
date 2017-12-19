@@ -20,12 +20,9 @@ namespace runnerd {
 
   namespace common {
 
-
-    TextConfigurationParser::TextConfigurationParser(const std::string& filePath):
-    filePath_(filePath)
-    {
-
-    }
+    TextConfigurationParser::TextConfigurationParser(const std::string& filePath) :
+            filePath_(filePath)
+    { }
 
     ConfigurationContent TextConfigurationParser::readByLine()
     {

@@ -19,7 +19,7 @@ namespace common {
   typedef std::vector<std::string> ConfigurationContent;
 
   /**
-   * @brief Handles simple text files.
+   * @brief Provides reading of simple text configuration files.
    */
   class TextConfigurationParser {
     public:
