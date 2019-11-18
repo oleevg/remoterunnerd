@@ -138,7 +138,7 @@ namespace runnerd {
 
           try
           {
-            response = ProcessExecutor().executeProcess(execName, argumentsWithoutExec, getProcessExecutionTimeout());
+            response = ProcessExecutor().executeProcess(execName, argumentsWithoutExec, std::chrono::milliseconds(getProcessExecutionTimeout()));
           }
           catch (const core::BaseException& exc)
           {

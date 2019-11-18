@@ -29,6 +29,7 @@ set(sources
 
 set(tests
     test/CommandStore_test.cpp
+    test/ProcessExecutor_test.cpp
     test/TextConfigurationParser_test.cpp
     )
 
@@ -42,6 +43,7 @@ set(libraries
     )
 
 set(external_libraries
+    ${Boost_SYSTEM_LIBRARY}
     )
 
 
