@@ -4,7 +4,7 @@ Simple network service that provides remote and local execution of registered co
 
 ### Prerequisites
 * CMake build system (>= 3.3) is used to compile the project. Compiling tested with gcc4.9.2 and gcc6.3.0.
-* Compiler support for C++11 standard is required.
+* Compiler support for C++14 standard is required.
 * boost (>= 1.64.0) is required to build the project.
 * [zlog library](https://github.com/HardySimpson/zlog) might be used to collect the service's messages and redirect it to an ordinary file, syslog service etc.
 
