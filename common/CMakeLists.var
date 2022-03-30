@@ -28,6 +28,7 @@ set(sources
     )
 
 set(tests
+    test/TestModule_main.cpp
     test/CommandStore_test.cpp
     test/ProcessExecutor_test.cpp
     test/TextConfigurationParser_test.cpp

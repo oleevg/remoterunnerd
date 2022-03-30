@@ -134,8 +134,10 @@ set(${project_name}_${module_name}_TESTS ${tests}
 # Add test module if tests sources are specified and skip this step overwise.
 #
 if (${project_name}_${module_name}_TESTS)
-  set(Boost_USE_STATIC_LIBS ON)
+  #set(Boost_USE_STATIC_LIBS ON)
+  set(Boost_USE_STATIC_LIBS OFF)
   set(Boost_MULTITHREADED ON)
+  ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK)
   if(WIN32)
     if (MSVC)
       set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
@@ -147,41 +149,37 @@ if (${project_name}_${module_name}_TESTS)
 
   include_directories(${Boost_INCLUDE_DIR})
 
-  foreach (module_test_source ${${project_name}_${module_name}_TESTS})
-    get_filename_component(module_test ${module_test_source} NAME_WE)
+  set(module_test ${project_name}_${module_name}_test)
+  add_executable(${module_test}
+                 ${${project_name}_${module_name}_TESTS}
+                 )
 
-    # Add test's executable to the project using the specified source files.
-    add_executable(${module_test}
-                   ${module_test_source}
-                   )
+  if (WIN32)
+    list(APPEND libraries_test
+         ${libraries_test_WIN32}
+         )
+  elseif (APPLE)
+    list(APPEND libraries_test
+         ${libraries_test_APPLE}
+         )
+  elseif (UNIX)
+    list(APPEND libraries_test
+         ${libraries_test_UNIX}
+         )
+  endif ()
 
-    if (WIN32)
-      list(APPEND libraries_test
-           ${libraries_test_WIN32}
-           )
-    elseif (APPLE)
-      list(APPEND libraries_test
-           ${libraries_test_APPLE}
-           )
-    elseif (UNIX)
-      list(APPEND libraries_test
-           ${libraries_test_UNIX}
-           )
+  ## Link a target to the given libraries.
+  foreach (dependency ${libraries_test})
+    if (NOT DEFINED ${${dependency}_link_type})
+      target_link_libraries(${module_test} ${dependency})
+    else ()
+      target_link_libraries(${module_test} ${dependency})
     endif ()
-
-    ## Link a target to the given libraries.
-    foreach (dependency ${libraries_test})
-      if (NOT DEFINED ${${dependency}_link_type})
-        target_link_libraries(${module_test} ${dependency})
-      else ()
-        target_link_libraries(${module_test} ${dependency})
-      endif ()
-    endforeach ()
-
-    target_link_libraries(${module_test} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
-
-    add_test(NAME ${project_name}_${module_test} COMMAND ${module_test})
   endforeach ()
+
+  target_link_libraries(${module_test} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+
+  add_test(NAME ${project_name}_${module_test} COMMAND ${module_test})
 else ()
   message(STATUS "Skipping test module generation for ${project_name}_${module_name}")
 endif ()

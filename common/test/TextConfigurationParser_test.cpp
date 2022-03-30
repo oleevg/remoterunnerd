@@ -5,9 +5,8 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#define BOOST_TEST_MODULE "TextConfigurationParser test module"
-
 #include <boost/test/unit_test.hpp>
+
 #include <fstream>
 #include <random>
 #include <unistd.h>
@@ -72,17 +71,16 @@ struct TextConfigurationParserFixture {
   bool isOwner_;
 };
 
-
 BOOST_FIXTURE_TEST_SUITE( TextConfigurationParser, TextConfigurationParserFixture)
 
-  BOOST_AUTO_TEST_CASE(nonExistentFile_readByLine_throw)
+  BOOST_AUTO_TEST_CASE(Must_throw_when_reading_non_existing_file)
   {
     runnerd::common::TextConfigurationParser textConfigurationParser(fileName_);
 
     BOOST_REQUIRE_THROW(textConfigurationParser.readByLine(), runnerd::core::BaseException);
   }
 
-  BOOST_AUTO_TEST_CASE(existentFile_readByLine_no_throw)
+  BOOST_AUTO_TEST_CASE(Should_read_existing_file)
   {
     createFile();
 

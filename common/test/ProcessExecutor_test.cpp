@@ -5,8 +5,6 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#define BOOST_TEST_MODULE "ProcessExecutor test module"
-
 #include <string>
 #include <vector>
 #include <iostream>

@@ -5,15 +5,13 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#define BOOST_TEST_MODULE "CommandStore test module"
-
 #include <boost/test/unit_test.hpp>
 
 #include <common/CommandStore.hpp>
 
 BOOST_AUTO_TEST_SUITE (CommandStore)
 
-  BOOST_AUTO_TEST_CASE(setAllCommands_isRegistered_true)
+  BOOST_AUTO_TEST_CASE(Should_keep_registered_command)
   {
     runnerd::common::CommandStore commandStore(10);
 
@@ -26,7 +24,7 @@ BOOST_AUTO_TEST_SUITE (CommandStore)
     }
   }
 
-  BOOST_AUTO_TEST_CASE(updateCommands_isRegistered_false)
+  BOOST_AUTO_TEST_CASE(Should_update_commands)
   {
     runnerd::common::CommandStore commandStore(10);
 
@@ -41,7 +39,7 @@ BOOST_AUTO_TEST_SUITE (CommandStore)
     }
   }
 
-  BOOST_AUTO_TEST_CASE(registerCommand_isRegistered_true)
+  BOOST_AUTO_TEST_CASE(Should_register_command_by_one)
   {
     runnerd::common::CommandStore commandStore(10);
 
