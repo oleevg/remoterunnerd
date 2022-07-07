@@ -33,7 +33,7 @@ namespace runnerd {
     {
       FILE* fStream = nullptr;
 
-      fprintf( stdout, "Daemonizing the process...\n");
+      fprintf(stdout, "Daemonizing the process...\n");
       pid_t pid = fork();
 
       switch(pid)
@@ -143,7 +143,7 @@ namespace runnerd {
           auto& flag = item.second->flag;
           flag.store(true);
 
-          std::unique_lock<std::mutex> lck(mtx);
+          std::lock_guard<std::mutex> lck(mtx);
           conditionVariable.notify_one();
         }
       }

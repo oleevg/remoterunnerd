@@ -29,7 +29,7 @@ namespace runnerd {
           return stringStream.str();
         }
 
-        static size_t threadIdToInt()
+        static long threadIdToInt()
         {
           std::string strId = threadIdToString();
 

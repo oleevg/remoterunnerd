@@ -24,7 +24,7 @@ namespace runnerd {
 
   namespace server {
 
-    ApplicationService::ApplicationService(int port, int processExecutionTimeout, size_t threadPoolSize,
+    ApplicationService::ApplicationService(int port, const std::chrono::milliseconds& processExecutionTimeout, size_t threadPoolSize,
                                            const common::TextConfigurationParser::Ptr& parser,
                                            const common::CommandStore::Ptr& commandStore,
                                            bool daemonize) :
@@ -33,7 +33,7 @@ namespace runnerd {
       asyncListener_ = std::make_shared<network::AsyncListener>(threadPoolSize, port);
     }
 
-    ApplicationService::ApplicationService(const std::string& unixSocketPath, int processExecutionTimeout,
+    ApplicationService::ApplicationService(const std::string& unixSocketPath, const std::chrono::milliseconds& processExecutionTimeout,
                                            size_t threadPoolSize,
                                            const common::TextConfigurationParser::Ptr& parser,
                                            const common::CommandStore::Ptr& commandStore,
@@ -43,7 +43,7 @@ namespace runnerd {
       asyncListener_ = std::make_shared<network::AsyncLocalListener>(threadPoolSize, unixSocketPath);
     }
 
-    ApplicationService::ApplicationService(int processExecutionTimeout,
+    ApplicationService::ApplicationService(const std::chrono::milliseconds& processExecutionTimeout,
                                            const common::TextConfigurationParser::Ptr& parser,
                                            const common::CommandStore::Ptr& commandStore, bool daemonize) :
             parser_(parser), commandStore_(commandStore), processExecutionTimeout_(processExecutionTimeout),

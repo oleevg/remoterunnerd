@@ -10,6 +10,7 @@
 
 #include <memory>
 #include <string>
+#include <chrono>
 
 #include <boost/core/noncopyable.hpp>
 
@@ -35,26 +36,26 @@ namespace runnerd {
         /**
          * @brief ctor.
          * @param port Port number to listen to.
-         * @param processExecutionTimeout Acceptable timeout in seconds to wait for a process execution.
+         * @param processExecutionTimeout Acceptable timeout to wait for a process execution.
          * @param threadPoolSize The thread pool size.
          * @param parser Application's configuration file parser.
          * @param commandStore Registered commands storage.
          * @param daemonize Whether run as a daemon or not.
          */
-        ApplicationService(int port, int processExecutionTimeout, size_t threadPoolSize,
+        ApplicationService(int port, const std::chrono::milliseconds& processExecutionTimeout, size_t threadPoolSize,
                            const common::TextConfigurationParser::Ptr& parser, const common::CommandStore::Ptr& commandStore,
                            bool daemonize);
 
         /**
          * @brief ctor.
          * @param unixSocketPath Path to the local socket.
-         * @param processExecutionTimeout Acceptable timeout in seconds to wait for a process execution.
+         * @param processExecutionTimeout Acceptable timeout to wait for a process execution.
          * @param threadPoolSize The thread pool size.
          * @param parser Application's configuration file parser.
          * @param commandStore Registered commands storage.
          * @param daemonize Whether run as a daemon or not.
          */
-        ApplicationService(const std::string& unixSocketPath, int processExecutionTimeout, size_t threadPoolSize,
+        ApplicationService(const std::string& unixSocketPath, const std::chrono::milliseconds& processExecutionTimeout, size_t threadPoolSize,
                            const common::TextConfigurationParser::Ptr& parser, const common::CommandStore::Ptr& commandStore,
                            bool daemonize);
         /**
@@ -69,7 +70,7 @@ namespace runnerd {
         int run();
 
       private:
-        ApplicationService(int processExecutionTimeout, const common::TextConfigurationParser::Ptr& parser,
+        ApplicationService(const std::chrono::milliseconds& processExecutionTimeout, const common::TextConfigurationParser::Ptr& parser,
                            const common::CommandStore::Ptr& commandStore,
                            bool daemonize);
 
@@ -87,7 +88,7 @@ namespace runnerd {
         common::UnixService::SignalHandlerFlag::Ptr intFlag_;
         common::UnixService::SignalHandlerFlag::Ptr hupFlag_;
 
-        int processExecutionTimeout_;
+        std::chrono::milliseconds processExecutionTimeout_;
         bool daemonized_;
     };
 

@@ -5,6 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
+#include <chrono>
 #include <string>
 #include <iostream>
 
@@ -37,7 +38,7 @@ namespace runnerd {
 
       /* Default parameters definition */
       const int portDefault = 12345;
-      const int timeoutDefault = 15;
+      const int timeoutDefault = 15000;
       const size_t threadPoolSizeDefault = 5;
       const std::string unixSocketDefault = "/tmp/simple-telnetd";
       const std::string commandsConfigurationFileDefault = "/etc/remote-runnerd.conf";
@@ -59,7 +60,7 @@ namespace runnerd {
               ("config,c", options::value<std::string>(&configurationFile)->default_value(commandsConfigurationFileDefault),
                "The configuration file with supported commands list.")
               ("socket,s", options::value<std::string>(&unixSocket)->default_value(unixSocketDefault), "The Unix socket path.")
-              ("timeout,t", options::value<int>(&timeout)->default_value(timeoutDefault), "Process execution wait timeout in seconds.")
+              ("timeout,t", options::value<int>(&timeout)->default_value(timeoutDefault), "Process execution wait timeout in milliseconds.")
               ("threads", options::value<size_t>(&threadPoolSize)->default_value(threadPoolSizeDefault), "The service's thread pool size.")
               ("unix,u", options::bool_switch(&useUnixSocket)->default_value(useUnixSocketDefault), "Force to use Unix socket.")
               ("debug,d", options::bool_switch(&debugRun)->default_value(debugRunDefault), "Interactive run without daemonizing.")
@@ -101,11 +102,11 @@ namespace runnerd {
       {
         // TODO: Temporary hack. Need to implement proper exclusive application run.
         remove(unixSocket.c_str());
-        appService = std::make_shared<ApplicationService>(unixSocket, timeout, threadPoolSize, parser, commandStore, !debugRun);
+        appService = std::make_shared<ApplicationService>(unixSocket, std::chrono::milliseconds(timeout), threadPoolSize, parser, commandStore, !debugRun);
       }
       else
       {
-        appService = std::make_shared<ApplicationService>(port, timeout, threadPoolSize, parser, commandStore, !debugRun);
+        appService = std::make_shared<ApplicationService>(port, std::chrono::milliseconds(timeout), threadPoolSize, parser, commandStore, !debugRun);
       }
 
     }

@@ -9,6 +9,7 @@
 #define RUNNERD_PROCESSRUNNERPROTOCOL_HPP
 
 #include <string>
+#include <chrono>
 #include <functional>
 #include <unordered_map>
 #include <memory>
@@ -37,17 +38,17 @@ namespace runnerd {
          * @brief ctor.
          * @param connection Connection to communicate with a client.
          * @param commandStore Registered commands storage.
-         * @param processExecutionTimeout Acceptable timeout in seconds to wait for commands execution.
+         * @param processExecutionTimeout Acceptable timeout to wait for commands execution.
          */
         ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
-                                      int processExecutionTimeout = -1);
+                                      const std::chrono::milliseconds& processExecutionTimeout);
 
         /**
          * @brief Starts protocol's steps sequence.
          */
         void start();
 
-        int getProcessExecutionTimeout() const;
+        std::chrono::milliseconds getProcessExecutionTimeout() const;
 
         void close();
 
@@ -70,7 +71,7 @@ namespace runnerd {
         std::string listHandler();
 
       private:
-        int processExecutionTimeout_;
+        std::chrono::milliseconds processExecutionTimeout_;
 
         CommandHandlers commandHandlers_;
         CommandStore::Ptr commandStore_;

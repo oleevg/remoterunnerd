@@ -32,7 +32,7 @@ Simple network service that provides remote and local execution of registered co
                                         commands list.
     -s [ --socket ] arg (=/tmp/simple-telnetd)
                                         The Unix socket path.
-    -t [ --timeout ] arg (=15)            Process execution wait time in seconds.
+    -t [ --timeout ] arg (=15)            Process execution wait period in milliseconds.
     --threads arg (=5)                    The service's thread pool size.
     -u [ --unix ]                         Force to use Unix socket.
     -d [ --debug ]                        Interactive run without daemonizing.

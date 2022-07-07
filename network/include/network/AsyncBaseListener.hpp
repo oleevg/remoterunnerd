@@ -9,7 +9,7 @@
 #define RUNNERD_ASYNCBASELISTENER_HPP
 
 #include <thread>
-#include <list>
+#include <vector>
 
 #include <boost/asio.hpp>
 
@@ -33,7 +33,9 @@ namespace runnerd {
         template <typename... Args>
         AsyncBaseListener(size_t threadPoolSize, Args &&... args):
                 service_(), acceptor_(service_, std::forward<Args>(args)...), threadPoolSize_(threadPoolSize)
-        { }
+        { 
+          threadPool_.reserve(threadPoolSize_);
+        }
 
         virtual void wait() override
         {
@@ -87,7 +89,7 @@ namespace runnerd {
         Acceptor acceptor_;
 
         size_t threadPoolSize_;
-        std::list<std::thread> threadPool_;
+        std::vector<std::thread> threadPool_;
     };
   }
 

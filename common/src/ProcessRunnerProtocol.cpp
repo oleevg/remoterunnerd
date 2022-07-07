@@ -11,6 +11,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 
+#include <chrono>
 #include <core/ulog.h>
 #include <core/ThreadHelper.hpp>
 #include <core/BaseException.hpp>
@@ -24,7 +25,7 @@ namespace runnerd {
   namespace common {
 
     ProcessRunnerProtocol::ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
-                                                     int processExecutionTimeout) :
+                                                     const std::chrono::milliseconds& processExecutionTimeout) :
             processExecutionTimeout_(processExecutionTimeout), connection_(connection), commandStore_(commandStore), commandPrompt_("runnerd# ")
     {
       registerInternalCommands();
@@ -138,7 +139,7 @@ namespace runnerd {
 
           try
           {
-            response = ProcessExecutor().executeProcess(execName, argumentsWithoutExec, std::chrono::milliseconds(getProcessExecutionTimeout()));
+            response = ProcessExecutor().executeProcess(execName, argumentsWithoutExec, getProcessExecutionTimeout());
           }
           catch (const core::BaseException& exc)
           {
@@ -163,7 +164,7 @@ namespace runnerd {
       return readBuffer_;
     }
 
-    int ProcessRunnerProtocol::getProcessExecutionTimeout() const
+    std::chrono::milliseconds ProcessRunnerProtocol::getProcessExecutionTimeout() const
     {
       return processExecutionTimeout_;
     }

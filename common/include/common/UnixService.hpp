@@ -42,7 +42,7 @@ namespace runnerd {
 
       public:
         /**
-         * @brief Deamonizes the service.
+         * @brief Daemonizes the service.
          */
         void daemonize();
 
