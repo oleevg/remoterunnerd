@@ -82,20 +82,20 @@ namespace runnerd {
 
       if(timeout <= 0)
       {
-        throw core::BaseException("Negative or zero timeout values are not supported. Please provide some positive integer value.");
+        throw core::BaseException("Negative or zero timeout values are not supported. Please provide a positive integer value.");
       }
 
       if(threadPoolSize < 1)
       {
-        throw core::BaseException("The number of service's threads can't be less than one. Please provide some positive integer value.");
+        throw core::BaseException("The number of service's threads can't be less than one. Please provide a positive integer value.");
       }
 
-      common::TextConfigurationParser::Ptr parser = std::make_shared<common::TextConfigurationParser>(
+      auto parser = std::make_shared<common::TextConfigurationParser>(
               configurationFile);
 
       auto content = parser->readByLine();
 
-      common::CommandStore::Ptr commandStore = std::make_shared<common::CommandStore>(content.size());
+      auto commandStore = std::make_shared<common::CommandStore>(content.size());
       commandStore->setAllCommands(content);
 
       if(useUnixSocket || !variableMap["socket"].defaulted())

@@ -5,6 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
+#include <mutex>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -136,17 +137,26 @@ namespace runnerd {
 
     void UnixService::signalHandler(int signalNumber)
     {
-      for (auto item : getSignalHandlerFlags())
-      {
-        if(signalNumber == item.first)
-        {
-          auto& flag = item.second->flag;
-          flag.store(true);
+      // for (auto item : getSignalHandlerFlags())
+      // {
+      //   if(signalNumber == item.first)
+      //   {
+      //     auto& flag = item.second->flag;
+      //     flag.store(true);
 
-          std::lock_guard<std::mutex> lck(mtx);
-          conditionVariable.notify_one();
-        }
-      }
+      //     std::lock_guard lck(mtx);
+      //     conditionVariable.notify_one();
+      //   }
+      // }
+      auto& signalHandlerFlags = getSignalHandlerFlags();
+      auto it = signalHandlerFlags.find(signalNumber);
+      if (it != signalHandlerFlags.cend()){
+        auto& flag = it->second->flag;
+        flag.store(true);
+
+        std::lock_guard lck(mtx);
+        conditionVariable.notify_one();
+      } 
     }
 
     UnixService::SignalHandlerFlags& UnixService::getSignalHandlerFlags()
@@ -158,7 +168,7 @@ namespace runnerd {
 
     void UnixService::waitForSignalsSync()
     {
-      std::unique_lock<std::mutex> lck(mtx);
+      std::unique_lock lck(mtx);
       conditionVariable.wait(lck);
     }
   }

@@ -16,7 +16,7 @@
 
 BOOST_AUTO_TEST_SUITE(ProcessExecutor)
 
-  BOOST_AUTO_TEST_CASE(Most_throw_when_app_is_not_in_path)
+  BOOST_AUTO_TEST_CASE(Must_throw_when_app_is_not_in_path)
   {
     runnerd::common::ProcessExecutor processExecutor;
 
