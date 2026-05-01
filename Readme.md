@@ -19,6 +19,14 @@ Simple network service that provides remote and local execution of registered co
     $ cmake ..
     $ make
 ```
+
+* Build with ninja
+
+```
+  cd buid
+  cmake -G Ninja DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+```
+
 * Getting help:
     
 ```
