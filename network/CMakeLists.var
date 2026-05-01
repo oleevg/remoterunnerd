@@ -7,7 +7,7 @@
 
 set(module_name network)
 
-set(module_type library)
+set(module_type interface)
 
 set(library_type)
 
