@@ -14,6 +14,8 @@
 #include <unordered_map>
 #include <memory>
 
+#include <boost/core/noncopyable.hpp>
+
 #include <network/IAsyncConnection.hpp>
 
 #include "CommandStore.hpp"

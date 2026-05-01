@@ -11,10 +11,9 @@
 #include <thread>
 #include <memory>
 
-#include <boost/process/child.hpp>
-#include <boost/process/io.hpp>
-#include <boost/process/async_pipe.hpp>
-#include <boost/asio/io_service.hpp>
+#include <boost/process/v1/child.hpp>
+#include <boost/process/v1/io.hpp>
+#include <boost/process/v1/async_pipe.hpp>
 
 #include <core/ulog.h>
 #include <core/ThreadHelper.hpp>
@@ -43,9 +42,9 @@ namespace runnerd {
         std::string handleOutputStreamUsage() const;
 
         std::thread ioThread;
-        boost::asio::io_service ioService;
-        boost::process::async_pipe outPipe;
-        boost::process::async_pipe errPipe;
+        boost::asio::io_context ioService;
+        boost::process::v1::async_pipe outPipe;
+        boost::process::v1::async_pipe errPipe;
 
         BytesArray outIoBuffer;
         BytesArray errIoBuffer;
@@ -118,8 +117,8 @@ namespace runnerd {
         execCommand.append(arg);
       }
 
-      std::function<void(const boost::system::error_code & errorCode, std::size_t size, BytesArray& in, BytesArray& out, boost::process::async_pipe& pipe)> onDataReady;
-      onDataReady = [&](const boost::system::error_code & errorCode, size_t size, BytesArray& in, BytesArray& out, boost::process::async_pipe& pipe)
+      std::function<void(const boost::system::error_code & errorCode, std::size_t size, BytesArray& in, BytesArray& out, boost::process::v1::async_pipe& pipe)> onDataReady;
+      onDataReady = [&](const boost::system::error_code & errorCode, size_t size, BytesArray& in, BytesArray& out, boost::process::v1::async_pipe& pipe)
       {
         out.reserve(out.size() + size);
         out.insert(out.end(), in.begin(), in.begin() + size);
@@ -146,8 +145,8 @@ namespace runnerd {
 
       try
       {
-        boost::process::child childProcess(execCommand, boost::process::std_out > impl->outPipe,
-                                           boost::process::std_err > impl->errPipe);
+        boost::process::v1::child childProcess(execCommand, boost::process::v1::std_out > impl->outPipe,
+                                           boost::process::v1::std_err > impl->errPipe);
 
         boost::asio::async_read(impl->outPipe, boost::asio::buffer(impl->outIoBuffer), onOutputReady);
         boost::asio::async_read(impl->errPipe, boost::asio::buffer(impl->errIoBuffer), onErrorReady);
@@ -174,7 +173,7 @@ namespace runnerd {
 
         return impl->handleOutputStreamUsage();
       }
-      catch(const boost::process::process_error& exc)
+      catch(const boost::process::v1::process_error& exc)
       {
         throw core::BaseException(exc.what());
       }

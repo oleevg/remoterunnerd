@@ -79,13 +79,13 @@ namespace runnerd {
           acceptor_.async_accept(connection->getSocket(), proxyHandler);
         }
 
-        boost::asio::io_service& getIoService()
+        boost::asio::io_context& getIoService()
         {
           return service_;
         }
 
       private:
-        boost::asio::io_service service_;
+        boost::asio::io_context service_;
         Acceptor acceptor_;
 
         size_t threadPoolSize_;
