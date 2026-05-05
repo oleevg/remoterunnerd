@@ -14,14 +14,14 @@
 
 namespace runnerd {
 
-namespace common {
+  namespace common {
 
-  typedef std::vector<std::string> ConfigurationContent;
+    typedef std::vector<std::string> ConfigurationContent;
 
-  /**
-   * @brief Provides reading of simple text configuration files.
-   */
-  class TextConfigurationParser {
+    /**
+     * @brief Provides reading of simple text configuration files.
+     */
+    class TextConfigurationParser {
     public:
       typedef std::shared_ptr<TextConfigurationParser> Ptr;
 
@@ -40,12 +40,10 @@ namespace common {
 
     private:
       std::string filePath_;
+    };
 
-  };
+  } // namespace common
 
-  }
+} // namespace runnerd
 
-}
-
-
-#endif //C_TEXTCONFIGURATIONPARSER_HPP
+#endif // C_TEXTCONFIGURATIONPARSER_HPP

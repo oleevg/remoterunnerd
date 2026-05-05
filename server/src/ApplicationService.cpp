@@ -24,30 +24,28 @@ namespace runnerd {
 
   namespace server {
 
-    ApplicationService::ApplicationService(int port, const std::chrono::milliseconds& processExecutionTimeout, size_t threadPoolSize,
-                                           const common::TextConfigurationParser::Ptr& parser,
-                                           const common::CommandStore::Ptr& commandStore,
-                                           bool daemonize) :
-            ApplicationService(processExecutionTimeout, parser, commandStore, daemonize)
+    ApplicationService::ApplicationService(int port, const std::chrono::milliseconds& processExecutionTimeout,
+                                           size_t threadPoolSize, const common::TextConfigurationParser::Ptr& parser,
+                                           const common::CommandStore::Ptr& commandStore, bool daemonize)
+        : ApplicationService(processExecutionTimeout, parser, commandStore, daemonize)
     {
       asyncListener_ = std::make_shared<network::AsyncListener>(threadPoolSize, port);
     }
 
-    ApplicationService::ApplicationService(const std::string& unixSocketPath, const std::chrono::milliseconds& processExecutionTimeout,
-                                           size_t threadPoolSize,
-                                           const common::TextConfigurationParser::Ptr& parser,
-                                           const common::CommandStore::Ptr& commandStore,
-                                           bool daemonize) :
-            ApplicationService(processExecutionTimeout, parser, commandStore, daemonize)
+    ApplicationService::ApplicationService(const std::string& unixSocketPath,
+                                           const std::chrono::milliseconds& processExecutionTimeout,
+                                           size_t threadPoolSize, const common::TextConfigurationParser::Ptr& parser,
+                                           const common::CommandStore::Ptr& commandStore, bool daemonize)
+        : ApplicationService(processExecutionTimeout, parser, commandStore, daemonize)
     {
       asyncListener_ = std::make_shared<network::AsyncLocalListener>(threadPoolSize, unixSocketPath);
     }
 
     ApplicationService::ApplicationService(const std::chrono::milliseconds& processExecutionTimeout,
                                            const common::TextConfigurationParser::Ptr& parser,
-                                           const common::CommandStore::Ptr& commandStore, bool daemonize) :
-            parser_(parser), commandStore_(commandStore), processExecutionTimeout_(processExecutionTimeout),
-            daemonized_(daemonize)
+                                           const common::CommandStore::Ptr& commandStore, bool daemonize)
+        : parser_(parser), commandStore_(commandStore), processExecutionTimeout_(processExecutionTimeout),
+          daemonized_(daemonize)
     {
       initialize();
     }
@@ -67,17 +65,17 @@ namespace runnerd {
 
       unixService.setSignalHandler();
 
-      std::future<void> signalHandlerTask = std::async(std::launch::async, &ApplicationService::signalHandlerTask,
-                                                       this);
+      std::future<void> signalHandlerTask =
+          std::async(std::launch::async, &ApplicationService::signalHandlerTask, this);
 
       auto selfCopy = shared_from_this();
 
-      auto acceptHandler = [selfCopy](const network::IAsyncConnection::Ptr& connection,
-                                      const boost::system::error_code& errorCode) {
+      auto acceptHandler =
+          [selfCopy](const network::IAsyncConnection::Ptr& connection, const boost::system::error_code& errorCode)
+      {
         mdebug_info("Client connected. ThreadId=0x%x.\n", core::ThreadHelper::threadIdToInt());
-        common::ProcessRunnerProtocol::Ptr protocol = std::make_shared<common::ProcessRunnerProtocol>(connection,
-                                                                                                      selfCopy->commandStore_,
-                                                                                                      selfCopy->processExecutionTimeout_);
+        common::ProcessRunnerProtocol::Ptr protocol = std::make_shared<common::ProcessRunnerProtocol>(
+            connection, selfCopy->commandStore_, selfCopy->processExecutionTimeout_);
         protocol->start();
       };
 
@@ -141,6 +139,6 @@ namespace runnerd {
       }
     }
 
-  }
+  } // namespace server
 
-}
+} // namespace runnerd

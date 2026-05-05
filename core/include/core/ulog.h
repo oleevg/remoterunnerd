@@ -11,28 +11,25 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define ERROR   "\x1B[31m"
-#define INFO    "\x1B[32m"
-#define WARN    "\x1B[33m"
+#define ERROR "\x1B[31m"
+#define INFO "\x1B[32m"
+#define WARN "\x1B[33m"
 #define ENDLINE "\033[0m\n"
 
 #ifdef ZLOG
-  #include <zlog.h>
+#include <zlog.h>
 #else
-  enum zlog_level {
-    ZLOG_LEVEL_INFO=0,
-    ZLOG_LEVEL_NOTICE,
-    ZLOG_LEVEL_WARN,
-    ZLOG_LEVEL_ERROR
-  };
+enum zlog_level { ZLOG_LEVEL_INFO = 0, ZLOG_LEVEL_NOTICE, ZLOG_LEVEL_WARN, ZLOG_LEVEL_ERROR };
 #endif
 
-#define BUILD_BUFFER(buffer, format) do {\
-		va_list args;\
-		va_start(args, format);\
-		vsnprintf(buffer, sizeof(buffer), format, args);\
-		va_end(args);\
-} while (0)
+#define BUILD_BUFFER(buffer, format)                                                                                   \
+  do                                                                                                                   \
+  {                                                                                                                    \
+    va_list args;                                                                                                      \
+    va_start(args, format);                                                                                            \
+    vsnprintf(buffer, sizeof(buffer), format, args);                                                                   \
+    va_end(args);                                                                                                      \
+  } while (0)
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,7 +39,8 @@ void ulog_init();
 void ulog_clean();
 void ulog_info(const char* category, const char* file_name, const char* func_name, int line, const char* format, ...);
 void ulog_error(const char* category, const char* file_name, const char* func_name, int line, const char* format, ...);
-void ulog_common(enum zlog_level level, const char* category, const char* file_name, const char* func_name, int line, const char* format, ...);
+void ulog_common(enum zlog_level level, const char* category, const char* file_name, const char* func_name, int line,
+                 const char* format, ...);
 
 #ifndef ZLOG
 #define ULOG_CATEGORY "ulog"
@@ -57,14 +55,14 @@ void ulog_common(enum zlog_level level, const char* category, const char* file_n
 #endif
 
 #define mdebug_error(format, ...) ulog_error(ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##__VA_ARGS__)
-#define mdebug_notice(format, ...) ulog_common(ZLOG_LEVEL_NOTICE, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##__VA_ARGS__)
+#define mdebug_notice(format, ...)                                                                                     \
+  ulog_common(ZLOG_LEVEL_NOTICE, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##__VA_ARGS__)
 #define mdebug_info(format, ...) ulog_info(ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##__VA_ARGS__)
-#define mdebug_warn(format, ...) ulog_common(ZLOG_LEVEL_WARN, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##__VA_ARGS__)
-
+#define mdebug_warn(format, ...)                                                                                       \
+  ulog_common(ZLOG_LEVEL_WARN, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##__VA_ARGS__)
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* CORE_ULOG_H_ */
-

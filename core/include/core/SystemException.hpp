@@ -19,23 +19,22 @@ namespace runnerd {
      */
     class SystemException : public BaseException {
 
-      public:
-        /**
-         * @brief ctor.
-         * @param errorMessage System call error message.
-         * @param errorCode System call error code.
-         */
-        SystemException(const std::string& errorMessage, int errorCode);
+    public:
+      /**
+       * @brief ctor.
+       * @param errorMessage System call error message.
+       * @param errorCode System call error code.
+       */
+      SystemException(const std::string& errorMessage, int errorCode);
 
-        int getErrorCode() const;
+      int getErrorCode() const;
 
-      private:
-        int errorCode_;
+    private:
+      int errorCode_;
     };
 
-  }
+  } // namespace core
 
-}
+} // namespace runnerd
 
-
-#endif //RUNNERD_SYSTEMEXCEPTION_HPP
+#endif // RUNNERD_SYSTEMEXCEPTION_HPP

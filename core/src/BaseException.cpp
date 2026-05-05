@@ -11,17 +11,13 @@ namespace runnerd {
 
   namespace core {
 
-    BaseException::BaseException(const std::string& errorMessage) :
-    errorMessage_("Base error occured: " + errorMessage)
-    {
-
-    }
+    BaseException::BaseException(const std::string& errorMessage) : errorMessage_("Base error occured: " + errorMessage)
+    {}
 
     const char* BaseException::what() const noexcept
     {
       return errorMessage_.c_str();
     }
-  }
+  } // namespace core
 
-}
-
+} // namespace runnerd

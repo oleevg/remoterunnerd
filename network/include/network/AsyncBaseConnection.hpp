@@ -15,52 +15,51 @@ namespace runnerd {
 
   namespace network {
 
-    template <class Socket>
-    class AsyncBaseConnection : public IAsyncConnection {
-      public:
-        explicit AsyncBaseConnection(boost::asio::io_context& service):
-        socket_(service), started_(true)
-        { }
+    template <class Socket> class AsyncBaseConnection : public IAsyncConnection {
+    public:
+      explicit AsyncBaseConnection(boost::asio::io_context& service) : socket_(service), started_(true)
+      {}
 
-        Socket& getSocket()
-        {
-          return socket_;
-        }
+      Socket& getSocket()
+      {
+        return socket_;
+      }
 
-        bool isStarted() const
-        {
-          return started_;
-        }
+      bool isStarted() const
+      {
+        return started_;
+      }
 
-        void close() override
-        {
-          started_ = false;
-          socket_.close();
-        }
+      void close() override
+      {
+        started_ = false;
+        socket_.close();
+      }
 
-        void readAsync(IOBuffer& buffer, ReadCompleteHandler readCompleteHandler, IOHandler readHandler) override
-        {
-          if (!isStarted()) return;
+      void readAsync(IOBuffer& buffer, ReadCompleteHandler readCompleteHandler, IOHandler readHandler) override
+      {
+        if (!isStarted())
+          return;
 
-          boost::asio::async_read(getSocket(), boost::asio::buffer(buffer), readCompleteHandler, readHandler);
-        }
+        boost::asio::async_read(getSocket(), boost::asio::buffer(buffer), readCompleteHandler, readHandler);
+      }
 
-        void writeAsync(const IOBuffer& buffer, IOHandler handler) override
-        {
-          if (!isStarted()) return;
+      void writeAsync(const IOBuffer& buffer, IOHandler handler) override
+      {
+        if (!isStarted())
+          return;
 
-          getSocket().async_write_some(boost::asio::buffer(buffer), handler);
-        }
+        getSocket().async_write_some(boost::asio::buffer(buffer), handler);
+      }
 
-      private:
-        Socket socket_;
+    private:
+      Socket socket_;
 
-        bool started_;
-
+      bool started_;
     };
 
-  }
+  } // namespace network
 
-}
+} // namespace runnerd
 
-#endif //RUNNERD_ASYNCBASECONNECTION_H
+#endif // RUNNERD_ASYNCBASECONNECTION_H

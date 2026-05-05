@@ -23,36 +23,34 @@ namespace runnerd {
      * @brief Executes commands and provides access to its output.
      */
     class ProcessExecutor {
-      public:
-        typedef std::vector<std::string> Arguments;
+    public:
+      typedef std::vector<std::string> Arguments;
 
-        struct Messages
-        {
-          static const char* Canceled;
-        };
+      struct Messages {
+        static const char* Canceled;
+      };
 
-      public:
-        ProcessExecutor();
+    public:
+      ProcessExecutor();
 
-        ~ProcessExecutor();
+      ~ProcessExecutor();
 
-        /**
-         * @brief Executes provided command with the specified arguments.
-         * @param execName Command name to execute.
-         * @param arguments The collection of command arguments.
-         * @param timeout Acceptable timeout in seconds to wait for command execution.
-         * @return Command's output.
-         */
-        std::string executeProcess(const std::string& execName, const Arguments& arguments, const std::chrono::milliseconds& timeout);
+      /**
+       * @brief Executes provided command with the specified arguments.
+       * @param execName Command name to execute.
+       * @param arguments The collection of command arguments.
+       * @param timeout Acceptable timeout in seconds to wait for command execution.
+       * @return Command's output.
+       */
+      std::string executeProcess(const std::string& execName, const Arguments& arguments,
+                                 const std::chrono::milliseconds& timeout);
 
-      private:
-        std::unique_ptr<ProcessExecutorImpl> impl;
+    private:
+      std::unique_ptr<ProcessExecutorImpl> impl;
     };
 
-  }
+  } // namespace common
 
-}
+} // namespace runnerd
 
-
-
-#endif //RUNNERD_PROCESSEXECUTOR_HPP
+#endif // RUNNERD_PROCESSEXECUTOR_HPP

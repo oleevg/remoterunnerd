@@ -12,19 +12,19 @@
 namespace runnerd {
 
   class ULogWrapper {
-    public:
-      ULogWrapper()
-      {
-        ulog_init();
-      }
+  public:
+    ULogWrapper()
+    {
+      ulog_init();
+    }
 
-      ~ULogWrapper()
-      {
-        ulog_clean();
-      }
+    ~ULogWrapper()
+    {
+      ulog_clean();
+    }
   };
 
-}
+} // namespace runnerd
 
 int main(int argc, const char* argv[])
 {
@@ -34,4 +34,3 @@ int main(int argc, const char* argv[])
 
   return app.run(argc, argv);
 }
-

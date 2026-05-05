@@ -11,19 +11,15 @@ namespace runnerd {
 
   namespace core {
 
-    SystemException::SystemException(const std::string& errorMessage, int errorCode) : BaseException(errorMessage),
-                                                                                       errorCode_(errorCode)
-    {
-
-    }
+    SystemException::SystemException(const std::string& errorMessage, int errorCode)
+        : BaseException(errorMessage), errorCode_(errorCode)
+    {}
 
     int SystemException::getErrorCode() const
     {
       return errorCode_;
     }
 
-  }
+  } // namespace core
 
-}
-
-
+} // namespace runnerd

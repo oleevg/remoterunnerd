@@ -28,40 +28,41 @@ namespace runnerd {
 
     typedef std::vector<char> BytesArray;
 
-    class ProcessExecutorImpl
-    {
-      public:
-        ProcessExecutorImpl();
+    class ProcessExecutorImpl {
+    public:
+      ProcessExecutorImpl();
 
-        ~ProcessExecutorImpl();
+      ~ProcessExecutorImpl();
 
-        void run();
+      void run();
 
-        void wait();
+      void wait();
 
-        std::string handleOutputStreamUsage() const;
+      std::string handleOutputStreamUsage() const;
 
-        std::thread ioThread;
-        boost::asio::io_context ioService;
-        boost::process::v1::async_pipe outPipe;
-        boost::process::v1::async_pipe errPipe;
+      std::thread ioThread;
+      boost::asio::io_context ioService;
+      boost::process::v1::async_pipe outPipe;
+      boost::process::v1::async_pipe errPipe;
 
-        BytesArray outIoBuffer;
-        BytesArray errIoBuffer;
+      BytesArray outIoBuffer;
+      BytesArray errIoBuffer;
 
-        BytesArray outputData;
-        BytesArray errorData;
+      BytesArray outputData;
+      BytesArray errorData;
     };
 
-    ProcessExecutorImpl::ProcessExecutorImpl():
-    outPipe(ioService), errPipe(ioService), outIoBuffer(1024), errIoBuffer(1024)
+    ProcessExecutorImpl::ProcessExecutorImpl()
+        : outPipe(ioService), errPipe(ioService), outIoBuffer(1024), errIoBuffer(1024)
     {}
 
     void ProcessExecutorImpl::run()
     {
-      ioThread = std::thread([this]() {
-        ioService.run();
-      });
+      ioThread = std::thread(
+          [this]()
+          {
+            ioService.run();
+          });
     }
 
     ProcessExecutorImpl::~ProcessExecutorImpl()
@@ -71,7 +72,7 @@ namespace runnerd {
 
     void ProcessExecutorImpl::wait()
     {
-      if(ioThread.joinable())
+      if (ioThread.joinable())
       {
         ioThread.join();
       }
@@ -79,7 +80,7 @@ namespace runnerd {
 
     std::string ProcessExecutorImpl::handleOutputStreamUsage() const
     {
-      if(!outputData.empty())
+      if (!outputData.empty())
       {
         return std::string(outputData.begin(), outputData.end());
       }
@@ -98,9 +99,9 @@ namespace runnerd {
 
     ProcessExecutor::~ProcessExecutor() = default;
 
-    std::string
-    ProcessExecutor::executeProcess(const std::string& execName, const ProcessExecutor::Arguments& arguments,
-                                    const std::chrono::milliseconds& timeout)
+    std::string ProcessExecutor::executeProcess(const std::string& execName,
+                                                const ProcessExecutor::Arguments& arguments,
+                                                const std::chrono::milliseconds& timeout)
     {
       mdebug_info("Going to execute '%s'. ThreadId=0x%x", execName.c_str(), core::ThreadHelper::threadIdToInt());
 
@@ -117,27 +118,33 @@ namespace runnerd {
         execCommand.append(arg);
       }
 
-      std::function<void(const boost::system::error_code & errorCode, std::size_t size, BytesArray& in, BytesArray& out, boost::process::v1::async_pipe& pipe)> onDataReady;
-      onDataReady = [&](const boost::system::error_code & errorCode, size_t size, BytesArray& in, BytesArray& out, boost::process::v1::async_pipe& pipe)
+      std::function<void(const boost::system::error_code& errorCode, std::size_t size, BytesArray& in, BytesArray& out,
+                         boost::process::v1::async_pipe& pipe)>
+          onDataReady;
+      onDataReady = [&](const boost::system::error_code& errorCode, size_t size, BytesArray& in, BytesArray& out,
+                        boost::process::v1::async_pipe& pipe)
       {
         out.reserve(out.size() + size);
         out.insert(out.end(), in.begin(), in.begin() + size);
         if (!errorCode)
         {
-          boost::asio::async_read(pipe, boost::asio::buffer(in), [&](const boost::system::error_code & ec, size_t n)
-          {
-            onDataReady(ec, n, in, out, pipe);
-          });
+          boost::asio::async_read(pipe, boost::asio::buffer(in),
+                                  [&](const boost::system::error_code& ec, size_t n)
+                                  {
+                                    onDataReady(ec, n, in, out, pipe);
+                                  });
         }
       };
 
-      std::function<void(const boost::system::error_code & errorCode, std::size_t size)> onOutputReady = [this, onDataReady](const boost::system::error_code & errorCode, size_t size)
+      std::function<void(const boost::system::error_code& errorCode, std::size_t size)> onOutputReady =
+          [this, onDataReady](const boost::system::error_code& errorCode, size_t size)
       {
         mdebug_info("onOutputReady output received: size = %d, ec = %d", size, errorCode);
         onDataReady(errorCode, size, impl->outIoBuffer, impl->outputData, impl->outPipe);
       };
 
-      std::function<void(const boost::system::error_code & errorCode, std::size_t size)> onErrorReady = [this, onDataReady](const boost::system::error_code & errorCode, size_t size)
+      std::function<void(const boost::system::error_code& errorCode, std::size_t size)> onErrorReady =
+          [this, onDataReady](const boost::system::error_code& errorCode, size_t size)
       {
         mdebug_info("onErrorReady output received: size = %d, ec = %d", size, errorCode);
         onDataReady(errorCode, size, impl->errIoBuffer, impl->errorData, impl->errPipe);
@@ -146,7 +153,7 @@ namespace runnerd {
       try
       {
         boost::process::v1::child childProcess(execCommand, boost::process::v1::std_out > impl->outPipe,
-                                           boost::process::v1::std_err > impl->errPipe);
+                                               boost::process::v1::std_err > impl->errPipe);
 
         boost::asio::async_read(impl->outPipe, boost::asio::buffer(impl->outIoBuffer), onOutputReady);
         boost::asio::async_read(impl->errPipe, boost::asio::buffer(impl->errIoBuffer), onErrorReady);
@@ -156,7 +163,8 @@ namespace runnerd {
         std::error_code errorCode;
         if (!childProcess.wait_for(timeout, errorCode))
         {
-          mdebug_warn("Process '%s' execution timeout expired. Going to terminate the child process.", execName.c_str());
+          mdebug_warn("Process '%s' execution timeout expired. Going to terminate the child process.",
+                      execName.c_str());
           childProcess.terminate();
           return Messages::Canceled;
         }
@@ -165,19 +173,18 @@ namespace runnerd {
 
         impl->wait();
 
-        if(exitCode)
+        if (exitCode)
         {
           mdebug_warn("Command '%s' execution failed. Return code: %d.", execName.c_str(), exitCode);
           return std::string(impl->errorData.begin(), impl->errorData.end());
         }
 
         return impl->handleOutputStreamUsage();
-      }
-      catch(const boost::process::v1::process_error& exc)
+      } catch (const boost::process::v1::process_error& exc)
       {
         throw core::BaseException(exc.what());
       }
     }
-  }
+  } // namespace common
 
-}
+} // namespace runnerd

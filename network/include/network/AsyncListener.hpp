@@ -22,17 +22,16 @@ namespace runnerd {
      * @brief Asynchronous listener implementation using Boost.Asio IP TCP sockets.
      */
     class AsyncListener : public AsyncBaseListener<boost::asio::ip::tcp::acceptor, boost::asio::ip::tcp::socket> {
-      public:
-        AsyncListener(size_t threadPoolSize, int port):
-                AsyncBaseListener(threadPoolSize, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
-        {
-          mdebug_info("Running with the port '%d'.", port);
-        }
+    public:
+      AsyncListener(size_t threadPoolSize, int port)
+          : AsyncBaseListener(threadPoolSize, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
+      {
+        mdebug_info("Running with the port '%d'.", port);
+      }
     };
 
-  }
+  } // namespace network
 
-}
+} // namespace runnerd
 
-
-#endif //RUNNERD_LISTENER_HPP
+#endif // RUNNERD_LISTENER_HPP

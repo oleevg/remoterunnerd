@@ -26,75 +26,75 @@ namespace runnerd {
      * @brief Base asynchronous listener class implementation.
      * @detailed Provides base asynchronous listener functionality using Boost.Asio.
      */
-    template <class Acceptor, class Socket>
-    class AsyncBaseListener : public IAsyncListener {
+    template <class Acceptor, class Socket> class AsyncBaseListener : public IAsyncListener {
 
-      public:
-        template <typename... Args>
-        AsyncBaseListener(size_t threadPoolSize, Args &&... args):
-                service_(), acceptor_(service_, std::forward<Args>(args)...), threadPoolSize_(threadPoolSize)
-        { 
-          threadPool_.reserve(threadPoolSize_);
-        }
+    public:
+      template <typename... Args>
+      AsyncBaseListener(size_t threadPoolSize, Args&&... args)
+          : service_(), acceptor_(service_, std::forward<Args>(args)...), threadPoolSize_(threadPoolSize)
+      {
+        threadPool_.reserve(threadPoolSize_);
+      }
 
-        virtual void wait() override
+      virtual void wait() override
+      {
+        for (auto& serviceThread : threadPool_)
         {
-          for (auto& serviceThread : threadPool_)
-          {
-            serviceThread.join();
-          }
-
-          mdebug_info("Listener finished.\n");
+          serviceThread.join();
         }
 
-        virtual void stop() override
+        mdebug_info("Listener finished.\n");
+      }
+
+      virtual void stop() override
+      {
+        service_.stop();
+      }
+
+      virtual void listenAsync(AcceptHandler asyncHandler) override
+      {
+        acceptAsync(asyncHandler);
+
+        mdebug_info("Listener started.\n");
+        for (size_t i = 0; i < threadPoolSize_; ++i)
         {
-          service_.stop();
+          threadPool_.emplace_back(
+              [this]()
+              {
+                getIoService().run();
+              });
         }
+      }
 
-        virtual void listenAsync(AcceptHandler asyncHandler) override
+    protected:
+      void acceptAsync(AcceptHandler asyncHandler)
+      {
+        auto connection = std::make_shared<AsyncBaseConnection<Socket>>(getIoService());
+
+        auto proxyHandler = [this, connection, asyncHandler](const boost::system::error_code& err)
         {
-          acceptAsync(asyncHandler);
+          this->acceptAsync(asyncHandler);
 
-          mdebug_info("Listener started.\n");
-          for (size_t i = 0; i < threadPoolSize_; ++i)
-          {
-            threadPool_.emplace_back([this]() {
-              getIoService().run();
-            });
-          }
-        }
+          asyncHandler(connection, err);
+        };
 
-      protected:
-        void acceptAsync(AcceptHandler asyncHandler)
-        {
-          auto connection = std::make_shared<AsyncBaseConnection<Socket>>(getIoService());
+        acceptor_.async_accept(connection->getSocket(), proxyHandler);
+      }
 
-          auto proxyHandler = [this, connection, asyncHandler](const boost::system::error_code &err) {
-            this->acceptAsync(asyncHandler);
+      boost::asio::io_context& getIoService()
+      {
+        return service_;
+      }
 
-            asyncHandler(connection, err);
-          };
+    private:
+      boost::asio::io_context service_;
+      Acceptor acceptor_;
 
-          acceptor_.async_accept(connection->getSocket(), proxyHandler);
-        }
-
-        boost::asio::io_context& getIoService()
-        {
-          return service_;
-        }
-
-      private:
-        boost::asio::io_context service_;
-        Acceptor acceptor_;
-
-        size_t threadPoolSize_;
-        std::vector<std::thread> threadPool_;
+      size_t threadPoolSize_;
+      std::vector<std::thread> threadPool_;
     };
-  }
+  } // namespace network
 
-}
+} // namespace runnerd
 
-
-
-#endif //RUNNERD_ASYNCBASELISTENER_HPP
+#endif // RUNNERD_ASYNCBASELISTENER_HPP

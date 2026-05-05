@@ -29,3 +29,25 @@ add_definitions(${${project_name}_definitions})
 foreach (module ${modules})
   add_subdirectory(${module})
 endforeach ()
+
+find_program(CLANG_FORMAT clang-format)
+if(CLANG_FORMAT)
+  file(GLOB_RECURSE ALL_SOURCE_FILES
+    ${CMAKE_SOURCE_DIR}/core/*.cpp    ${CMAKE_SOURCE_DIR}/core/*.hpp    ${CMAKE_SOURCE_DIR}/core/*.h
+    ${CMAKE_SOURCE_DIR}/network/*.cpp ${CMAKE_SOURCE_DIR}/network/*.hpp ${CMAKE_SOURCE_DIR}/network/*.h
+    ${CMAKE_SOURCE_DIR}/common/*.cpp  ${CMAKE_SOURCE_DIR}/common/*.hpp  ${CMAKE_SOURCE_DIR}/common/*.h
+    ${CMAKE_SOURCE_DIR}/server/*.cpp  ${CMAKE_SOURCE_DIR}/server/*.hpp  ${CMAKE_SOURCE_DIR}/server/*.h
+  )
+
+  add_custom_target(format
+    COMMAND ${CLANG_FORMAT} -i ${ALL_SOURCE_FILES}
+    COMMENT "Formatting source files with clang-format"
+    VERBATIM
+  )
+
+  add_custom_target(check-format
+    COMMAND ${CLANG_FORMAT} --dry-run --Werror ${ALL_SOURCE_FILES}
+    COMMENT "Checking source formatting with clang-format"
+    VERBATIM
+  )
+endif()

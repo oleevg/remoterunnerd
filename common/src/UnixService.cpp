@@ -22,7 +22,6 @@
 
 #include <common/UnixService.hpp>
 
-
 namespace runnerd {
 
   namespace common {
@@ -37,80 +36,79 @@ namespace runnerd {
       fprintf(stdout, "Daemonizing the process...\n");
       pid_t pid = fork();
 
-      switch(pid)
+      switch (pid)
       {
-        case 0:
-          /* Child process */
-          /* On success: The child process becomes session leader */
-          if (setsid() < 0)
-          {
-            throw core::SystemException((boost::format("Error in setsid() call: %s") % strerror(errno)).str(), errno);
-          }
+      case 0:
+        /* Child process */
+        /* On success: The child process becomes session leader */
+        if (setsid() < 0)
+        {
+          throw core::SystemException((boost::format("Error in setsid() call: %s") % strerror(errno)).str(), errno);
+        }
 
-          /* Catch, ignore and handle signals */
-          signal(SIGCHLD, SIG_IGN);
-          signal(SIGHUP, SIG_IGN);
+        /* Catch, ignore and handle signals */
+        signal(SIGCHLD, SIG_IGN);
+        signal(SIGHUP, SIG_IGN);
 
-          /* Fork off for the second time*/
-          pid = fork();
+        /* Fork off for the second time*/
+        pid = fork();
 
-          /* An error occurred */
-          if (pid < 0)
-          {
-            throw core::SystemException(
-                    (boost::format("Error in fork() when spawning a grandchild process: %s") % strerror(errno)).str(), errno);
-          }
-
-          /* Success: Let the parent terminate */
-          if (pid > 0)
-          {
-            exit(EXIT_SUCCESS);
-          }
-
-          /* Set new file permissions */
-          umask(0);
-
-          /* Change the working directory to the root directory */
-          /* or another appropriated directory */
-          chdir("/");
-
-          fStream  = freopen("/dev/null", "r+", stdin);
-          if (!fStream)
-          {
-            throw core::BaseException("Cannot attach stdin to /dev/null");
-          }
-
-          fStream = freopen("/dev/null", "r+", stdout);
-          if (!fStream)
-          {
-            throw core::BaseException("Cannot attach stdout to /dev/null");
-          }
-
-          fStream = freopen("/dev/null", "r+", stderr);
-          if (!fStream)
-          {
-            throw core::BaseException("Cannot attach stderr to /dev/null");
-          }
-
-          break;
-
-        case -1:
+        /* An error occurred */
+        if (pid < 0)
+        {
           throw core::SystemException(
-                  (boost::format("Error in fork() when spawning child process: %s") % strerror(errno)).str(), errno);
+              (boost::format("Error in fork() when spawning a grandchild process: %s") % strerror(errno)).str(), errno);
+        }
 
-        default:
-          /* The main process */
+        /* Success: Let the parent terminate */
+        if (pid > 0)
+        {
           exit(EXIT_SUCCESS);
+        }
 
+        /* Set new file permissions */
+        umask(0);
+
+        /* Change the working directory to the root directory */
+        /* or another appropriated directory */
+        chdir("/");
+
+        fStream = freopen("/dev/null", "r+", stdin);
+        if (!fStream)
+        {
+          throw core::BaseException("Cannot attach stdin to /dev/null");
+        }
+
+        fStream = freopen("/dev/null", "r+", stdout);
+        if (!fStream)
+        {
+          throw core::BaseException("Cannot attach stdout to /dev/null");
+        }
+
+        fStream = freopen("/dev/null", "r+", stderr);
+        if (!fStream)
+        {
+          throw core::BaseException("Cannot attach stderr to /dev/null");
+        }
+
+        break;
+
+      case -1:
+        throw core::SystemException(
+            (boost::format("Error in fork() when spawning child process: %s") % strerror(errno)).str(), errno);
+
+      default:
+        /* The main process */
+        exit(EXIT_SUCCESS);
       }
     }
 
     void UnixService::registerSignalHandlerFlag(int signalNumber, SignalHandlerFlag::Ptr flag)
     {
-      if(getSignalHandlerFlags().count(signalNumber))
+      if (getSignalHandlerFlags().count(signalNumber))
       {
         throw core::BaseException(
-                "Flag for signal %d has already been registered. You have to unregister it at first to continue.");
+            "Flag for signal %d has already been registered. You have to unregister it at first to continue.");
       }
 
       getSignalHandlerFlags()[signalNumber] = flag;
@@ -129,7 +127,7 @@ namespace runnerd {
       sa.sa_handler = &signalHandler;
       sa.sa_flags = SA_RESTART;
 
-      for (const auto& sh : getSignalHandlerFlags() )
+      for (const auto& sh : getSignalHandlerFlags())
       {
         sigaction(sh.first, &sa, nullptr);
       }
@@ -150,13 +148,14 @@ namespace runnerd {
       // }
       auto& signalHandlerFlags = getSignalHandlerFlags();
       auto it = signalHandlerFlags.find(signalNumber);
-      if (it != signalHandlerFlags.cend()){
+      if (it != signalHandlerFlags.cend())
+      {
         auto& flag = it->second->flag;
         flag.store(true);
 
         std::lock_guard lck(mtx);
         conditionVariable.notify_one();
-      } 
+      }
     }
 
     UnixService::SignalHandlerFlags& UnixService::getSignalHandlerFlags()
@@ -171,6 +170,6 @@ namespace runnerd {
       std::unique_lock lck(mtx);
       conditionVariable.wait(lck);
     }
-  }
+  } // namespace common
 
-}
+} // namespace runnerd

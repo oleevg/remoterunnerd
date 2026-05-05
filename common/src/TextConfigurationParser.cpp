@@ -20,23 +20,24 @@ namespace runnerd {
 
   namespace common {
 
-    TextConfigurationParser::TextConfigurationParser(const std::string& filePath) :
-            filePath_(filePath)
-    { }
+    TextConfigurationParser::TextConfigurationParser(const std::string& filePath) : filePath_(filePath)
+    {}
 
     ConfigurationContent TextConfigurationParser::readByLine()
     {
       ConfigurationContent result;
 
-      if(access(filePath_.c_str(), R_OK))
+      if (access(filePath_.c_str(), R_OK))
       {
-        throw core::BaseException((boost::format("Couldn't open the file '%s' for reading: %s") % filePath_.c_str() % strerror(errno)).str());
+        throw core::BaseException(
+            (boost::format("Couldn't open the file '%s' for reading: %s") % filePath_.c_str() % strerror(errno)).str());
       }
 
       std::ifstream file(filePath_, std::ios_base::in);
-      if(!file.is_open())
+      if (!file.is_open())
       {
-        throw core::BaseException((boost::format("Couldn't open the file '%s': Unknown error occurred.") % filePath_.c_str()).str());
+        throw core::BaseException(
+            (boost::format("Couldn't open the file '%s': Unknown error occurred.") % filePath_.c_str()).str());
       }
 
       std::string line;
@@ -47,6 +48,6 @@ namespace runnerd {
 
       return result;
     }
-  }
+  } // namespace common
 
-}
+} // namespace runnerd

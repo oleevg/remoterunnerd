@@ -23,10 +23,13 @@ namespace {
   {
     if (vm.count(lOpt) && !vm[lOpt].defaulted() && vm.count(rOpt) && !vm[rOpt].defaulted())
     {
-      throw runnerd::core::BaseException((boost::format("You can't set options '%s' and '%s' at the same time. Choose only one of them to continue.") % lOpt % rOpt).str());
+      throw runnerd::core::BaseException(
+          (boost::format("You can't set options '%s' and '%s' at the same time. Choose only one of them to continue.") %
+           lOpt % rOpt)
+              .str());
     }
   }
-}
+} // namespace
 
 namespace runnerd {
 
@@ -45,7 +48,8 @@ namespace runnerd {
       const bool useUnixSocketDefault = false;
       const bool debugRunDefault = false;
 
-      options::options_description optionDescription((boost::format("Usage: %s [options]... \nOptions") % argv[0]).str());
+      options::options_description optionDescription(
+          (boost::format("Usage: %s [options]... \nOptions") % argv[0]).str());
 
       int port = portDefault;
       int timeout = timeoutDefault;
@@ -55,23 +59,25 @@ namespace runnerd {
       bool useUnixSocket = useUnixSocketDefault;
       bool debugRun = debugRunDefault;
 
-      optionDescription.add_options()
-              ("port,p", options::value<int>(&port)->default_value(portDefault), "The port number to listen.")
-              ("config,c", options::value<std::string>(&configurationFile)->default_value(commandsConfigurationFileDefault),
-               "The configuration file with supported commands list.")
-              ("socket,s", options::value<std::string>(&unixSocket)->default_value(unixSocketDefault), "The Unix socket path.")
-              ("timeout,t", options::value<int>(&timeout)->default_value(timeoutDefault), "Process execution wait timeout in milliseconds.")
-              ("threads", options::value<size_t>(&threadPoolSize)->default_value(threadPoolSizeDefault), "The service's thread pool size.")
-              ("unix,u", options::bool_switch(&useUnixSocket)->default_value(useUnixSocketDefault), "Force to use Unix socket.")
-              ("debug,d", options::bool_switch(&debugRun)->default_value(debugRunDefault), "Interactive run without daemonizing.")
-              ("help,h", "As it says.");
+      optionDescription.add_options()("port,p", options::value<int>(&port)->default_value(portDefault),
+                                      "The port number to listen.")(
+          "config,c", options::value<std::string>(&configurationFile)->default_value(commandsConfigurationFileDefault),
+          "The configuration file with supported commands list.")(
+          "socket,s", options::value<std::string>(&unixSocket)->default_value(unixSocketDefault),
+          "The Unix socket path.")("timeout,t", options::value<int>(&timeout)->default_value(timeoutDefault),
+                                   "Process execution wait timeout in milliseconds.")(
+          "threads", options::value<size_t>(&threadPoolSize)->default_value(threadPoolSizeDefault),
+          "The service's thread pool size.")(
+          "unix,u", options::bool_switch(&useUnixSocket)->default_value(useUnixSocketDefault),
+          "Force to use Unix socket.")("debug,d", options::bool_switch(&debugRun)->default_value(debugRunDefault),
+                                       "Interactive run without daemonizing.")("help,h", "As it says.");
 
       options::variables_map variableMap;
 
       options::store(options::parse_command_line(argc, argv, optionDescription), variableMap);
       options::notify(variableMap);
 
-      if(variableMap.count("help"))
+      if (variableMap.count("help"))
       {
         std::cout << optionDescription << "\n";
         exit(0);
@@ -80,35 +86,37 @@ namespace runnerd {
       conflicting_options(variableMap, "port", "socket");
       conflicting_options(variableMap, "port", "unix");
 
-      if(timeout <= 0)
+      if (timeout <= 0)
       {
-        throw core::BaseException("Negative or zero timeout values are not supported. Please provide a positive integer value.");
+        throw core::BaseException(
+            "Negative or zero timeout values are not supported. Please provide a positive integer value.");
       }
 
-      if(threadPoolSize < 1)
+      if (threadPoolSize < 1)
       {
-        throw core::BaseException("The number of service's threads can't be less than one. Please provide a positive integer value.");
+        throw core::BaseException(
+            "The number of service's threads can't be less than one. Please provide a positive integer value.");
       }
 
-      auto parser = std::make_shared<common::TextConfigurationParser>(
-              configurationFile);
+      auto parser = std::make_shared<common::TextConfigurationParser>(configurationFile);
 
       auto content = parser->readByLine();
 
       auto commandStore = std::make_shared<common::CommandStore>(content.size());
       commandStore->setAllCommands(content);
 
-      if(useUnixSocket || !variableMap["socket"].defaulted())
+      if (useUnixSocket || !variableMap["socket"].defaulted())
       {
         // TODO: Temporary hack. Need to implement proper exclusive application run.
         remove(unixSocket.c_str());
-        appService = std::make_shared<ApplicationService>(unixSocket, std::chrono::milliseconds(timeout), threadPoolSize, parser, commandStore, !debugRun);
+        appService = std::make_shared<ApplicationService>(unixSocket, std::chrono::milliseconds(timeout),
+                                                          threadPoolSize, parser, commandStore, !debugRun);
       }
       else
       {
-        appService = std::make_shared<ApplicationService>(port, std::chrono::milliseconds(timeout), threadPoolSize, parser, commandStore, !debugRun);
+        appService = std::make_shared<ApplicationService>(port, std::chrono::milliseconds(timeout), threadPoolSize,
+                                                          parser, commandStore, !debugRun);
       }
-
     }
 
     int Application::run(int argc, const char** argv)
@@ -119,18 +127,15 @@ namespace runnerd {
       {
         parseArguments(argc, argv);
         rc = appService->run();
-      }
-      catch (const core::SystemException& exc)
+      } catch (const core::SystemException& exc)
       {
         mdebug_error(exc.what());
         rc = exc.getErrorCode();
-      }
-      catch (const core::BaseException& exc)
+      } catch (const core::BaseException& exc)
       {
         mdebug_error(exc.what());
         rc = -1;
-      }
-      catch(const std::exception& exc)
+      } catch (const std::exception& exc)
       {
         mdebug_error("Unknown error occurred. %s", exc.what());
         rc = -1;
@@ -139,6 +144,6 @@ namespace runnerd {
       return rc;
     }
 
-  }
+  } // namespace server
 
-}
+} // namespace runnerd

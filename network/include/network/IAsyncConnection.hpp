@@ -30,37 +30,35 @@ namespace runnerd {
      * @brief Asynchronous connection base interface.
      */
     class IAsyncConnection {
-      public:
-        typedef std::shared_ptr<IAsyncConnection> Ptr;
+    public:
+      typedef std::shared_ptr<IAsyncConnection> Ptr;
 
-      public:
+    public:
+      virtual ~IAsyncConnection() = default;
 
-        virtual ~IAsyncConnection() = default;
+      /**
+       * @brief Closes client's connection.
+       */
+      virtual void close() = 0;
 
-        /**
-         * @brief Closes client's connection.
-         */
-        virtual void close() = 0;
+      /**
+       * @brief Asynchronous reading from client's socket.
+       * @param buffer Buffer to write received data to.
+       * @param readCompleteHandler Read complete functor.
+       * @param readHandler Read data functor.
+       */
+      virtual void readAsync(IOBuffer& buffer, ReadCompleteHandler readCompleteHandler, IOHandler readHandler) = 0;
 
-        /**
-         * @brief Asynchronous reading from client's socket.
-         * @param buffer Buffer to write received data to.
-         * @param readCompleteHandler Read complete functor.
-         * @param readHandler Read data functor.
-         */
-        virtual void readAsync(IOBuffer& buffer, ReadCompleteHandler readCompleteHandler, IOHandler readHandler) = 0;
-
-        /**
-         * @brief Asynchronous writing to the client's socket.
-         * @param buffer Buffer to read the data for sending from.
-         * @param handler Write data functor.
-         */
-        virtual void writeAsync(const IOBuffer& buffer, IOHandler handler) = 0;
-
+      /**
+       * @brief Asynchronous writing to the client's socket.
+       * @param buffer Buffer to read the data for sending from.
+       * @param handler Write data functor.
+       */
+      virtual void writeAsync(const IOBuffer& buffer, IOHandler handler) = 0;
     };
 
-  }
+  } // namespace network
 
-}
+} // namespace runnerd
 
-#endif //RUNNERD_IASYNCCONNECTION_HPP
+#endif // RUNNERD_IASYNCCONNECTION_HPP

@@ -20,18 +20,17 @@ namespace runnerd {
      */
     class BaseException : public std::exception {
 
-      public:
-        BaseException(const std::string& errorMessage);
+    public:
+      BaseException(const std::string& errorMessage);
 
-        const char* what() const noexcept override;
+      const char* what() const noexcept override;
 
-      private:
-        std::string errorMessage_;
+    private:
+      std::string errorMessage_;
     };
 
-  }
+  } // namespace core
 
-}
+} // namespace runnerd
 
-
-#endif //C_BASEEXCEPTION_HPP
+#endif // C_BASEEXCEPTION_HPP

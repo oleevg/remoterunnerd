@@ -26,64 +26,61 @@ namespace runnerd {
      */
     class UnixService : public boost::serialization::singleton<UnixService> {
 
-      public:
-        struct SignalHandlerFlag {
-          typedef std::shared_ptr<SignalHandlerFlag> Ptr;
+    public:
+      struct SignalHandlerFlag {
+        typedef std::shared_ptr<SignalHandlerFlag> Ptr;
 
-          SignalHandlerFlag(bool value) : flag (value)
-          {
+        SignalHandlerFlag(bool value) : flag(value)
+        {}
 
-          }
+        std::atomic<bool> flag;
+      };
 
-          std::atomic<bool> flag;
-        };
+      typedef std::map<int, SignalHandlerFlag::Ptr> SignalHandlerFlags;
 
-        typedef std::map<int, SignalHandlerFlag::Ptr> SignalHandlerFlags;
+    public:
+      /**
+       * @brief Daemonizes the service.
+       */
+      void daemonize();
 
-      public:
-        /**
-         * @brief Daemonizes the service.
-         */
-        void daemonize();
+      /**
+       * @brief Sets signal handler function.
+       * @detailed Must be called after all required signals have been registered.
+       */
+      void setSignalHandler();
 
-        /**
-         * @brief Sets signal handler function.
-         * @detailed Must be called after all required signals have been registered.
-         */
-        void setSignalHandler();
+      /**
+       * @brief Blocks the calling thread and waits for a signal.
+       */
+      void waitForSignalsSync();
 
-        /**
-         * @brief Blocks the calling thread and waits for a signal.
-         */
-        void waitForSignalsSync();
+      /**
+       * @brief Unregisters previously registered signal.
+       * @param signalNumber Signal number to unregister.
+       * @return Whether the specified signal was successfully unregistered.
+       */
+      bool unregisterSignalHandlerFlag(int signalNumber);
 
-        /**
-         * @brief Unregisters previously registered signal.
-         * @param signalNumber Signal number to unregister.
-         * @return Whether the specified signal was successfully unregistered.
-         */
-        bool unregisterSignalHandlerFlag(int signalNumber);
+      /**
+       * @brief Registers the specified signal.
+       * @param signalNumber Signal number to register.
+       * @param flag Atomic flag to keep the signal status.
+       */
+      void registerSignalHandlerFlag(int signalNumber, SignalHandlerFlag::Ptr flag);
 
-        /**
-         * @brief Registers the specified signal.
-         * @param signalNumber Signal number to register.
-         * @param flag Atomic flag to keep the signal status.
-         */
-        void registerSignalHandlerFlag(int signalNumber, SignalHandlerFlag::Ptr flag);
+    private:
+      static void signalHandler(int signalNumber);
 
-      private:
-        static void signalHandler(int signalNumber);
+    private:
+      static SignalHandlerFlags& getSignalHandlerFlags();
 
-      private:
-        static SignalHandlerFlags& getSignalHandlerFlags();
-
-        static std::mutex mtx;
-        static std::condition_variable conditionVariable;
+      static std::mutex mtx;
+      static std::condition_variable conditionVariable;
     };
 
-  }
+  } // namespace common
 
-}
+} // namespace runnerd
 
-
-#endif //RUNNERD_UNIXSERVICE_HPP
+#endif // RUNNERD_UNIXSERVICE_HPP

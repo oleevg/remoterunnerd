@@ -29,72 +29,71 @@ namespace runnerd {
      */
     class ApplicationService : public std::enable_shared_from_this<ApplicationService>, boost::noncopyable {
 
-      public:
-        typedef std::shared_ptr<ApplicationService> Ptr;
+    public:
+      typedef std::shared_ptr<ApplicationService> Ptr;
 
-      public:
-        /**
-         * @brief ctor.
-         * @param port Port number to listen to.
-         * @param processExecutionTimeout Acceptable timeout to wait for a process execution.
-         * @param threadPoolSize The thread pool size.
-         * @param parser Application's configuration file parser.
-         * @param commandStore Registered commands storage.
-         * @param daemonize Whether run as a daemon or not.
-         */
-        ApplicationService(int port, const std::chrono::milliseconds& processExecutionTimeout, size_t threadPoolSize,
-                           const common::TextConfigurationParser::Ptr& parser, const common::CommandStore::Ptr& commandStore,
-                           bool daemonize);
+    public:
+      /**
+       * @brief ctor.
+       * @param port Port number to listen to.
+       * @param processExecutionTimeout Acceptable timeout to wait for a process execution.
+       * @param threadPoolSize The thread pool size.
+       * @param parser Application's configuration file parser.
+       * @param commandStore Registered commands storage.
+       * @param daemonize Whether run as a daemon or not.
+       */
+      ApplicationService(int port, const std::chrono::milliseconds& processExecutionTimeout, size_t threadPoolSize,
+                         const common::TextConfigurationParser::Ptr& parser,
+                         const common::CommandStore::Ptr& commandStore, bool daemonize);
 
-        /**
-         * @brief ctor.
-         * @param unixSocketPath Path to the local socket.
-         * @param processExecutionTimeout Acceptable timeout to wait for a process execution.
-         * @param threadPoolSize The thread pool size.
-         * @param parser Application's configuration file parser.
-         * @param commandStore Registered commands storage.
-         * @param daemonize Whether run as a daemon or not.
-         */
-        ApplicationService(const std::string& unixSocketPath, const std::chrono::milliseconds& processExecutionTimeout, size_t threadPoolSize,
-                           const common::TextConfigurationParser::Ptr& parser, const common::CommandStore::Ptr& commandStore,
-                           bool daemonize);
-        /**
-         * @return Flag saying whether application runs as a daemon or not.
-         */
-        bool isDaemonized() const;
+      /**
+       * @brief ctor.
+       * @param unixSocketPath Path to the local socket.
+       * @param processExecutionTimeout Acceptable timeout to wait for a process execution.
+       * @param threadPoolSize The thread pool size.
+       * @param parser Application's configuration file parser.
+       * @param commandStore Registered commands storage.
+       * @param daemonize Whether run as a daemon or not.
+       */
+      ApplicationService(const std::string& unixSocketPath, const std::chrono::milliseconds& processExecutionTimeout,
+                         size_t threadPoolSize, const common::TextConfigurationParser::Ptr& parser,
+                         const common::CommandStore::Ptr& commandStore, bool daemonize);
+      /**
+       * @return Flag saying whether application runs as a daemon or not.
+       */
+      bool isDaemonized() const;
 
-        /**
-         * @brief Starts the application main cycle.
-         * @return Execution exit code.
-         */
-        int run();
+      /**
+       * @brief Starts the application main cycle.
+       * @return Execution exit code.
+       */
+      int run();
 
-      private:
-        ApplicationService(const std::chrono::milliseconds& processExecutionTimeout, const common::TextConfigurationParser::Ptr& parser,
-                           const common::CommandStore::Ptr& commandStore,
-                           bool daemonize);
+    private:
+      ApplicationService(const std::chrono::milliseconds& processExecutionTimeout,
+                         const common::TextConfigurationParser::Ptr& parser,
+                         const common::CommandStore::Ptr& commandStore, bool daemonize);
 
-        void initialize();
+      void initialize();
 
-        void signalHandlerTask();
+      void signalHandlerTask();
 
-      private:
-        common::TextConfigurationParser::Ptr parser_;
-        common::CommandStore::Ptr commandStore_;
+    private:
+      common::TextConfigurationParser::Ptr parser_;
+      common::CommandStore::Ptr commandStore_;
 
-        network::IAsyncListener::Ptr asyncListener_;
+      network::IAsyncListener::Ptr asyncListener_;
 
-        common::UnixService::SignalHandlerFlag::Ptr termFlag_;
-        common::UnixService::SignalHandlerFlag::Ptr intFlag_;
-        common::UnixService::SignalHandlerFlag::Ptr hupFlag_;
+      common::UnixService::SignalHandlerFlag::Ptr termFlag_;
+      common::UnixService::SignalHandlerFlag::Ptr intFlag_;
+      common::UnixService::SignalHandlerFlag::Ptr hupFlag_;
 
-        std::chrono::milliseconds processExecutionTimeout_;
-        bool daemonized_;
+      std::chrono::milliseconds processExecutionTimeout_;
+      bool daemonized_;
     };
 
-  }
+  } // namespace server
 
-}
+} // namespace runnerd
 
-
-#endif //RUNNERD_APPLICATIONSERVICE_HPP
+#endif // RUNNERD_APPLICATIONSERVICE_HPP

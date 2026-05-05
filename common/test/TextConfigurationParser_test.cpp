@@ -26,7 +26,7 @@ namespace {
     std::string result;
     result.reserve(length);
 
-    while(length-- > 0)
+    while (length-- > 0)
     {
       result += symbols[pick(rg)];
     }
@@ -34,17 +34,16 @@ namespace {
     return result;
   }
 
-}
+} // namespace
 
 struct TextConfigurationParserFixture {
 
-  TextConfigurationParserFixture():
-          isOwner_(false)
+  TextConfigurationParserFixture() : isOwner_(false)
   {
     while (true)
     {
       fileName_ = generateRandomString(17);
-      if(access(fileName_.c_str(), F_OK))
+      if (access(fileName_.c_str(), F_OK))
       {
         break;
       }
@@ -53,7 +52,7 @@ struct TextConfigurationParserFixture {
 
   ~TextConfigurationParserFixture()
   {
-    if(isOwner_ && !fileName_.empty())
+    if (isOwner_ && !fileName_.empty())
     {
       remove(fileName_.c_str());
     }
@@ -71,24 +70,21 @@ struct TextConfigurationParserFixture {
   bool isOwner_;
 };
 
-BOOST_FIXTURE_TEST_SUITE( TextConfigurationParser, TextConfigurationParserFixture)
+BOOST_FIXTURE_TEST_SUITE(TextConfigurationParser, TextConfigurationParserFixture)
 
-  BOOST_AUTO_TEST_CASE(Must_throw_when_reading_non_existing_file)
-  {
-    runnerd::common::TextConfigurationParser textConfigurationParser(fileName_);
+BOOST_AUTO_TEST_CASE(Must_throw_when_reading_non_existing_file)
+{
+  runnerd::common::TextConfigurationParser textConfigurationParser(fileName_);
 
-    BOOST_REQUIRE_THROW(textConfigurationParser.readByLine(), runnerd::core::BaseException);
-  }
+  BOOST_REQUIRE_THROW(textConfigurationParser.readByLine(), runnerd::core::BaseException);
+}
 
-  BOOST_AUTO_TEST_CASE(Should_read_existing_file)
-  {
-    createFile();
+BOOST_AUTO_TEST_CASE(Should_read_existing_file)
+{
+  createFile();
 
-    runnerd::common::TextConfigurationParser textConfigurationParser(fileName_);
-    BOOST_REQUIRE_NO_THROW(textConfigurationParser.readByLine());
-  }
+  runnerd::common::TextConfigurationParser textConfigurationParser(fileName_);
+  BOOST_REQUIRE_NO_THROW(textConfigurationParser.readByLine());
+}
 
 BOOST_AUTO_TEST_SUITE_END()
-
-
-

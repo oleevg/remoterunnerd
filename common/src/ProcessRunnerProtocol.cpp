@@ -24,9 +24,11 @@ namespace runnerd {
 
   namespace common {
 
-    ProcessRunnerProtocol::ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
-                                                     const std::chrono::milliseconds& processExecutionTimeout) :
-            processExecutionTimeout_(processExecutionTimeout), connection_(connection), commandStore_(commandStore), commandPrompt_("runnerd# ")
+    ProcessRunnerProtocol::ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection,
+                                                 const CommandStore::Ptr& commandStore,
+                                                 const std::chrono::milliseconds& processExecutionTimeout)
+        : processExecutionTimeout_(processExecutionTimeout), connection_(connection), commandStore_(commandStore),
+          commandPrompt_("runnerd# ")
     {
       registerInternalCommands();
 
@@ -37,9 +39,10 @@ namespace runnerd {
     {
       auto selfCopy = shared_from_this();
 
-      readCompleteHandler_ = [selfCopy](const boost::system::error_code &err, size_t bytes)
+      readCompleteHandler_ = [selfCopy](const boost::system::error_code& err, size_t bytes)
       {
-        if (err) return 0;
+        if (err)
+          return 0;
 
         auto beginIterator = selfCopy->getReadBuffer().cbegin();
         auto endIterator = selfCopy->getReadBuffer().cbegin();
@@ -51,9 +54,9 @@ namespace runnerd {
         return found ? 0 : 1;
       };
 
-      writeHandler_ = [selfCopy](const boost::system::error_code &err, size_t bytes)
+      writeHandler_ = [selfCopy](const boost::system::error_code& err, size_t bytes)
       {
-        if(!err)
+        if (!err)
         {
           mdebug_info("Response has been sent. ThreadId=0x%x.\n", core::ThreadHelper::threadIdToInt());
           selfCopy->startReadTaskAsync();
@@ -64,9 +67,9 @@ namespace runnerd {
         }
       };
 
-      readHandler_ = [selfCopy](const boost::system::error_code &err, size_t bytes)
+      readHandler_ = [selfCopy](const boost::system::error_code& err, size_t bytes)
       {
-        if(!err)
+        if (!err)
         {
           mdebug_info("Request has been received. ThreadId=0x%x.\n", core::ThreadHelper::threadIdToInt());
           std::string response = selfCopy->handleRequest();
@@ -79,7 +82,7 @@ namespace runnerd {
       };
 
       // Let's start
-      connection_->writeAsync(network::IOBuffer(commandPrompt_.cbegin(), commandPrompt_.cend()),  writeHandler_);
+      connection_->writeAsync(network::IOBuffer(commandPrompt_.cbegin(), commandPrompt_.cend()), writeHandler_);
     }
 
     size_t ProcessRunnerProtocol::getReadBufferSize() const
@@ -117,18 +120,18 @@ namespace runnerd {
       std::string request = normalizeCommandLine(getReadBuffer());
 
       std::string response;
-      if(!request.empty())
+      if (!request.empty())
       {
         ProcessExecutor::Arguments arguments;
         boost::algorithm::split(arguments, request, boost::is_any_of("\t "), boost::token_compress_on);
 
         const std::string& execName = arguments.front();
 
-        if(isInternalCommand(execName))
+        if (isInternalCommand(execName))
         {
           response = executeInternalCommand(execName);
         }
-        else if(commandStore_->isRegistered(execName))
+        else if (commandStore_->isRegistered(execName))
         {
           ProcessExecutor::Arguments argumentsWithoutExec;
 
@@ -140,8 +143,7 @@ namespace runnerd {
           try
           {
             response = ProcessExecutor().executeProcess(execName, argumentsWithoutExec, getProcessExecutionTimeout());
-          }
-          catch (const core::BaseException& exc)
+          } catch (const core::BaseException& exc)
           {
             response = exc.what();
           }
@@ -149,7 +151,9 @@ namespace runnerd {
         else
         {
           mdebug_warn("Attempt to execute unregistered command: '%s'", execName.c_str());
-          response = (boost::format("Command '%s' is not registered. You can't execute unregistered commands.") % execName.c_str()).str();
+          response = (boost::format("Command '%s' is not registered. You can't execute unregistered commands.") %
+                      execName.c_str())
+                         .str();
         }
       }
 
@@ -190,13 +194,13 @@ namespace runnerd {
     {
       std::string response;
 
-      for (const auto& command: commandStore_->getAllCommands())
+      for (const auto& command : commandStore_->getAllCommands())
       {
         response.append(command);
         response.push_back('\n');
       }
 
-      for (const auto& command: commandHandlers_)
+      for (const auto& command : commandHandlers_)
       {
         response.append(command.first);
         response.push_back('\n');
@@ -208,23 +212,23 @@ namespace runnerd {
     std::string ProcessRunnerProtocol::normalizeCommandLine(const network::IOBuffer& commandLine)
     {
       // Remove initial spaces
-      auto beginIterator = std::find_if_not(commandLine.cbegin(), commandLine.cend(), [](const network::IOBuffer::value_type& value)
-      {
-        return (value == '\t' || value == ' ');
-      });
-
+      auto beginIterator = std::find_if_not(commandLine.cbegin(), commandLine.cend(),
+                                            [](const network::IOBuffer::value_type& value)
+                                            {
+                                              return (value == '\t' || value == ' ');
+                                            });
 
       // Remove trailing new line symbol
       std::string symbolsEnd("\n\r");
-      auto endIterator = std::find_first_of(commandLine.cbegin(), commandLine.cend(), symbolsEnd.cbegin(), symbolsEnd.cend());
+      auto endIterator =
+          std::find_first_of(commandLine.cbegin(), commandLine.cend(), symbolsEnd.cbegin(), symbolsEnd.cend());
 
       std::string result(beginIterator, endIterator);
 
       // Test for injections
 
-
       return result;
     }
-  }
+  } // namespace common
 
-}
+} // namespace runnerd

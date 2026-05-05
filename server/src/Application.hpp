@@ -30,19 +30,18 @@ namespace runnerd {
       /**
        * @brief Starts application's main cycle.
        */
-      public:
-        int run(int argc, const char** argv);
+    public:
+      int run(int argc, const char** argv);
 
-      private:
-        void parseArguments(int argc, const char** argv);
+    private:
+      void parseArguments(int argc, const char** argv);
 
-      private:
-        std::shared_ptr<ApplicationService> appService;
-
+    private:
+      std::shared_ptr<ApplicationService> appService;
     };
 
-  }
+  } // namespace server
 
-}
+} // namespace runnerd
 
-#endif //REMOTERUNNERD_APPLICATION_H
+#endif // REMOTERUNNERD_APPLICATION_H

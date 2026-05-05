@@ -20,26 +20,25 @@ namespace runnerd {
      * @brief Helper class to work with std::thread identifier.
      */
     class ThreadHelper {
-      public:
-        static std::string threadIdToString()
-        {
-          std::stringstream stringStream;
-          stringStream << std::this_thread::get_id();
+    public:
+      static std::string threadIdToString()
+      {
+        std::stringstream stringStream;
+        stringStream << std::this_thread::get_id();
 
-          return stringStream.str();
-        }
+        return stringStream.str();
+      }
 
-        static long threadIdToInt()
-        {
-          std::string strId = threadIdToString();
+      static long threadIdToInt()
+      {
+        std::string strId = threadIdToString();
 
-          return std::stol(strId);
-        }
+        return std::stol(strId);
+      }
     };
 
-  }
+  } // namespace core
 
-}
+} // namespace runnerd
 
-
-#endif //RUNNERD_THREADMACRO_HPP_HPP
+#endif // RUNNERD_THREADMACRO_HPP_HPP

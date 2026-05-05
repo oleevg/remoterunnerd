@@ -25,38 +25,38 @@ namespace runnerd {
      * @brief Asynchronous listener base interface.
      */
     class IAsyncListener {
-      public:
-        typedef std::shared_ptr<IAsyncListener> Ptr;
+    public:
+      typedef std::shared_ptr<IAsyncListener> Ptr;
 
-      public:
-        virtual ~IAsyncListener() = default;
+    public:
+      virtual ~IAsyncListener() = default;
 
-        /**
-         * @brief Starts to listen on the socket.
-         * @param asyncHandler Callable object to process client's connections.
-         */
-        virtual void listenAsync(AcceptHandler asyncHandler) = 0;
+      /**
+       * @brief Starts to listen on the socket.
+       * @param asyncHandler Callable object to process client's connections.
+       */
+      virtual void listenAsync(AcceptHandler asyncHandler) = 0;
 
-        /**
-         * @brief Waits for the server to stop listening.
-         */
-        virtual void wait() = 0;
+      /**
+       * @brief Waits for the server to stop listening.
+       */
+      virtual void wait() = 0;
 
-        /**
-         * @brief Stops listening on the used socket.
-         */
-        virtual void stop() = 0;
+      /**
+       * @brief Stops listening on the used socket.
+       */
+      virtual void stop() = 0;
 
-      protected:
-        /**
-         * @brief Starts waiting for client's connections.
-         * @param asyncHandler Callable object to process client's connections
-         */
-        virtual void acceptAsync(AcceptHandler asyncHandler) = 0;
+    protected:
+      /**
+       * @brief Starts waiting for client's connections.
+       * @param asyncHandler Callable object to process client's connections
+       */
+      virtual void acceptAsync(AcceptHandler asyncHandler) = 0;
     };
 
-  }
+  } // namespace network
 
-}
+} // namespace runnerd
 
-#endif //RUNNERD_IASYNCLISTENER_HPP
+#endif // RUNNERD_IASYNCLISTENER_HPP

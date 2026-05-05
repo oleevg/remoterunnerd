@@ -29,70 +29,68 @@ namespace runnerd {
      */
     class ProcessRunnerProtocol : public std::enable_shared_from_this<ProcessRunnerProtocol>, boost::noncopyable {
 
-        typedef std::string (ProcessRunnerProtocol::*CommandHandler)(void);
-        typedef std::unordered_map<std::string, CommandHandler> CommandHandlers;
+      typedef std::string (ProcessRunnerProtocol::*CommandHandler)(void);
+      typedef std::unordered_map<std::string, CommandHandler> CommandHandlers;
 
-      public:
-        typedef std::shared_ptr<ProcessRunnerProtocol> Ptr;
+    public:
+      typedef std::shared_ptr<ProcessRunnerProtocol> Ptr;
 
-      public:
-        /**
-         * @brief ctor.
-         * @param connection Connection to communicate with a client.
-         * @param commandStore Registered commands storage.
-         * @param processExecutionTimeout Acceptable timeout to wait for commands execution.
-         */
-        ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
-                                      const std::chrono::milliseconds& processExecutionTimeout);
+    public:
+      /**
+       * @brief ctor.
+       * @param connection Connection to communicate with a client.
+       * @param commandStore Registered commands storage.
+       * @param processExecutionTimeout Acceptable timeout to wait for commands execution.
+       */
+      ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection, const CommandStore::Ptr& commandStore,
+                            const std::chrono::milliseconds& processExecutionTimeout);
 
-        /**
-         * @brief Starts protocol's steps sequence.
-         */
-        void start();
+      /**
+       * @brief Starts protocol's steps sequence.
+       */
+      void start();
 
-        std::chrono::milliseconds getProcessExecutionTimeout() const;
+      std::chrono::milliseconds getProcessExecutionTimeout() const;
 
-        void close();
+      void close();
 
-      private:
-        void registerInternalCommands();
-        size_t getReadBufferSize() const;
+    private:
+      void registerInternalCommands();
+      size_t getReadBufferSize() const;
 
-        const network::IOBuffer& getReadBuffer() const;
+      const network::IOBuffer& getReadBuffer() const;
 
-        void startReadTaskAsync();
-        void startWriteTaskAsync(const std::string& message);
+      void startReadTaskAsync();
+      void startWriteTaskAsync(const std::string& message);
 
-        std::string handleRequest();
-        std::string normalizeCommandLine(const network::IOBuffer& commandLine);
+      std::string handleRequest();
+      std::string normalizeCommandLine(const network::IOBuffer& commandLine);
 
-        bool isInternalCommand(const std::string& command) const;
-        std::string executeInternalCommand(const std::string& command);
+      bool isInternalCommand(const std::string& command) const;
+      std::string executeInternalCommand(const std::string& command);
 
-        std::string exitHandler();
-        std::string listHandler();
+      std::string exitHandler();
+      std::string listHandler();
 
-      private:
-        std::chrono::milliseconds processExecutionTimeout_;
+    private:
+      std::chrono::milliseconds processExecutionTimeout_;
 
-        CommandHandlers commandHandlers_;
-        CommandStore::Ptr commandStore_;
+      CommandHandlers commandHandlers_;
+      CommandStore::Ptr commandStore_;
 
-        network::IAsyncConnection::Ptr connection_;
+      network::IAsyncConnection::Ptr connection_;
 
-        network::IOHandler readHandler_;
-        network::IOHandler writeHandler_;
-        network::ReadCompleteHandler readCompleteHandler_;
+      network::IOHandler readHandler_;
+      network::IOHandler writeHandler_;
+      network::ReadCompleteHandler readCompleteHandler_;
 
-        const std::string commandPrompt_;
+      const std::string commandPrompt_;
 
-        network::IOBuffer readBuffer_;
-
+      network::IOBuffer readBuffer_;
     };
 
-  }
+  } // namespace common
 
-}
+} // namespace runnerd
 
-
-#endif //RUNNERD_PROCESSRUNNERPROTOCOL_HPP
+#endif // RUNNERD_PROCESSRUNNERPROTOCOL_HPP

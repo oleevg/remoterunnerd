@@ -5,3 +5,6 @@
 build/
 cmake-build-debug/
 
+# TODO file
+TODO.md
+
