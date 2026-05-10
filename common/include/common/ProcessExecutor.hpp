@@ -23,7 +23,7 @@ namespace runnerd {
      */
     class ProcessExecutor {
     public:
-      typedef std::vector<std::string> Arguments;
+      using Arguments = std::vector<std::string>;
 
       struct Messages {
         static const char* Canceled;

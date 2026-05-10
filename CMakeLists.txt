@@ -62,20 +62,31 @@ if(CLANG_FORMAT)
 endif()
 
 # clang-tidy — requires compile_commands.json (use Ninja or -DCMAKE_EXPORT_COMPILE_COMMANDS=ON)
-find_program(CLANG_TIDY clang-tidy)
+find_program(CLANG_TIDY NAMES clang-tidy)
 find_program(RUN_CLANG_TIDY NAMES run-clang-tidy run-clang-tidy-18 run-clang-tidy-17 run-clang-tidy-16)
 if(CLANG_TIDY)
   if(RUN_CLANG_TIDY)
     add_custom_target(tidy
-      COMMAND ${RUN_CLANG_TIDY} -p ${CMAKE_BINARY_DIR} -j 4
+      COMMAND ${RUN_CLANG_TIDY} -clang-tidy-binary ${CLANG_TIDY} -p ${CMAKE_BINARY_DIR} -j 4
       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
       COMMENT "Running clang-tidy in parallel (run-clang-tidy)"
+      VERBATIM
+    )
+    add_custom_target(tidy-fix
+      COMMAND ${RUN_CLANG_TIDY} -clang-tidy-binary ${CLANG_TIDY} -p ${CMAKE_BINARY_DIR} -fix -j 4
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      COMMENT "Running clang-tidy with auto-fix in parallel (run-clang-tidy)"
       VERBATIM
     )
   else()
     add_custom_target(tidy
       COMMAND ${CLANG_TIDY} -p ${CMAKE_BINARY_DIR} ${ALL_CPP_FILES}
       COMMENT "Running clang-tidy"
+      VERBATIM
+    )
+    add_custom_target(tidy-fix
+      COMMAND ${CLANG_TIDY} --fix -p ${CMAKE_BINARY_DIR} ${ALL_CPP_FILES}
+      COMMENT "Running clang-tidy with auto-fix"
       VERBATIM
     )
   endif()

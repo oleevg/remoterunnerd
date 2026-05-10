@@ -35,7 +35,7 @@ namespace runnerd {
         threadPool_.reserve(threadPoolSize_);
       }
 
-      virtual void wait() override
+      void wait() override
       {
         for (auto& serviceThread : threadPool_)
         {
@@ -45,12 +45,12 @@ namespace runnerd {
         mdebug_info("Listener finished.\n");
       }
 
-      virtual void stop() override
+      void stop() override
       {
         service_.stop();
       }
 
-      virtual void listenAsync(AcceptHandler asyncHandler) override
+      void listenAsync(AcceptHandler asyncHandler) override
       {
         acceptAsync(asyncHandler);
 

@@ -19,18 +19,18 @@ namespace runnerd {
 
   namespace network {
 
-    typedef uint8_t Byte;
-    typedef std::vector<Byte> IOBuffer;
+    using Byte = uint8_t;
+    using IOBuffer = std::vector<Byte>;
 
-    typedef std::function<void(const boost::system::error_code&, size_t)> IOHandler;
-    typedef std::function<size_t(const boost::system::error_code&, size_t)> ReadCompleteHandler;
+    using IOHandler = std::function<void(const boost::system::error_code&, size_t)>;
+    using ReadCompleteHandler = std::function<size_t(const boost::system::error_code&, size_t)>;
 
     /**
      * @brief Asynchronous connection base interface.
      */
     class IAsyncConnection {
     public:
-      typedef std::shared_ptr<IAsyncConnection> Ptr;
+      using Ptr = std::shared_ptr<IAsyncConnection>;
 
     public:
       virtual ~IAsyncConnection() = default;

@@ -27,7 +27,7 @@ namespace runnerd {
 
     public:
       struct SignalHandlerFlag {
-        typedef std::shared_ptr<SignalHandlerFlag> Ptr;
+        using Ptr = std::shared_ptr<SignalHandlerFlag>;
 
         SignalHandlerFlag(bool value) : flag(value)
         {}
@@ -35,7 +35,7 @@ namespace runnerd {
         std::atomic<bool> flag;
       };
 
-      typedef std::map<int, SignalHandlerFlag::Ptr> SignalHandlerFlags;
+      using SignalHandlerFlags = std::map<int, SignalHandlerFlag::Ptr>;
 
     public:
       /**

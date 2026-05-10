@@ -27,11 +27,11 @@ namespace runnerd {
      */
     class ProcessRunnerProtocol : public std::enable_shared_from_this<ProcessRunnerProtocol>, boost::noncopyable {
 
-      typedef std::string (ProcessRunnerProtocol::*CommandHandler)(void);
-      typedef std::unordered_map<std::string, CommandHandler> CommandHandlers;
+      using CommandHandler = std::string (ProcessRunnerProtocol::*)(void);
+      using CommandHandlers = std::unordered_map<std::string, CommandHandler>;
 
     public:
-      typedef std::shared_ptr<ProcessRunnerProtocol> Ptr;
+      using Ptr = std::shared_ptr<ProcessRunnerProtocol>;
 
     public:
       /**

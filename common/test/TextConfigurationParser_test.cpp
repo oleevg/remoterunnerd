@@ -9,6 +9,7 @@
 
 #include <fstream>
 #include <random>
+#include <string_view>
 #include <unistd.h>
 
 #include <common/TextConfigurationParser.hpp>
@@ -18,10 +19,10 @@ namespace {
 
   std::string generateRandomString(size_t length)
   {
-    const char symbols[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    constexpr std::string_view symbols = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     static std::mt19937 rg{std::random_device{}()};
-    static std::uniform_int_distribution<size_t> pick(0, sizeof(symbols) - 2);
+    static std::uniform_int_distribution<size_t> pick(0, symbols.size() - 1);
 
     std::string result;
     result.reserve(length);
@@ -38,7 +39,7 @@ namespace {
 
 struct TextConfigurationParserFixture {
 
-  TextConfigurationParserFixture() : isOwner_(false)
+  TextConfigurationParserFixture()  
   {
     while (true)
     {
@@ -67,7 +68,7 @@ struct TextConfigurationParserFixture {
   }
 
   std::string fileName_;
-  bool isOwner_;
+  bool isOwner_{false};
 };
 
 BOOST_FIXTURE_TEST_SUITE(TextConfigurationParser, TextConfigurationParserFixture)

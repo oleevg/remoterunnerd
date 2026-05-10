@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE(Should_read_process_output)
 
   auto result = processExecutor.executeProcess(processName, arguments, std::chrono::seconds(3));
 
-  std::cout << "Process output:" << result << std::endl;
+  std::cout << "Process output:" << result << '\n';
 
   auto flag = result.find("Python");
   BOOST_REQUIRE(flag != std::string::npos);
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(Should_handle_execution_timeout)
 
   auto result = processExecutor.executeProcess(processName, arguments, std::chrono::seconds(3));
 
-  std::cout << "Process output:" << result << std::endl;
+  std::cout << "Process output:" << result << '\n';
 
   BOOST_REQUIRE_EQUAL(result, runnerd::common::ProcessExecutor::Messages::Canceled);
 }

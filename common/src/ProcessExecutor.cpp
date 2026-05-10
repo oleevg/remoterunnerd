@@ -26,7 +26,7 @@ namespace runnerd {
 
   namespace common {
 
-    typedef std::vector<char> BytesArray;
+    using BytesArray = std::vector<char>;
 
     class ProcessExecutorImpl {
     public:

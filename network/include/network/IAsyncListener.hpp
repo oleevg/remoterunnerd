@@ -18,14 +18,14 @@ namespace runnerd {
 
   namespace network {
 
-    typedef std::function<void(const IAsyncConnection::Ptr&, const boost::system::error_code&)> AcceptHandler;
+    using AcceptHandler = std::function<void(const IAsyncConnection::Ptr&, const boost::system::error_code&)>;
 
     /**
      * @brief Asynchronous listener base interface.
      */
     class IAsyncListener {
     public:
-      typedef std::shared_ptr<IAsyncListener> Ptr;
+      using Ptr = std::shared_ptr<IAsyncListener>;
 
     public:
       virtual ~IAsyncListener() = default;

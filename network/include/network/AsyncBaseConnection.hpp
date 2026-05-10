@@ -16,7 +16,7 @@ namespace runnerd {
 
     template <class Socket> class AsyncBaseConnection : public IAsyncConnection {
     public:
-      explicit AsyncBaseConnection(boost::asio::io_context& service) : socket_(service), started_(true)
+      explicit AsyncBaseConnection(boost::asio::io_context& service) : socket_(service) 
       {}
 
       Socket& getSocket()
@@ -54,7 +54,7 @@ namespace runnerd {
     private:
       Socket socket_;
 
-      bool started_;
+      bool started_{true};
     };
 
   } // namespace network

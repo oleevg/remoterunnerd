@@ -22,8 +22,8 @@ namespace runnerd {
     class CommandStore {
 
     public:
-      typedef std::shared_ptr<CommandStore> Ptr;
-      typedef std::vector<std::string> CommandCollection;
+      using Ptr = std::shared_ptr<CommandStore>;
+      using CommandCollection = std::vector<std::string>;
 
     public:
       /**

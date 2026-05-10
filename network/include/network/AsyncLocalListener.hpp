@@ -31,7 +31,7 @@ namespace runnerd {
         mdebug_info("Running with the local socket '%s'.", unixSocketPath_.c_str());
       }
 
-      ~AsyncLocalListener()
+      ~AsyncLocalListener() override
       {
         remove(unixSocketPath_.c_str());
       }
