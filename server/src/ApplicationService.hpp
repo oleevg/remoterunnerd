@@ -30,7 +30,7 @@ namespace runnerd {
     class ApplicationService : public std::enable_shared_from_this<ApplicationService>, boost::noncopyable {
 
     public:
-      typedef std::shared_ptr<ApplicationService> Ptr;
+      using Ptr = std::shared_ptr<ApplicationService>;
 
     public:
       /**

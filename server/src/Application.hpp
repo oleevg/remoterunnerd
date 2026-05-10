@@ -8,7 +8,6 @@
 #ifndef REMOTERUNNERD_APPLICATION_H
 #define REMOTERUNNERD_APPLICATION_H
 
-#include <string>
 #include <memory>
 
 #include <common/TextConfigurationParser.hpp>

@@ -8,7 +8,6 @@
 #ifndef C_BASEEXCEPTION_HPP
 #define C_BASEEXCEPTION_HPP
 
-#include <stdexcept>
 #include <string>
 
 namespace runnerd {

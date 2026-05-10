@@ -10,7 +10,6 @@
 
 #include <string>
 #include <chrono>
-#include <functional>
 #include <unordered_map>
 #include <memory>
 

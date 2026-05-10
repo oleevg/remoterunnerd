@@ -1,0 +1,64 @@
+---
+# clang-tidy configuration for C++17 → C++23 migration analysis.
+# Run via: cmake --build build --target tidy
+# Requires compile_commands.json: configure with -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+#   (Ninja generator produces it automatically; for Make add -DCMAKE_EXPORT_COMPILE_COMMANDS=ON)
+#
+# Check groups and what they surface in this codebase:
+#
+#   modernize-use-using               typedef → using  (every header has these)
+#   modernize-use-nullptr             NULL → nullptr
+#   modernize-use-override            missing override specifiers on virtual methods
+#   modernize-use-nodiscard           return values that should be [[nodiscard]]
+#   modernize-use-default-member-init move field defaults into class body
+#   modernize-use-emplace             push_back({...}) → emplace_back(...)
+#   modernize-loop-convert            iterator loops → range-based for
+#   modernize-avoid-c-arrays          C-style arrays → std::array / std::span (C++20)
+#   modernize-use-designated-initializers  aggregate init sugar (C++20)
+#   modernize-use-std-format          boost::format → std::format (C++20) [clang-tidy ≥17]
+#   modernize-use-std-print           printf-style → std::print/println (C++23) [clang-tidy ≥18]
+#   modernize-use-ranges              iterator-pair algorithms → std::ranges:: (C++23) [clang-tidy ≥18]
+#   performance-avoid-endl            std::endl → '\n' (flushes unnecessarily)
+#   performance-move-const-arg        needless copies of move-only args
+#   performance-unnecessary-copy-initialization  catches by-value when const-ref suffices
+#   readability-container-size-empty  .size() == 0 → .empty()
+#   readability-else-after-return     remove redundant else after return/throw
+#   readability-make-member-function-const  methods that could be const
+#   readability-qualified-auto        auto* / const auto& where type matters
+
+Checks: >-
+  -*,
+  modernize-avoid-c-arrays,
+  modernize-loop-convert,
+  modernize-use-default-member-init,
+  modernize-use-designated-initializers,
+  modernize-use-emplace,
+#  modernize-use-nodiscard,
+  modernize-use-nullptr,
+  modernize-use-override,
+  modernize-use-ranges,
+  modernize-use-std-format,
+  modernize-use-std-print,
+  modernize-use-using,
+  performance-avoid-endl,
+  performance-move-const-arg,
+  performance-unnecessary-copy-initialization,
+  readability-container-size-empty,
+  readability-else-after-return,
+  readability-make-member-function-const,
+  readability-qualified-auto
+
+WarningsAsErrors: ''
+
+# Emit warnings only for project headers; suppress noise from Boost and system headers
+HeaderFilterRegex: '.*/remoterunnerd/(core|network|common|server)/.*'
+
+FormatStyle: file
+
+CheckOptions:
+  - key:   modernize-loop-convert.MinConfidence
+    value: reasonable
+  - key:   modernize-use-designated-initializers.IgnoreSingleElementAggregates
+    value: 'true'
+  - key:   modernize-use-nodiscard.ReasonMessage
+    value: 'Return value must be used'
