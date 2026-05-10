@@ -66,7 +66,7 @@ namespace runnerd {
       }
 
     protected:
-      void acceptAsync(AcceptHandler asyncHandler)
+      void acceptAsync(AcceptHandler asyncHandler) override
       {
         auto connection = std::make_shared<AsyncBaseConnection<Socket>>(getIoService());
 
@@ -95,4 +95,3 @@ namespace runnerd {
   } // namespace network
 
 } // namespace runnerd
-

@@ -36,7 +36,7 @@ endif()
 
 set(BOOST_ROOT "/opt/homebrew/Cellar/boost/1.90.0_1")
 find_package(Boost 1.64.0 COMPONENTS program_options serialization REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
+include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 
 # Logger specific settings
 add_definitions(-DULOG_INFO)

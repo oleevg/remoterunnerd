@@ -1,4 +1,4 @@
-/*
+  /*
  * ulog.c
  *
  *  Created on: 10/1/17
@@ -12,7 +12,7 @@
 
 #include <core/ulog.h>
 
-static const int max_input_size=1024;
+#define MAX_INPUT_SIZE 1024
 
 static inline char* getCurrentTime(char* buffer, size_t bufferSize)
 {
@@ -47,7 +47,7 @@ void ulog_clean()
 
 void ulog_info(const char* category, const char* file_name, const char* func_name, int line, const char* format, ...)
 {
-  char buf[max_input_size];
+  char buf[MAX_INPUT_SIZE];
   char timeBuffer[26];
 
   BUILD_BUFFER(buf, format);
@@ -67,7 +67,7 @@ void ulog_info(const char* category, const char* file_name, const char* func_nam
 
 void ulog_error(const char* category, const char* file_name, const char* func_name, int line, const char* format, ...)
 {
-  char buf[max_input_size];
+  char buf[MAX_INPUT_SIZE];
   char timeBuffer[26];
 
   BUILD_BUFFER(buf, format);
@@ -85,7 +85,7 @@ void ulog_error(const char* category, const char* file_name, const char* func_na
 
 void ulog_common(enum zlog_level level, const char* category, const char* file_name, const char* func_name, int line, const char* format, ...)
 {
-  char buf[max_input_size];
+  char buf[MAX_INPUT_SIZE];
   char timeBuffer[26];
 
   BUILD_BUFFER(buf, format);

@@ -30,7 +30,6 @@ set(definitions
 
 
 set(libraries
-    runnerd_core
     runnerd_common
     runnerd_network
     )

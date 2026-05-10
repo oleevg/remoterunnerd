@@ -71,7 +71,7 @@ namespace runnerd {
       auto selfCopy = shared_from_this();
 
       auto acceptHandler =
-          [selfCopy](const network::IAsyncConnection::Ptr& connection, const boost::system::error_code& errorCode)
+          [selfCopy](const network::IAsyncConnection::Ptr& connection, const boost::system::error_code& /* errorCode */)
       {
         mdebug_info("Client connected. ThreadId=0x%x.\n", core::ThreadHelper::threadIdToInt());
         common::ProcessRunnerProtocol::Ptr protocol = std::make_shared<common::ProcessRunnerProtocol>(

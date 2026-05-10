@@ -53,12 +53,17 @@ void ulog_common(enum zlog_level level, const char* category, const char* file_n
 #define ULOG_FAIL "Error"
 #endif
 
+// ##__VA_ARGS__ is a GCC/Clang extension that removes the preceding comma when
+// __VA_ARGS__ is empty. Suppress the pedantic warning at the definition site.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
 #define mdebug_error(format, ...) ulog_error(ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##__VA_ARGS__)
 #define mdebug_notice(format, ...)                                                                                     \
   ulog_common(ZLOG_LEVEL_NOTICE, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##__VA_ARGS__)
 #define mdebug_info(format, ...) ulog_info(ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##__VA_ARGS__)
 #define mdebug_warn(format, ...)                                                                                       \
   ulog_common(ZLOG_LEVEL_WARN, ULOG_CATEGORY, __FILE__, __FUNCTION__, __LINE__, format, ##__VA_ARGS__)
+#pragma GCC diagnostic pop
 
 #ifdef __cplusplus
 }

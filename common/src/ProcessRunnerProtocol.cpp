@@ -27,7 +27,7 @@ namespace runnerd {
     ProcessRunnerProtocol::ProcessRunnerProtocol(const network::IAsyncConnection::Ptr& connection,
                                                  const CommandStore::Ptr& commandStore,
                                                  const std::chrono::milliseconds& processExecutionTimeout)
-        : processExecutionTimeout_(processExecutionTimeout), connection_(connection), commandStore_(commandStore),
+        : processExecutionTimeout_(processExecutionTimeout), commandStore_(commandStore), connection_(connection),
           commandPrompt_("runnerd# ")
     {
       registerInternalCommands();
@@ -54,7 +54,7 @@ namespace runnerd {
         return found ? 0 : 1;
       };
 
-      writeHandler_ = [selfCopy](const boost::system::error_code& err, size_t bytes)
+      writeHandler_ = [selfCopy](const boost::system::error_code& err, size_t /* bytes */)
       {
         if (!err)
         {
@@ -67,7 +67,7 @@ namespace runnerd {
         }
       };
 
-      readHandler_ = [selfCopy](const boost::system::error_code& err, size_t bytes)
+      readHandler_ = [selfCopy](const boost::system::error_code& err, size_t /* bytes */)
       {
         if (!err)
         {

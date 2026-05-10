@@ -161,7 +161,12 @@ namespace runnerd {
         impl->run();
 
         std::error_code errorCode;
+        // boost::process::child::wait_for() is deprecated in Boost 1.87+ as unreliable;
+        // no stable cross-platform replacement is available yet in this Boost version.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         if (!childProcess.wait_for(timeout, errorCode))
+#pragma GCC diagnostic pop
         {
           mdebug_warn("Process '%s' execution timeout expired. Going to terminate the child process.",
                       execName.c_str());
