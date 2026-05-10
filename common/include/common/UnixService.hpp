@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_UNIXSERVICE_HPP
-#define RUNNERD_UNIXSERVICE_HPP
+#pragma once
 
 #include <atomic>
 #include <memory>
@@ -83,4 +82,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_UNIXSERVICE_HPP

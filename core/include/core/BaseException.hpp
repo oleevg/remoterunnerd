@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef C_BASEEXCEPTION_HPP
-#define C_BASEEXCEPTION_HPP
+#pragma once
 
 #include <string>
 
@@ -32,4 +31,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // C_BASEEXCEPTION_HPP

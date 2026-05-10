@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_PROCESSEXECUTOR_HPP
-#define RUNNERD_PROCESSEXECUTOR_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -53,4 +52,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_PROCESSEXECUTOR_HPP

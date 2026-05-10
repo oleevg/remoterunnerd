@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_PROCESSRUNNERPROTOCOL_HPP
-#define RUNNERD_PROCESSRUNNERPROTOCOL_HPP
+#pragma once
 
 #include <string>
 #include <chrono>
@@ -92,4 +91,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_PROCESSRUNNERPROTOCOL_HPP

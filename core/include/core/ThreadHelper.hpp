@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_THREADMACRO_HPP_HPP
-#define RUNNERD_THREADMACRO_HPP_HPP
+#pragma once
 
 #include <sstream>
 #include <string>
@@ -41,4 +40,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_THREADMACRO_HPP_HPP

@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_IASYNCCONNECTION_HPP
-#define RUNNERD_IASYNCCONNECTION_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -61,4 +60,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_IASYNCCONNECTION_HPP

@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef CORE_ULOG_H_
-#define CORE_ULOG_H_
+#pragma once
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -65,4 +64,3 @@ void ulog_common(enum zlog_level level, const char* category, const char* file_n
 }
 #endif
 
-#endif /* CORE_ULOG_H_ */

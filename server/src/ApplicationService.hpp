@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_APPLICATIONSERVICE_HPP
-#define RUNNERD_APPLICATIONSERVICE_HPP
+#pragma once
 
 #include <memory>
 #include <string>
@@ -96,4 +95,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_APPLICATIONSERVICE_HPP

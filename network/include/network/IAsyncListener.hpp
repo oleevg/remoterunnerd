@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_IASYNCLISTENER_HPP
-#define RUNNERD_IASYNCLISTENER_HPP
+#pragma once
 
 #include <memory>
 #include <functional>
@@ -59,4 +58,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_IASYNCLISTENER_HPP

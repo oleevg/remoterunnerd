@@ -4,8 +4,7 @@
  *  Created on: 12/18/2017
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
-#ifndef RUNNERD_ASYNCBASECONNECTION_H
-#define RUNNERD_ASYNCBASECONNECTION_H
+#pragma once
 
 #include <boost/asio.hpp>
 
@@ -62,4 +61,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_ASYNCBASECONNECTION_H

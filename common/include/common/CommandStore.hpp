@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef C_COMMANDSTORE_HPP
-#define C_COMMANDSTORE_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -63,4 +62,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // C_COMMANDSTORE_HPP

@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_LISTENER_HPP
-#define RUNNERD_LISTENER_HPP
+#pragma once
 
 #include <boost/asio.hpp>
 
@@ -34,4 +33,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_LISTENER_HPP

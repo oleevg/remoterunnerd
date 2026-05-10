@@ -8,3 +8,5 @@ cmake-build-debug/
 # TODO file
 TODO.md
 
+# PNG files
+*.png

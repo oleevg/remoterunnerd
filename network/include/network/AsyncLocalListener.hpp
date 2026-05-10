@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_ASYNCLOCALLISTENER_HPP
-#define RUNNERD_ASYNCLOCALLISTENER_HPP
+#pragma once
 
 #include <string>
 #include <cstdio>
@@ -45,4 +44,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_ASYNCLOCALLISTENER_HPP

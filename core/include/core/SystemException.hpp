@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_SYSTEMEXCEPTION_HPP
-#define RUNNERD_SYSTEMEXCEPTION_HPP
+#pragma once
 
 #include "BaseException.hpp"
 
@@ -37,4 +36,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_SYSTEMEXCEPTION_HPP

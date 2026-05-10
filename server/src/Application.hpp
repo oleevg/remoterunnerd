@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef REMOTERUNNERD_APPLICATION_H
-#define REMOTERUNNERD_APPLICATION_H
+#pragma once
 
 #include <memory>
 
@@ -43,4 +42,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // REMOTERUNNERD_APPLICATION_H

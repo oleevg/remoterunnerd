@@ -5,8 +5,7 @@
  *      Author: Oleg F., fedorov.ftf@gmail.com
  */
 
-#ifndef RUNNERD_ASYNCBASELISTENER_HPP
-#define RUNNERD_ASYNCBASELISTENER_HPP
+#pragma once
 
 #include <thread>
 #include <vector>
@@ -97,4 +96,3 @@ namespace runnerd {
 
 } // namespace runnerd
 
-#endif // RUNNERD_ASYNCBASELISTENER_HPP
